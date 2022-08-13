@@ -8,6 +8,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="950" 
         WindowState="Maximized">
-    <Grid>
-    </Grid>
+    <DockPanel>
+        <view:CurrentSongView Name="CurrentSongView"
+                              DockPanel.Dock="Bottom"></view:CurrentSongView>
+        <view:StartView/>
+    </DockPanel>
 </Window>

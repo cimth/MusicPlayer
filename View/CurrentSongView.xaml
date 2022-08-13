@@ -1,0 +1,14 @@
+<UserControl x:Class="View.CurrentSongView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:View"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+             Background="Lavender">
+    <StackPanel>
+        <Label Content="{Binding Song.Title}"/>
+        <Button Content="Change Song" Command="{Binding ChangeSongCommand}"></Button>
+    </StackPanel>
+</UserControl>
