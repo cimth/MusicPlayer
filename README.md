@@ -8,6 +8,7 @@ playlists to play in a row and else.
 
 ## Included dependencies
 
-| Dependency            | Version |
-|-----------------------|---------|
-| .NET                  | 6       |
+| Dependency   | Version | Notes                                               |
+|--------------|---------|-----------------------------------------------------|
+| .NET         | 6       |                                                     |
+| SharpVectors | 1.8.0   | Used for easy displaying SVG images (for the icons) |

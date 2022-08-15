@@ -4,11 +4,59 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:View"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="150" d:DesignWidth="800"
              Background="Lavender">
-    <StackPanel>
-        <Label Content="{Binding Song.Title}"/>
-        <Button Content="Change Song" Command="{Binding ChangeSongCommand}"></Button>
-    </StackPanel>
+    <DockPanel Margin="10">
+        <!-- song information -->
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,10"
+                    HorizontalAlignment="Center">
+            <Label Content="{Binding Song.Title, FallbackValue=Song title}"
+                   HorizontalAlignment="Center"/>
+            <Button Content="Change Song" Command="{Binding ChangeSongCommand}"></Button>
+        </StackPanel>
+        
+        <!-- controls -->
+        <Grid HorizontalAlignment="Center">
+            <!-- set margin on button sides -->
+            <Grid.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Margin" Value="2,0,2,0" />
+                </Style>
+            </Grid.Resources>
+            
+            <!-- Grid layout -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <!-- previous button -->
+            <Button Grid.Column="0" Padding="15" Height="50">
+                <Image Source="{svgc:SvgImage Resources/Icons/play-skip-back.svg}"
+                       Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+            </Button>
+            
+            <!-- stop button -->
+            <Button Grid.Column="1" Padding="15" Height="50">
+                <Image Source="{svgc:SvgImage Resources/Icons/stop.svg}"
+                       Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+            </Button>
+            
+            <!-- play button -->
+            <Button Grid.Column="2" Padding="15" Height="50">
+                <Image Source="{svgc:SvgImage Resources/Icons/play.svg}"
+                       Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+            </Button>
+            
+            <!-- next button -->
+            <Button Grid.Column="3" Padding="15" Height="50">
+                <Image Source="{svgc:SvgImage Resources/Icons/play-skip-forward.svg}"
+                       Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+            </Button>
+        </Grid>
+    </DockPanel>
 </UserControl>

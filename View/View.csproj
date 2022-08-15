@@ -7,4 +7,27 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="SharpVectors" Version="1.8.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\Icons\play.svg" />
+      <Resource Include="Resources\Icons\play.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Resources\Icons\play-skip-back.svg" />
+      <Resource Include="Resources\Icons\play-skip-back.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Resources\Icons\play-skip-forward.svg" />
+      <Resource Include="Resources\Icons\play-skip-forward.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Resources\Icons\stop.svg" />
+      <Resource Include="Resources\Icons\stop.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
 </Project>
