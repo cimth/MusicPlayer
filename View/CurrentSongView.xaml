@@ -4,10 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:View"
+             xmlns:converter="clr-namespace:View.Converter"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              mc:Ignorable="d"
              d:DesignHeight="150" d:DesignWidth="800"
              Background="Lavender">
+    <UserControl.Resources>
+        <converter:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    
     <DockPanel Margin="10">
         <!-- song information -->
         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,10"
@@ -40,14 +46,25 @@
             </Button>
             
             <!-- stop button -->
-            <Button Grid.Column="1" Padding="15" Height="50">
+            <Button Grid.Column="1" Padding="15" Height="50"
+                    Command="{Binding StopCommand}">
                 <Image Source="{svgc:SvgImage Resources/Icons/stop.svg}"
                        Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
             </Button>
             
             <!-- play button -->
-            <Button Grid.Column="2" Padding="15" Height="50">
+            <Button Grid.Column="2" Padding="15" Height="50"
+                    Visibility="{Binding SongPlayer.IsPlaying, Converter={StaticResource InvertBooleanToVisibilityConverter}}"
+                    Command="{Binding ResumeCommand}">
                 <Image Source="{svgc:SvgImage Resources/Icons/play.svg}"
+                       Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+            </Button>
+            
+            <!-- pause button -->
+            <Button Grid.Column="2" Padding="15" Height="50"
+                    Visibility="{Binding SongPlayer.IsPlaying, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding PauseCommand}">
+                <Image Source="{svgc:SvgImage Resources/Icons/pause.svg}"
                        Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
             </Button>
             
