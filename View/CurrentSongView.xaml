@@ -40,38 +40,38 @@
             </Grid.ColumnDefinitions>
             
             <!-- previous button -->
-            <Button Grid.Column="0" Padding="15" Height="50">
-                <Image Source="{svgc:SvgImage Resources/Icons/play-skip-back.svg}"
-                       Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+            <Button Grid.Column="0" Padding="15" 
+                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}">
+                <Image Source="{svgc:SvgImage Resources/Icons/play-skip-back.svg}" />
             </Button>
             
             <!-- stop button -->
-            <Button Grid.Column="1" Padding="15" Height="50"
+            <Button Grid.Column="1" Padding="15" 
+                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Command="{Binding StopCommand}">
-                <Image Source="{svgc:SvgImage Resources/Icons/stop.svg}"
-                       Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+                <Image Source="{svgc:SvgImage Resources/Icons/stop.svg}" />
             </Button>
             
             <!-- play button -->
-            <Button Grid.Column="2" Padding="15" Height="50"
+            <Button Grid.Column="2" Padding="15" 
+                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Visibility="{Binding SongPlayer.IsPlaying, Converter={StaticResource InvertBooleanToVisibilityConverter}}"
                     Command="{Binding ResumeCommand}">
-                <Image Source="{svgc:SvgImage Resources/Icons/play.svg}"
-                       Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+                <Image Source="{svgc:SvgImage Resources/Icons/play.svg}" />
             </Button>
             
             <!-- pause button -->
-            <Button Grid.Column="2" Padding="15" Height="50"
+            <Button Grid.Column="2" Padding="15" 
+                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Visibility="{Binding SongPlayer.IsPlaying, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding PauseCommand}">
-                <Image Source="{svgc:SvgImage Resources/Icons/pause.svg}"
-                       Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+                <Image Source="{svgc:SvgImage Resources/Icons/pause.svg}"/>
             </Button>
             
             <!-- next button -->
-            <Button Grid.Column="3" Padding="15" Height="50">
-                <Image Source="{svgc:SvgImage Resources/Icons/play-skip-forward.svg}"
-                       Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+            <Button Grid.Column="3" Padding="15" 
+                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}">
+                <Image Source="{svgc:SvgImage Resources/Icons/play-skip-forward.svg}" />
             </Button>
         </Grid>
     </DockPanel>
