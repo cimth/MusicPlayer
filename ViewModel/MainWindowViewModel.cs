@@ -30,6 +30,6 @@ public class MainWindowViewModel
         this._songPlayer = new SongPlayer();
         
         this.DirectoriesViewModel = new DirectoriesViewModel(_songImporter, _songPlayer);
-        this.CurrentSongViewModel = new CurrentSongViewModel(_songImporter, _songPlayer);
+        this.CurrentSongViewModel = new CurrentSongViewModel(_songPlayer);
     }
 }

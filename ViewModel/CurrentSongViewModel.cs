@@ -8,29 +8,17 @@ namespace ViewModel;
 public class CurrentSongViewModel : NotifyPropertyChangedImpl
 {
     // ==============
-    // FIELDS
-    // ==============
-    
-    private readonly SongImporter _songImporter;
-    private SongPlayer _songPlayer;
-    
-    // ==============
     // PROPERTIES
     // ==============
 
-    public SongPlayer SongPlayer
-    {
-        get => _songPlayer;
-        set => SetField(ref _songPlayer, value);
-    }
+    public SongPlayer SongPlayer { get; }
     
     // ==============
     // INITIALIZATION
     // ==============
 
-    public CurrentSongViewModel(SongImporter songImporter, SongPlayer songPlayer)
+    public CurrentSongViewModel(SongPlayer songPlayer)
     {
-        this._songImporter = songImporter;
-        this._songPlayer = songPlayer;
+        this.SongPlayer = songPlayer;
     }
 }
