@@ -1,0 +1,28 @@
+<UserControl x:Class="View.DirectoriesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:View"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="400">
+    <DockPanel>
+        <!-- toolbar -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" 
+                    Background="MintCream">
+            <Button Content="Add" Margin="5" />
+        </StackPanel>
+        
+        <!-- directories and content -->
+        <ListView ItemsSource="{Binding CurrentDirectoryContentPaths}"
+                  SelectedItem="{Binding SelectedPath}"
+                  BorderThickness="0">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="MouseDoubleClick">
+                    <b:InvokeCommandAction Command="{Binding DoubleClickOnPathCommand}"/>
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </ListView>
+    </DockPanel>
+</UserControl>

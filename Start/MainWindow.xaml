@@ -25,6 +25,8 @@
             <!-- navigation sidebar -->
             <view:NavigationSidebar Grid.Column="0" Background="WhiteSmoke" />
         
+            <!-- directories view -->
+            <view:DirectoriesView Grid.Column="1" DataContext="{Binding DirectoriesViewModel}" />
         </Grid>
     </DockPanel>
 </Window>
