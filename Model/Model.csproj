@@ -5,6 +5,12 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <Nullable>enable</Nullable>
+        <TargetFramework>.net6.0-windows</TargetFramework>
+        <UseWpf>True</UseWpf>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="TagLibSharp" Version="2.3.0" />
+    </ItemGroup>
 
 </Project>

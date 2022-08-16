@@ -12,7 +12,9 @@ public class Song
     
     public string Title { get; set; }
     public string Album { get; set; }
-    public TimeSpan Length { get; set; }
+    public string[] Artists { get; set; }
+    public uint TrackNumber { get; set; }
+    public TimeSpan Duration { get; set; }
 
     #endregion
     
@@ -22,12 +24,14 @@ public class Song
 
     #region INITIALIZATION
 
-    public Song(string filePath, string title, string album, TimeSpan length)
+    public Song(string filePath, string title, string album, string[] artists, uint trackNumber, TimeSpan duration)
     {
-        FilePath = filePath;
-        Title = title;
-        Album = album;
-        Length = length;
+        this.FilePath = filePath;
+        this.Title = title;
+        this.Album = album;
+        this.Artists = artists;
+        this.TrackNumber = trackNumber;
+        this.Duration = duration;
     }
 
     #endregion

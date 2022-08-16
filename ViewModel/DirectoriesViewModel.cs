@@ -1,5 +1,7 @@
 
 using System.Windows.Input;
+using Model.DataType;
+using Model.Service;
 using ViewModel.Base;
 using ViewModel.Command;
 
@@ -49,13 +51,23 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     #endregion
     
     // ==============
+    // FIELDS FOR MODEL SERVICES
+    // ==============
+
+    private readonly SongImporter _songImporter;
+    private readonly SongPlayer _songPlayer;
+    
+    // ==============
     // INITIALIZATION
     // ==============
 
     #region INITIALIZATION
 
-    public DirectoriesViewModel()
+    public DirectoriesViewModel(SongImporter songImporter, SongPlayer songPlayer)
     {
+        this._songImporter = songImporter;
+        this._songPlayer = songPlayer;
+        
         // test directory
         _currentDirectoryPath = "";
         this.LoadDirectoryContent(_currentDirectoryPath);
@@ -91,6 +103,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     private void PlayMusic(string filePath)
     {
         Console.WriteLine($"Play '{filePath}'");
+        Song song = _songImporter.Import(filePath);
+        this._songPlayer.Play(song);
     }
     
     // ==============

@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using Model.DataType;
+using Model.Service;
 using ViewModel.Base;
 using ViewModel.Command;
 
@@ -24,15 +25,25 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
     #endregion
     
     // ==============
+    // FIELDS FOR MODEL SERVICES
+    // ==============
+
+    private readonly SongImporter _songImporter;
+    private readonly SongPlayer _songPlayer;
+    
+    // ==============
     // INITIALIZATION
     // ==============
 
     #region INITIALIZATION
 
-    public CurrentSongViewModel()
+    public CurrentSongViewModel(SongImporter songImporter, SongPlayer songPlayer)
     {
+        this._songImporter = songImporter;
+        this._songPlayer = songPlayer;
+        
         // test song
-        _song = new Song("", "Song title", "Song album", TimeSpan.Zero);
+        _song = songImporter.Import("");
         
         // init commands
         this.ChangeSongCommand = new DelegateCommand(ChangeSong);
@@ -51,7 +62,7 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
     private void ChangeSong()
     {
         Console.WriteLine("ChangeSong()");
-        this.Song = new Song("", "Changed title", "Changed album", TimeSpan.Zero);
+        this.Song = this._songImporter.Import("");
     }
     
     #endregion
