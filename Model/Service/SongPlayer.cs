@@ -39,26 +39,35 @@ public class SongPlayer : NotifyPropertyChangedImpl
     {
         this.CurrentSong = song;
         this.IsPlaying = true;
-        
+
         _mediaPlayer.Open(new Uri(song.FilePath));
         _mediaPlayer.Play();
     }
     
     public void Pause()
     {
-        this.IsPlaying = false;
-        _mediaPlayer.Pause();
+        if (this._isPlaying)
+        {
+            this.IsPlaying = false;
+            _mediaPlayer.Pause();
+        }
     }
     
     public void Resume()
     {
-        this.IsPlaying = true;
-        _mediaPlayer.Play();
+        if (!this._isPlaying && this.CurrentSong != null)
+        {
+            this.IsPlaying = true;
+            _mediaPlayer.Play();
+        }
     }
     
     public void Stop()
     {
-        this.IsPlaying = false;
-        _mediaPlayer.Stop();
+        if (this._isPlaying)
+        {
+            this.IsPlaying = false;
+            _mediaPlayer.Stop();
+        }
     }
 }
