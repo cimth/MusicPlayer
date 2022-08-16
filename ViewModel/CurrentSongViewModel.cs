@@ -1,7 +1,6 @@
-using System.Windows.Input;
+using Common;
 using Model.DataType;
 using Model.Service;
-using ViewModel.Base;
 using ViewModel.Command;
 
 namespace ViewModel;

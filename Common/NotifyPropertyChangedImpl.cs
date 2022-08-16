@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace ViewModel.Base;
+namespace Common;
 
 /// <summary>
 /// This class can be used as base class for data type classes and similar which should provide the interface
