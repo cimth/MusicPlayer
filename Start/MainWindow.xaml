@@ -5,13 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Start"
         xmlns:view="clr-namespace:View;assembly=View"
+        xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" 
         Height="600" Width="950" MinHeight="600" MinWidth="950"
         WindowState="Maximized">
     <DockPanel>
-        <view:CurrentSongView Name="CurrentSongView"
-                              DockPanel.Dock="Bottom"></view:CurrentSongView>
-        <view:StartView/>
+        <!-- current song (bottom) -->
+        <view:CurrentSongView DockPanel.Dock="Bottom" DataContext="{Binding CurrentSongViewModel}" />
+        
+        <!-- main content (center) -->
+        <Grid>
+            <!-- Grid layout -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" MinWidth="200"/>
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
+        
+            <!-- navigation sidebar -->
+            <view:NavigationSidebar Grid.Column="0" Background="WhiteSmoke" />
+        
+        </Grid>
     </DockPanel>
 </Window>

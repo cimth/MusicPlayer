@@ -12,9 +12,10 @@ namespace Start
         {
             InitializeComponent();
             
-            // create view models and add it as data context for the views
-            CurrentSongViewModel currentSongViewModel = new CurrentSongViewModel();
-            this.CurrentSongView.DataContext = currentSongViewModel;
+            // Create main view model for DataContext
+            // => ATTENTION: The MainWindow is the only view where the view model is created like this.
+            //               For all other views, the view model is set via binding.
+            DataContext = new MainWindowViewModel();
         }
     }
 }
