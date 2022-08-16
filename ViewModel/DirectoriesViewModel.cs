@@ -20,14 +20,31 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         set => SetField(ref _currentDirectoryPath, value);
     }
 
-    private List<string>? _currentDirectoryContentPaths;
-    public List<string>? CurrentDirectoryContentPaths
+    private List<string>? _subDirectoryPaths;
+    public List<string>? SubDirectoryPaths
     {
-        get => _currentDirectoryContentPaths;
-        set => SetField(ref _currentDirectoryContentPaths, value);
+        get => _subDirectoryPaths;
+        set => SetField(ref _subDirectoryPaths, value);
+    }
+
+    private List<string>? _musicFilePaths;
+    public List<string>? MusicFilePaths
+    {
+        get => _musicFilePaths;
+        set => SetField(ref _musicFilePaths, value);
     }
     
-    public string? SelectedPath { get; set; }
+    public string? SelectedSubDirectoryPath { get; set; }
+    
+    public string? SelectedMusicFilePath { get; set; }
+
+    private bool _hasSubDirectoriesAndMusicFiles;
+
+    public bool HasSubDirectoriesAndMusicFiles
+    {
+        get => _hasSubDirectoriesAndMusicFiles;
+        set => SetField(ref _hasSubDirectoriesAndMusicFiles, value);
+    }
 
     #endregion
     
@@ -44,19 +61,24 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         this.LoadDirectoryContent(_currentDirectoryPath);
 
         // init commands
-        this.DoubleClickOnPathCommand = new DelegateCommand(DoubleClickOnPath);
+        this.OpenSubDirectoryCommand = new DelegateCommand(OpenSubDirectory);
+        this.PlayMusicFileCommand = new DelegateCommand(PlayMusicFile);
     }
 
     private void LoadDirectoryContent(string directoryPath)
     {
         if (Directory.Exists(directoryPath))
         {
+            // load sub directories
             string[] subDirectories = Directory.GetDirectories(directoryPath);
+            this.SubDirectoryPaths = new List<string>(subDirectories);
+            
+            // load music files
             string[] mp3Files = Directory.GetFiles(directoryPath, "*.mp3");
+            this.MusicFilePaths = new List<string>(mp3Files);
 
-            this.CurrentDirectoryContentPaths = new List<string>();
-            this.CurrentDirectoryContentPaths.AddRange(subDirectories);
-            this.CurrentDirectoryContentPaths.AddRange(mp3Files);
+            // check if both sub directories and music files exist (for conditionally showing a seperator)
+            this.HasSubDirectoriesAndMusicFiles = subDirectories.Length > 0 && mp3Files.Length > 0;
         }
     }
 
@@ -77,18 +99,23 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
 
     #region COMMANDS
     
-    public ICommand DoubleClickOnPathCommand { get; set; }
+    public ICommand OpenSubDirectoryCommand { get; set; }
 
-    private void DoubleClickOnPath()
+    private void OpenSubDirectory()
     {
-        Console.WriteLine($"DoubleClickOnPath() with '{SelectedPath}'");
-        
-        if (Directory.Exists(SelectedPath))
+        if (Directory.Exists(SelectedSubDirectoryPath))
         {
-            this.LoadDirectoryContent(SelectedPath);
-        } else if (File.Exists(SelectedPath))
+            this.LoadDirectoryContent(SelectedSubDirectoryPath);
+        }
+    }
+    
+    public ICommand PlayMusicFileCommand { get; set; }
+
+    private void PlayMusicFile()
+    {
+        if (File.Exists(SelectedMusicFilePath))
         {
-            this.PlayMusic(SelectedPath);
+            this.PlayMusic(SelectedMusicFilePath);
         }
     }
     
