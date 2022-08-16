@@ -8,27 +8,29 @@ namespace ViewModel;
 public class CurrentSongViewModel : NotifyPropertyChangedImpl
 {
     // ==============
-    // FIELDS FOR DATA BINDING IN VIEW
+    // FIELDS
     // ==============
-
+    
     #region FIELDS
-
-    private Song _song;
-
-    public Song Song
-    {
-        get => _song;
-        set => SetField(ref _song, value);
-    }
-
+    
+    private readonly SongImporter _songImporter;
+    
     #endregion
     
     // ==============
-    // FIELDS FOR MODEL SERVICES
+    // PROPERTIES
     // ==============
 
-    private readonly SongImporter _songImporter;
-    private readonly SongPlayer _songPlayer;
+    #region PROPERTIES
+
+    private SongPlayer _songPlayer;
+    public SongPlayer SongPlayer
+    {
+        get => _songPlayer;
+        set => SetField(ref _songPlayer, value);
+    }
+
+    #endregion
     
     // ==============
     // INITIALIZATION
@@ -40,12 +42,6 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
     {
         this._songImporter = songImporter;
         this._songPlayer = songPlayer;
-        
-        // test song
-        _song = songImporter.Import("");
-        
-        // init commands
-        this.ChangeSongCommand = new DelegateCommand(ChangeSong);
     }
 
     #endregion
@@ -55,14 +51,6 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
     // ==============
 
     #region COMMANDS
-
-    public ICommand ChangeSongCommand { get; set; }
-
-    private void ChangeSong()
-    {
-        Console.WriteLine("ChangeSong()");
-        this.Song = this._songImporter.Import("");
-    }
     
     #endregion
 }

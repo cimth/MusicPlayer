@@ -12,9 +12,8 @@
         <!-- song information -->
         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,10"
                     HorizontalAlignment="Center">
-            <Label Content="{Binding Song.Title, FallbackValue=Song title}"
+            <Label Content="{Binding SongPlayer.CurrentSong.Title, FallbackValue=No song loaded}"
                    HorizontalAlignment="Center"/>
-            <Button Content="Change Song" Command="{Binding ChangeSongCommand}"></Button>
         </StackPanel>
         
         <!-- controls -->
