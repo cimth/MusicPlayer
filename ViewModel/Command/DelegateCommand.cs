@@ -12,34 +12,24 @@ public class DelegateCommand : ICommand
     // FIELDS
     // ==============
 
-    #region FIELDS
-
     public event EventHandler? CanExecuteChanged;
     
     private readonly Predicate<object?>? _canExecute;
     private readonly Action _execute;
 
-    #endregion
-
     // ==============
     // INITIALIZATION
     // ==============
-    
-    #region initialization
 
     public DelegateCommand(Action execute, Predicate<object?>? canExecute = null)
     {
         this._execute = execute ?? throw new ArgumentNullException(nameof(execute));
         this._canExecute = canExecute;
     }
-    
-    #endregion
 
     // ==============
     // CAN EXECUTE
     // ==============
-    
-    #region canExecute
 
     public bool CanExecute(object? parameter)
     {
@@ -63,19 +53,13 @@ public class DelegateCommand : ICommand
     {
         this.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
-    
-    #endregion
 
     // ==============
     // EXECUTE
     // ==============
     
-    #region execute
-
     public void Execute(object? parameter)
     {
         this._execute?.Invoke();
     }
-    
-    #endregion
 }

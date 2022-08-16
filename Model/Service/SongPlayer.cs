@@ -10,15 +10,20 @@ public class SongPlayer : NotifyPropertyChangedImpl
     // FIELDS
     // ==============
     
+    private readonly MediaPlayer _mediaPlayer = new MediaPlayer();
+    
     private Song? _currentSong;
+    
+    // ==============
+    // PROPERTIES
+    // ==============
+    
     public Song? CurrentSong
     {
         get => _currentSong;
         set => SetField(ref _currentSong, value);
     }
-    
-    private readonly MediaPlayer _mediaPlayer = new MediaPlayer();
-    
+
     // ==============
     // COMMON AUDIO ACTIONS
     // ==============

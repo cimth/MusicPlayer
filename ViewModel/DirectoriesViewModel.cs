@@ -1,4 +1,3 @@
-
 using System.Windows.Input;
 using Common;
 using Model.DataType;
@@ -10,64 +9,63 @@ namespace ViewModel;
 public class DirectoriesViewModel : NotifyPropertyChangedImpl
 {
     // ==============
-    // FIELDS FOR DATA BINDING IN VIEW
+    // FIELDS
     // ==============
 
-    #region FIELDS
+    private readonly SongImporter _songImporter;
+    private readonly SongPlayer _songPlayer;
 
     private string? _currentDirectoryPath;
+    private List<string>? _subDirectoryPaths;
+    private List<string>? _musicFilePaths;
+
+    private bool _hasSubDirectoriesAndMusicFiles;
+
+    // ==============
+    // PROPERTIES 
+    // ==============
+
     public string? CurrentDirectoryPath
     {
         get => _currentDirectoryPath;
         set => SetField(ref _currentDirectoryPath, value);
     }
 
-    private List<string>? _subDirectoryPaths;
     public List<string>? SubDirectoryPaths
     {
         get => _subDirectoryPaths;
         set => SetField(ref _subDirectoryPaths, value);
     }
 
-    private List<string>? _musicFilePaths;
     public List<string>? MusicFilePaths
     {
         get => _musicFilePaths;
         set => SetField(ref _musicFilePaths, value);
     }
-    
-    public string? SelectedSubDirectoryPath { get; set; }
-    
-    public string? SelectedMusicFilePath { get; set; }
 
-    private bool _hasSubDirectoriesAndMusicFiles;
+    public string? SelectedSubDirectoryPath { get; set; }
+
+    public string? SelectedMusicFilePath { get; set; }
 
     public bool HasSubDirectoriesAndMusicFiles
     {
         get => _hasSubDirectoriesAndMusicFiles;
         set => SetField(ref _hasSubDirectoriesAndMusicFiles, value);
     }
-
-    #endregion
     
-    // ==============
-    // FIELDS FOR MODEL SERVICES
-    // ==============
-
-    private readonly SongImporter _songImporter;
-    private readonly SongPlayer _songPlayer;
+    public ICommand PlayMusicFileCommand { get; set; }
     
+    public ICommand OpenSubDirectoryCommand { get; set; }
+
     // ==============
     // INITIALIZATION
     // ==============
-
-    #region INITIALIZATION
 
     public DirectoriesViewModel(SongImporter songImporter, SongPlayer songPlayer)
     {
         this._songImporter = songImporter;
         this._songPlayer = songPlayer;
-        
+
         // test directory
         _currentDirectoryPath = "";
         this.LoadDirectoryContent(_currentDirectoryPath);
@@ -84,7 +82,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
             // load sub directories
             string[] subDirectories = Directory.GetDirectories(directoryPath);
             this.SubDirectoryPaths = new List<string>(subDirectories);
-            
+
             // load music files
             string[] mp3Files = Directory.GetFiles(directoryPath, "*.mp3");
             this.MusicFilePaths = new List<string>(mp3Files);
@@ -94,8 +92,6 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         }
     }
 
-    #endregion
-    
     // ==============
     // PLAY SELECTED MUSIC FILE
     // ==============
@@ -106,14 +102,10 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         Song song = _songImporter.Import(filePath);
         this._songPlayer.Play(song);
     }
-    
-    // ==============
-    // COMMANDS
-    // ==============
 
-    #region COMMANDS
-    
-    public ICommand OpenSubDirectoryCommand { get; set; }
+    // ==============
+    // COMMAND ACTIONS
+    // ==============
 
     private void OpenSubDirectory()
     {
@@ -122,8 +114,6 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
             this.LoadDirectoryContent(SelectedSubDirectoryPath);
         }
     }
-    
-    public ICommand PlayMusicFileCommand { get; set; }
 
     private void PlayMusicFile()
     {
@@ -132,6 +122,4 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
             this.PlayMusic(SelectedMusicFilePath);
         }
     }
-    
-    #endregion
 }

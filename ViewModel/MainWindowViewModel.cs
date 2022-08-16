@@ -4,12 +4,25 @@ namespace ViewModel;
 
 public class MainWindowViewModel
 {
-    public DirectoriesViewModel DirectoriesViewModel { get; set; }
-    public CurrentSongViewModel CurrentSongViewModel { get; set; }
-
+    // ==============
+    // FIELDS
+    // ==============
+    
     // dependencies for multiple view models
     private readonly SongImporter _songImporter;
     private readonly SongPlayer _songPlayer;
+    
+    // ==============
+    // PROPERTIES
+    // ==============
+    public DirectoriesViewModel DirectoriesViewModel { get; set; }
+    
+    public CurrentSongViewModel CurrentSongViewModel { get; set; }
+
+    
+    // ==============
+    // INITIALIZATION
+    // ==============
 
     public MainWindowViewModel()
     {

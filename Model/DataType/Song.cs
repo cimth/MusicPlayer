@@ -3,10 +3,8 @@ namespace Model.DataType;
 public class Song 
 {
     // ==============
-    // FIELDS
+    // PROPERTIES
     // ==============
-    
-    #region FIELDS
 
     public string FilePath { get; set; }
     
@@ -15,14 +13,10 @@ public class Song
     public string[] Artists { get; set; }
     public uint TrackNumber { get; set; }
     public TimeSpan Duration { get; set; }
-
-    #endregion
     
     // ==============
     // INITIALIZATION
     // ==============
-
-    #region INITIALIZATION
 
     public Song(string filePath, string title, string album, string[] artists, uint trackNumber, TimeSpan duration)
     {
@@ -33,6 +27,4 @@ public class Song
         this.TrackNumber = trackNumber;
         this.Duration = duration;
     }
-
-    #endregion
 }
