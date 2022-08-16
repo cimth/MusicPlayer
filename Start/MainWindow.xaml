@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Start"
         xmlns:view="clr-namespace:View;assembly=View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="950" 
+        Title="MainWindow" 
+        Height="600" Width="950" MinHeight="600" MinWidth="950"
         WindowState="Maximized">
     <DockPanel>
         <view:CurrentSongView Name="CurrentSongView"
