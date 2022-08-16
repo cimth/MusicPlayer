@@ -5,8 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:View"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="600">
     <Grid>
-        <Label Content="Start" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" MinWidth="200"/>
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+        
+        <local:NavigationSidebar Grid.Column="0" Background="WhiteSmoke" />
+        
+        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Label Content="Start" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        </StackPanel>
     </Grid>
 </UserControl>
