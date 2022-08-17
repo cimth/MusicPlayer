@@ -109,6 +109,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     {
         if (Directory.Exists(SelectedSubDirectoryPath))
         {
+            // update current directory
+            CurrentDirectoryPath = SelectedSubDirectoryPath;
             this.LoadDirectoryContent(SelectedSubDirectoryPath);
         }
     }
