@@ -135,20 +135,10 @@ public class SongPlayer : NotifyPropertyChangedImpl
     // COMMON AUDIO ACTIONS
     // ==============
 
-    public void Play(Song song)
-    {
-        this.CurrentSong = song;
-        this.IsPlaying = true;
-
-        this.TimerCurrent = 0;
-        this.TimerMax = this.CurrentSong.Duration.TotalSeconds;
-
-        _mediaPlayer.Open(new Uri(song.FilePath));
-        _mediaPlayer.Play();
-    }
-    
     public void Play(Playlist playlist, int indexOfFirstSongToBePlayed)
     {
+        Console.WriteLine($"Start Playlist '{playlist.Name}'");
+        
         this._currentPlaylist = playlist;
         this._currentPlaylistIndex = indexOfFirstSongToBePlayed;
 
@@ -182,5 +172,23 @@ public class SongPlayer : NotifyPropertyChangedImpl
             this.IsPlaying = false;
             _mediaPlayer.Stop();
         }
+    }
+    
+    // ==============
+    // HELPING METHODS
+    // ==============
+    
+    private void Play(Song song)
+    {
+        Console.WriteLine($"Start song '{song.Title}'");
+        
+        this.CurrentSong = song;
+        this.IsPlaying = true;
+
+        this.TimerCurrent = 0;
+        this.TimerMax = this.CurrentSong.Duration.TotalSeconds;
+
+        _mediaPlayer.Open(new Uri(song.FilePath));
+        _mediaPlayer.Play();
     }
 }

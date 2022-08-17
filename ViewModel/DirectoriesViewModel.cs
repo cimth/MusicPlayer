@@ -80,7 +80,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
 
         // init commands
         this.OpenSubDirectoryCommand = new DelegateCommand(OpenSubDirectory);
-        this.PlayMusicFileCommand = new DelegateCommand(PlayMusicFile);
+        this.PlayMusicFileCommand = new DelegateCommand(PlaySelectedSong);
         this.PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand = new DelegateCommand(PlayAllSongsInDirectoryStartingWithTheSelectedSong);
     }
 
@@ -102,31 +102,6 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     }
 
     // ==============
-    // PLAY SELECTED MUSIC FILE
-    // ==============
-
-    private void PlaySingleSong(string filePath)
-    {
-        Console.WriteLine($"Play '{filePath}'");
-        Song song = _songImporter.Import(filePath);
-        this._songPlayer.Play(song);
-    }
-
-    private void PlayAllSongsInDirectoryStartingWIthTheSelectedSong(string directoryPath)
-    {
-        if (Directory.Exists(directoryPath) && File.Exists(this.SelectedMusicFilePath))
-        {
-            // convert directory to playlist
-            Console.WriteLine($"Play all songs in directory '{directoryPath}'");
-            string directoryName = Path.GetDirectoryName(directoryPath)!;
-            Playlist playlist = _songImporter.Import(directoryName, this.MusicFilePaths);
-            
-            // play the playlist with the selected song as first song
-            this._songPlayer.Play(playlist, this.SelectedMusicFileIndex);
-        }
-    }
-
-    // ==============
     // COMMAND ACTIONS
     // ==============
 
@@ -138,11 +113,16 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         }
     }
 
-    private void PlayMusicFile()
+    private void PlaySelectedSong()
     {
-        if (File.Exists(SelectedMusicFilePath))
+        if (File.Exists(this.SelectedMusicFilePath))
         {
-            this.PlaySingleSong(SelectedMusicFilePath);
+            // convert file to playlist
+            // => seems overcomplicated but it makes the logic easier to understand since internally only playlists are
+            //    played by SongPlayer and there is basically no different logic for single songs and playlists
+            string songName = Path.GetFileName(this.SelectedMusicFilePath);
+            Playlist playlist = _songImporter.Import(songName, this.SelectedMusicFilePath);
+            this._songPlayer.Play(playlist, 0);
         }
     }
 
@@ -150,7 +130,18 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     {
         if (Directory.Exists(CurrentDirectoryPath))
         {
-            this.PlayAllSongsInDirectoryStartingWIthTheSelectedSong(CurrentDirectoryPath);
+            Console.WriteLine($"Play all songs in directory '{CurrentDirectoryPath}'");
+            
+            // get only the directory name without the parent directories
+            // => you have to use Path.GetFilename() because Path.GetDirectoryName() would return the path to the
+            //    parent directory of CurrentDirectoryPath
+            string directoryName = Path.GetFileName(CurrentDirectoryPath);
+            
+            // convert directory to playlist
+            Playlist playlist = _songImporter.Import(directoryName, this.MusicFilePaths);
+            
+            // play the playlist with the selected song as first song
+            this._songPlayer.Play(playlist, this.SelectedMusicFileIndex);
         }
     }
 }
