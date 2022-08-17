@@ -119,7 +119,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
             // convert directory to playlist
             Console.WriteLine($"Play all songs in directory '{directoryPath}'");
             string directoryName = Path.GetDirectoryName(directoryPath)!;
-            SimplePlaylist playlist = _songImporter.Import(directoryName, this.MusicFilePaths);
+            Playlist playlist = _songImporter.Import(directoryName, this.MusicFilePaths);
             
             // play the selected song as first song
             Song firstSong = playlist.Songs[this.SelectedMusicFileIndex];

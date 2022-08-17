@@ -17,7 +17,7 @@ public class SongImporter
         return new Song(songPath, title, album, artists, trackNumber, duration);
     }
 
-    public SimplePlaylist Import(string playlistName, List<string> songPaths)
+    public Playlist Import(string playlistName, List<string> songPaths)
     {
         List<Song> songs = new List<Song>();
         
@@ -26,6 +26,6 @@ public class SongImporter
             songs.Add(this.Import(songPath));
         }
         
-        return new SimplePlaylist(playlistName, songs);
+        return new Playlist(playlistName, songs);
     }
 }

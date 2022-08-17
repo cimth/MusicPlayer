@@ -1,6 +1,6 @@
 namespace Model.DataType;
 
-public class SimplePlaylist
+public class Playlist
 {
     // ==============
     // PROPERTIES
@@ -14,7 +14,7 @@ public class SimplePlaylist
     // INITIALIZATION
     // ==============
 
-    public SimplePlaylist(string name, List<Song> songs)
+    public Playlist(string name, List<Song> songs)
     {
         this.Name = name;
         this.Songs = songs;
