@@ -68,11 +68,8 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
 
     private void SongProgressUpdateCurrentTimeCommand()
     {
-        if (this.SongPlayer.TimerCurrent != null)
-        {
-            TimeSpan newTimerValue = TimeSpan.FromSeconds(this.SongPlayer.TimerCurrent.Value);
-            this.SongPlayer.SetToSpecificTimerValue(newTimerValue);
-            this.SongPlayer.IsTimerUpdatedEverySecond = true;
-        }
+        TimeSpan newTimerValue = TimeSpan.FromSeconds(this.SongPlayer.TimerCurrent);
+        this.SongPlayer.SetToSpecificTimerValue(newTimerValue);
+        this.SongPlayer.IsTimerUpdatedEverySecond = true;
     }
 }

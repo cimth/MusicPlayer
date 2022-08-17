@@ -17,8 +17,8 @@ public class SongPlayer : NotifyPropertyChangedImpl
     private bool _isPlaying;
 
     // timer
-    private double? _timerMax;
-    private double? _timerCurrent;
+    private double _timerMax;
+    private double _timerCurrent;
     private bool _isTimerUpdatedEverySecond;
 
     // ==============
@@ -39,13 +39,13 @@ public class SongPlayer : NotifyPropertyChangedImpl
     
     // timer
 
-    public double? TimerMax
+    public double TimerMax
     {
         get => _timerMax;
         set => SetField(ref _timerMax, value);
     }
     
-    public double? TimerCurrent
+    public double TimerCurrent
     {
         get => _timerCurrent;
         set => SetField(ref _timerCurrent, value);
@@ -64,12 +64,18 @@ public class SongPlayer : NotifyPropertyChangedImpl
     public SongPlayer()
     {
         this._mediaPlayer = new MediaPlayer();
-        this.IsTimerUpdatedEverySecond = true;
-        this.InitTimerUpdate();
+        this.InitTimer();
     }
 
-    private void InitTimerUpdate()
+    private void InitTimer()
     {
+        // init seconds values
+        this.TimerCurrent = 0;
+        this.TimerMax = 0;
+        
+        // enable the secondly update of the current time
+        this.IsTimerUpdatedEverySecond = true;
+        
         DispatcherTimer timer = new DispatcherTimer();
         timer.Interval = TimeSpan.FromSeconds(1);
         timer.Tick += timer_Tick;
@@ -82,9 +88,7 @@ public class SongPlayer : NotifyPropertyChangedImpl
     
     public  void SetToSpecificTimerValue(TimeSpan specificTimerValue)
     {
-        if (this._mediaPlayer.Source != null
-            && this._mediaPlayer.NaturalDuration.HasTimeSpan
-            && this.TimerCurrent != null)
+        if (this._mediaPlayer.Source != null && this._mediaPlayer.NaturalDuration.HasTimeSpan)
         {
             this._mediaPlayer.Position = specificTimerValue;
         }

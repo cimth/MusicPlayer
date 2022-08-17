@@ -35,7 +35,7 @@
             
                 <!-- current time -->
                 <Label Grid.Column="0"
-                       Content="{Binding SongPlayer.TimerCurrent, Converter={StaticResource DoubleSecondsToTimerStringConverter}}"/>
+                       Content="{Binding SongPlayer.TimerCurrent, Converter={StaticResource DoubleSecondsToTimerStringConverter}, FallbackValue=0:00}"/>
             
                 <!-- song progress -->
                 <!-- 
