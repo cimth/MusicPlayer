@@ -11,15 +11,39 @@
              Background="Lavender">
     <UserControl.Resources>
         <converter:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
+        <converter:DoubleSecondsToTimerStringConverter x:Key="DoubleSecondsToTimerStringConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     
     <DockPanel Margin="10">
         <!-- song information -->
         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,10"
-                    HorizontalAlignment="Center">
+                    HorizontalAlignment="Stretch">
+            <!-- song title -->
             <Label Content="{Binding SongPlayer.CurrentSong.Title, FallbackValue=No song loaded}"
                    HorizontalAlignment="Center"/>
+            
+            <Grid Background="Transparent">
+                <!-- Grid layout -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+            
+                <!-- current time -->
+                <Label Grid.Column="0"
+                       Content="{Binding SongPlayer.TimerCurrent, Converter={StaticResource DoubleSecondsToTimerStringConverter}}"/>
+            
+                <!-- progress -->
+                <Slider Grid.Column="1" VerticalAlignment="Center"
+                        Minimum="0" Maximum="{Binding SongPlayer.TimerMax}" 
+                        Value="{Binding SongPlayer.TimerCurrent}" />
+            
+                <!-- song length -->
+                <Label Grid.Column="2" 
+                       Content="{Binding SongPlayer.TimerMax, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
+            </Grid>
         </StackPanel>
         
         <!-- controls -->
