@@ -37,10 +37,11 @@
             <!-- music files -->
             <ListView ItemsSource="{Binding MusicFilePaths}"
                       SelectedItem="{Binding SelectedMusicFilePath}"
+                      SelectedIndex="{Binding SelectedMusicFileIndex}"
                       BorderThickness="0">
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="MouseDoubleClick">
-                        <b:InvokeCommandAction Command="{Binding PlayMusicFileCommand}"/>
+                        <b:InvokeCommandAction Command="{Binding PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand}"/>
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
             </ListView>

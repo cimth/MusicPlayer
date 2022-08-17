@@ -46,6 +46,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     public string? SelectedSubDirectoryPath { get; set; }
 
     public string? SelectedMusicFilePath { get; set; }
+    
+    public int? SelectedMusicFileIndex { get; set; }
 
     public bool HasSubDirectoriesAndMusicFiles
     {
@@ -53,9 +55,13 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         set => SetField(ref _hasSubDirectoriesAndMusicFiles, value);
     }
     
+    // commands
+    
     public ICommand PlayMusicFileCommand { get; set; }
     
     public ICommand OpenSubDirectoryCommand { get; set; }
+    
+    public ICommand PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand { get; set; }
 
     // ==============
     // INITIALIZATION
@@ -73,6 +79,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         // init commands
         this.OpenSubDirectoryCommand = new DelegateCommand(OpenSubDirectory);
         this.PlayMusicFileCommand = new DelegateCommand(PlayMusicFile);
+        this.PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand = new DelegateCommand(PlayAllSongsInDirectoryStartingWithTheSelectedSong);
     }
 
     private void LoadDirectoryContent(string directoryPath)
@@ -96,11 +103,28 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     // PLAY SELECTED MUSIC FILE
     // ==============
 
-    private void PlayMusic(string filePath)
+    private void PlaySingleSong(string filePath)
     {
         Console.WriteLine($"Play '{filePath}'");
         Song song = _songImporter.Import(filePath);
         this._songPlayer.Play(song);
+    }
+
+    private void PlayAllSongsInDirectoryStartingWIthTheSelectedSong(string directoryPath)
+    {
+        if (Directory.Exists(directoryPath) && this.MusicFilePaths != null 
+            && this.SelectedMusicFileIndex != null && File.Exists(this.SelectedMusicFilePath))
+        {
+            // convert directory to playlist
+            Console.WriteLine($"Play all songs in directory '{directoryPath}'");
+            string directoryName = Path.GetDirectoryName(directoryPath)!;
+            SimplePlaylist playlist = _songImporter.Import(directoryName, this.MusicFilePaths);
+            
+            // play the selected song as first song
+            Song firstSong = playlist.Songs[this.SelectedMusicFileIndex.Value];
+            Console.WriteLine($"Start with song '{firstSong.Title}'");
+            _songPlayer.Play(firstSong);
+        }
     }
 
     // ==============
@@ -119,7 +143,15 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     {
         if (File.Exists(SelectedMusicFilePath))
         {
-            this.PlayMusic(SelectedMusicFilePath);
+            this.PlaySingleSong(SelectedMusicFilePath);
+        }
+    }
+
+    private void PlayAllSongsInDirectoryStartingWithTheSelectedSong()
+    {
+        if (Directory.Exists(CurrentDirectoryPath))
+        {
+            this.PlayAllSongsInDirectory(CurrentDirectoryPath);
         }
     }
 }
