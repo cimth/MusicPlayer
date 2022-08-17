@@ -16,8 +16,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     private readonly SongPlayer _songPlayer;
 
     private string? _currentDirectoryPath;
-    private List<string>? _subDirectoryPaths;
-    private List<string>? _musicFilePaths;
+    private List<string> _subDirectoryPaths;
+    private List<string> _musicFilePaths;
 
     private bool _hasSubDirectoriesAndMusicFiles;
 
@@ -31,13 +31,13 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         set => SetField(ref _currentDirectoryPath, value);
     }
 
-    public List<string>? SubDirectoryPaths
+    public List<string> SubDirectoryPaths
     {
         get => _subDirectoryPaths;
         set => SetField(ref _subDirectoryPaths, value);
     }
 
-    public List<string>? MusicFilePaths
+    public List<string> MusicFilePaths
     {
         get => _musicFilePaths;
         set => SetField(ref _musicFilePaths, value);
@@ -47,7 +47,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
 
     public string? SelectedMusicFilePath { get; set; }
     
-    public int? SelectedMusicFileIndex { get; set; }
+    public int SelectedMusicFileIndex { get; set; }
 
     public bool HasSubDirectoriesAndMusicFiles
     {
@@ -71,6 +71,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     {
         this._songImporter = songImporter;
         this._songPlayer = songPlayer;
+        this._subDirectoryPaths = new List<string>();
+        this._musicFilePaths = new List<string>();
 
         // test directory
         _currentDirectoryPath = "";
@@ -94,7 +96,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
             string[] mp3Files = Directory.GetFiles(directoryPath, "*.mp3");
             this.MusicFilePaths = new List<string>(mp3Files);
 
-            // check if both sub directories and music files exist (for conditionally showing a seperator)
+            // check if both sub directories and music files exist (for conditionally showing a separator)
             this.HasSubDirectoriesAndMusicFiles = subDirectories.Length > 0 && mp3Files.Length > 0;
         }
     }
@@ -112,8 +114,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
 
     private void PlayAllSongsInDirectoryStartingWIthTheSelectedSong(string directoryPath)
     {
-        if (Directory.Exists(directoryPath) && this.MusicFilePaths != null 
-            && this.SelectedMusicFileIndex != null && File.Exists(this.SelectedMusicFilePath))
+        if (Directory.Exists(directoryPath) && File.Exists(this.SelectedMusicFilePath))
         {
             // convert directory to playlist
             Console.WriteLine($"Play all songs in directory '{directoryPath}'");
@@ -121,7 +122,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
             SimplePlaylist playlist = _songImporter.Import(directoryName, this.MusicFilePaths);
             
             // play the selected song as first song
-            Song firstSong = playlist.Songs[this.SelectedMusicFileIndex.Value];
+            Song firstSong = playlist.Songs[this.SelectedMusicFileIndex];
             Console.WriteLine($"Start with song '{firstSong.Title}'");
             _songPlayer.Play(firstSong);
         }
@@ -151,7 +152,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     {
         if (Directory.Exists(CurrentDirectoryPath))
         {
-            this.PlayAllSongsInDirectory(CurrentDirectoryPath);
+            this.PlayAllSongsInDirectoryStartingWIthTheSelectedSong(CurrentDirectoryPath);
         }
     }
 }
