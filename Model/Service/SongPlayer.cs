@@ -13,6 +13,9 @@ public class SongPlayer : NotifyPropertyChangedImpl
     
     private readonly MediaPlayer _mediaPlayer;
 
+    private Playlist? _currentPlaylist;
+    private int _currentPlaylistIndex;
+    
     private Song? _currentSong;
     private bool _isPlaying;
 
@@ -64,6 +67,8 @@ public class SongPlayer : NotifyPropertyChangedImpl
     public SongPlayer()
     {
         this._mediaPlayer = new MediaPlayer();
+        this._mediaPlayer.MediaEnded += this.mediaPlayer_Ended;
+        
         this.InitTimer();
     }
 
@@ -104,6 +109,27 @@ public class SongPlayer : NotifyPropertyChangedImpl
             this.TimerCurrent = this._mediaPlayer.Position.TotalSeconds;
         }
     }
+    
+    // ==============
+    // SONG ENDED
+    // ==============
+
+    private void mediaPlayer_Ended(object? sender, EventArgs eventArgs)
+    {
+        if (this._currentPlaylist != null)
+        {
+            if (this._currentPlaylistIndex < this._currentPlaylist.Songs.Count - 1)
+            {
+                // play next song in playlist
+                this._currentPlaylistIndex += 1;
+                this.Play(this._currentPlaylist.Songs[_currentPlaylistIndex]);
+            }
+            else
+            {
+                Console.WriteLine($"End of playlist {_currentPlaylist.Name} reached.");
+            }
+        }
+    }
 
     // ==============
     // COMMON AUDIO ACTIONS
@@ -119,6 +145,16 @@ public class SongPlayer : NotifyPropertyChangedImpl
 
         _mediaPlayer.Open(new Uri(song.FilePath));
         _mediaPlayer.Play();
+    }
+    
+    public void Play(Playlist playlist, int indexOfFirstSongToBePlayed)
+    {
+        this._currentPlaylist = playlist;
+        this._currentPlaylistIndex = indexOfFirstSongToBePlayed;
+
+        // play the first song
+        Song songToPlay = playlist.Songs[indexOfFirstSongToBePlayed];
+        this.Play(songToPlay);
     }
     
     public void Pause()

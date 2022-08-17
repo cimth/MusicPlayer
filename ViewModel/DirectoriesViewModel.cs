@@ -121,10 +121,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
             string directoryName = Path.GetDirectoryName(directoryPath)!;
             Playlist playlist = _songImporter.Import(directoryName, this.MusicFilePaths);
             
-            // play the selected song as first song
-            Song firstSong = playlist.Songs[this.SelectedMusicFileIndex];
-            Console.WriteLine($"Start with song '{firstSong.Title}'");
-            _songPlayer.Play(firstSong);
+            // play the playlist with the selected song as first song
+            this._songPlayer.Play(playlist, this.SelectedMusicFileIndex);
         }
     }
 
