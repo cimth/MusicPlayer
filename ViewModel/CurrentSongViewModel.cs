@@ -15,9 +15,16 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
     public SongPlayer SongPlayer { get; }
     
     // commands
+    
     public ICommand PauseCommand { get; }
+    
     public ICommand ResumeCommand { get; }
+    
     public ICommand StopCommand { get; }
+
+    public ICommand SongProgressDragStartedCommand { get; }
+    
+    public ICommand SongProgressDragCompletedCommand { get; }
     
     // ==============
     // INITIALIZATION
@@ -31,6 +38,8 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
         this.PauseCommand = new DelegateCommand(this.Pause);
         this.ResumeCommand = new DelegateCommand(this.Resume);
         this.StopCommand = new DelegateCommand(this.Stop);
+        this.SongProgressDragStartedCommand = new DelegateCommand(this.SongProgressDragStarted);
+        this.SongProgressDragCompletedCommand = new DelegateCommand(this.SongProgressUpdateCurrentTimeCommand);
     }
     
     // ==============
@@ -50,5 +59,20 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
     private void Stop()
     {
         this.SongPlayer.Stop();
+    }
+
+    private void SongProgressDragStarted()
+    {
+        this.SongPlayer.IsTimerUpdatedEverySecond = false;
+    }
+
+    private void SongProgressUpdateCurrentTimeCommand()
+    {
+        if (this.SongPlayer.TimerCurrent != null)
+        {
+            TimeSpan newTimerValue = TimeSpan.FromSeconds(this.SongPlayer.TimerCurrent.Value);
+            this.SongPlayer.SetToSpecificTimerValue(newTimerValue);
+            this.SongPlayer.IsTimerUpdatedEverySecond = true;
+        }
     }
 }

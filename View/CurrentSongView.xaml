@@ -6,13 +6,15 @@
              xmlns:local="clr-namespace:View"
              xmlns:converter="clr-namespace:View.Converter"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="150" d:DesignWidth="800"
              Background="Lavender">
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converter:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
         <converter:DoubleSecondsToTimerStringConverter x:Key="DoubleSecondsToTimerStringConverter" />
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converter:InvertNullToBooleanConverter x:Key="InvertNullToBooleanConverter" />
     </UserControl.Resources>
     
     <DockPanel Margin="10">
@@ -35,10 +37,30 @@
                 <Label Grid.Column="0"
                        Content="{Binding SongPlayer.TimerCurrent, Converter={StaticResource DoubleSecondsToTimerStringConverter}}"/>
             
-                <!-- progress -->
+                <!-- song progress -->
+                <!-- 
+                    Notes:
+                     * Set IsMoveToPointEnabled to True to click anywhere in the slider to jump to this point 
+                     * Only enable the slider if the current song is not null
+                -->
                 <Slider Grid.Column="1" VerticalAlignment="Center"
                         Minimum="0" Maximum="{Binding SongPlayer.TimerMax}" 
-                        Value="{Binding SongPlayer.TimerCurrent}" />
+                        Value="{Binding SongPlayer.TimerCurrent}"
+                        IsMoveToPointEnabled="true"
+                        IsEnabled="{Binding SongPlayer.CurrentSong, Converter={StaticResource InvertNullToBooleanConverter}}">
+                    <!-- Use Interaction.Triggers to bind the mouse events to commands.
+                         With the Slider settings, only Code-Behind methods can be called.
+                         Only Preview<MouseEvent> can be used instead of <MouseEvent> because the Slider consumes
+                         the normal mouse events. -->
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                            <b:InvokeCommandAction Command="{Binding SongProgressDragStartedCommand}" />
+                        </b:EventTrigger>
+                        <b:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                            <b:InvokeCommandAction Command="{Binding SongProgressDragCompletedCommand}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Slider>
             
                 <!-- song length -->
                 <Label Grid.Column="2" 
