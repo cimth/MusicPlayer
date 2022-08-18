@@ -59,23 +59,11 @@
                    Content="Music Files" 
                    Background="Aquamarine" />
             
-            <DataGrid x:Name="MusicFiles" Grid.Row="3" 
-                      Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
-                      ItemsSource="{Binding PlaylistFromDirectory.Songs}"
-                      SelectedItem="{Binding SelectedSong}"
-                      SelectedIndex="{Binding SelectedPlaylistIndex}"
-                      BorderThickness="0"
-                      AutoGenerateColumns="False"
-                      CanUserReorderColumns="False"
-                      CanUserSortColumns="False"
-                      IsReadOnly="True"
-                      SelectionMode="Single" 
-                      SelectionUnit="FullRow" 
-                      CanUserResizeRows="False"
-                      Background="White"
-                      GridLinesVisibility="None"
-                      RowHeaderWidth="0"
-                      CellStyle="{DynamicResource DataGridCellStyle}">
+            <local:PlaylistGrid x:Name="MusicFiles" Grid.Row="3" 
+                                Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                ItemsSource="{Binding PlaylistFromDirectory.Songs}"
+                                SelectedItem="{Binding SelectedSong}"
+                                SelectedIndex="{Binding SelectedPlaylistIndex}">
                 <!-- 
                     Use Interaction.Triggers to bind the mouse events to commands.
                     With the ListView settings, only Code-Behind methods can be called.
@@ -97,7 +85,7 @@
                     <DataGridTextColumn Header="Album" Width="Auto"
                                         Binding="{Binding Album}" />
                 </DataGrid.Columns>
-            </DataGrid>
+            </local:PlaylistGrid>
         </Grid>
     </DockPanel>
 </UserControl>
