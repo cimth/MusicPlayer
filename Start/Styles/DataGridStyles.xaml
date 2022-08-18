@@ -1,0 +1,15 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- DataGridCell for playlists and directories -->
+    <Style x:Key="DataGridCellStyle" TargetType="{x:Type DataGridCell}">
+        <Style.Triggers>
+            <Trigger Property="DataGridCell.IsSelected" Value="True">
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="Background" Value="LightBlue" />
+                <!-- Hide borders -->
+                <Setter Property="BorderBrush" Value="{Binding Background, RelativeSource={RelativeSource Mode=Self}}"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

@@ -59,12 +59,23 @@
                    Content="Music Files" 
                    Background="Aquamarine" />
             
-            <ListView x:Name="MusicFiles" Grid.Row="3" 
+            <DataGrid x:Name="MusicFiles" Grid.Row="3" 
                       Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
                       ItemsSource="{Binding PlaylistFromDirectory.Songs}"
                       SelectedItem="{Binding SelectedSong}"
                       SelectedIndex="{Binding SelectedPlaylistIndex}"
-                      BorderThickness="0">
+                      BorderThickness="0"
+                      AutoGenerateColumns="False"
+                      CanUserReorderColumns="False"
+                      CanUserSortColumns="False"
+                      IsReadOnly="True"
+                      SelectionMode="Single" 
+                      SelectionUnit="FullRow" 
+                      CanUserResizeRows="False"
+                      Background="White"
+                      GridLinesVisibility="None"
+                      RowHeaderWidth="0"
+                      CellStyle="{DynamicResource DataGridCellStyle}">
                 <!-- 
                     Use Interaction.Triggers to bind the mouse events to commands.
                     With the ListView settings, only Code-Behind methods can be called.
@@ -76,19 +87,17 @@
                 </b:Interaction.Triggers>
                 
                 <!-- Show data as columns via GridView -->
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Title"
-                                        DisplayMemberBinding="{Binding Title}" />
-                        <GridViewColumn Header="Artists"
-                                        DisplayMemberBinding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}" />
-                        <GridViewColumn Header="Duration"
-                                        DisplayMemberBinding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
-                        <GridViewColumn Header="Album"
-                                        DisplayMemberBinding="{Binding Album}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Title" Width="2*"
+                                        Binding="{Binding Title}" />
+                    <DataGridTextColumn Header="Artists" Width="*"
+                                        Binding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}" />
+                    <DataGridTextColumn Header="Duration" Width="Auto"
+                                        Binding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
+                    <DataGridTextColumn Header="Album" Width="Auto"
+                                        Binding="{Binding Album}" />
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
     </DockPanel>
 </UserControl>
