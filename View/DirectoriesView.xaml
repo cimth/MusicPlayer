@@ -10,9 +10,9 @@
              d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <converter:DynamicExpanderToRowHeightConverter x:Key="DynamicExpanderToRowHeightConverter" />
         <converter:DoubleSecondsToTimerStringConverter x:Key="DoubleSecondsToTimerStringConverter" />
         <converter:StringArrayToCommaSeparatedStringConverter x:Key="StringArrayToCommaSeparatedStringConverter" />
+        <converter:IsVisibleToRowHeightConverter x:Key="IsVisibleToRowHeightConverter" />
     </UserControl.Resources>
     
     <DockPanel>
@@ -29,84 +29,66 @@
             <Grid.RowDefinitions>
                 <!-- Bind height to IsExpanded so that on True the expander gets half of the height 
                      and when on False its set to Auto so that the Expander does not take the (empty) half space -->
-                <RowDefinition Height="{Binding IsExpanded, ElementName=ExpSubDirectories, Converter={StaticResource DynamicExpanderToRowHeightConverter}}" />
-                <RowDefinition Height="{Binding IsExpanded, ElementName=ExpMusicFiles, Converter={StaticResource DynamicExpanderToRowHeightConverter}}" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="{Binding IsVisible, ElementName=SubDirectories, Converter={StaticResource IsVisibleToRowHeightConverter}}" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="{Binding IsVisible, ElementName=MusicFiles, Converter={StaticResource IsVisibleToRowHeightConverter}}" />
             </Grid.RowDefinitions>
             
             <!-- Sub directories -->
-            <Expander x:Name="ExpSubDirectories" Grid.Row="0" 
+            <Label Grid.Row="0"
                    Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}"
-                   IsExpanded="True">
-                <!-- Header -->
-                <Expander.Header>
-                    <!-- 
-                         width binding is needed to fill the whole header horizontally
-                         see https://stackoverflow.com/questions/31161591/wpf-expander-header-horizontal-stretch
-                    --> 
-                    <Label Content="Sub directories" Background="Aquamarine"
-                           Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}"/>
-                </Expander.Header>
+                   Content="Sub directories"
+                   Background="Aquamarine" />
             
-                <!-- Actual data -->
-                <ListView ItemsSource="{Binding SubDirectoryPaths}"
-                          SelectedItem="{Binding SelectedSubDirectoryPath}"
-                          BorderThickness="0"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto"
-                          ScrollViewer.CanContentScroll="False">
-                    <b:Interaction.Triggers>
-                        <b:EventTrigger EventName="MouseDoubleClick">
-                            <b:InvokeCommandAction Command="{Binding OpenSubDirectoryCommand}"/>
-                        </b:EventTrigger>
-                    </b:Interaction.Triggers>
-                </ListView>
-            </Expander>
+            <ListView x:Name="SubDirectories" Grid.Row="1"
+                      Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      ItemsSource="{Binding SubDirectoryPaths}"
+                      SelectedItem="{Binding SelectedSubDirectoryPath}"
+                      BorderThickness="0">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding OpenSubDirectoryCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </ListView>
             
             <!-- Music files -->
-            <Expander x:Name="ExpMusicFiles" Grid.Row="1" 
+            <Label Grid.Row="2" 
                    Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
-                   IsExpanded="True">
-                <!-- Header -->
-                <Expander.Header>
-                    <!-- 
-                         width binding is needed to fill the whole header horizontally
-                         see https://stackoverflow.com/questions/31161591/wpf-expander-header-horizontal-stretch
-                    --> 
-                    <Label Content="Music Files" Background="Aquamarine"
-                           Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}"/>
-                </Expander.Header>
+                   Content="Music Files" 
+                   Background="Aquamarine" />
             
-                <!-- Actual data -->
-                <ListView ItemsSource="{Binding PlaylistFromDirectory.Songs}"
-                          SelectedItem="{Binding SelectedSong}"
-                          SelectedIndex="{Binding SelectedPlaylistIndex}"
-                          BorderThickness="0"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto"
-                          ScrollViewer.CanContentScroll="True">
-                    <!-- 
-                        Use Interaction.Triggers to bind the mouse events to commands.
-                        With the ListView settings, only Code-Behind methods can be called.
-                    -->
-                    <b:Interaction.Triggers>
-                        <b:EventTrigger EventName="MouseDoubleClick">
-                            <b:InvokeCommandAction Command="{Binding PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand}"/>
-                        </b:EventTrigger>
-                    </b:Interaction.Triggers>
-                    
-                    <!-- Show data as columns via GridView -->
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Title"
-                                            DisplayMemberBinding="{Binding Title}" />
-                            <GridViewColumn Header="Artists"
-                                            DisplayMemberBinding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}" />
-                            <GridViewColumn Header="Duration"
-                                            DisplayMemberBinding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
-                            <GridViewColumn Header="Album"
-                                            DisplayMemberBinding="{Binding Album}" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Expander>
+            <ListView x:Name="MusicFiles" Grid.Row="3" 
+                      Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      ItemsSource="{Binding PlaylistFromDirectory.Songs}"
+                      SelectedItem="{Binding SelectedSong}"
+                      SelectedIndex="{Binding SelectedPlaylistIndex}"
+                      BorderThickness="0">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the ListView settings, only Code-Behind methods can be called.
+                -->
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+                
+                <!-- Show data as columns via GridView -->
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Title"
+                                        DisplayMemberBinding="{Binding Title}" />
+                        <GridViewColumn Header="Artists"
+                                        DisplayMemberBinding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}" />
+                        <GridViewColumn Header="Duration"
+                                        DisplayMemberBinding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
+                        <GridViewColumn Header="Album"
+                                        DisplayMemberBinding="{Binding Album}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Grid>
     </DockPanel>
 </UserControl>

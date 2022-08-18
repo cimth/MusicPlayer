@@ -4,15 +4,15 @@ using System.Windows.Data;
 
 namespace View.Converter;
 
-public class DynamicExpanderToRowHeightConverter : IValueConverter
+public class IsVisibleToRowHeightConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is bool isExpanded)
+        if (value is bool isVisible)
         {
-            return isExpanded ? "*" : "Auto";
+            return isVisible ? "*" : "Auto";
         }
-        return "*";
+        return "Auto";
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
