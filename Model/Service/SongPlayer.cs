@@ -15,6 +15,7 @@ public class SongPlayer : NotifyPropertyChangedImpl
 
     private Playlist? _currentPlaylist;
     private int _currentPlaylistIndex;
+    private bool _repeatPlaylist;
     
     private Song? _currentSong;
     private bool _isPlaying;
@@ -27,6 +28,12 @@ public class SongPlayer : NotifyPropertyChangedImpl
     // ==============
     // PROPERTIES
     // ==============
+
+    public bool RepeatPlaylist
+    {
+        get => _repeatPlaylist;
+        set => SetField(ref _repeatPlaylist, value);
+    }
     
     public Song? CurrentSong
     {
@@ -127,6 +134,13 @@ public class SongPlayer : NotifyPropertyChangedImpl
             else
             {
                 Console.WriteLine($"End of playlist {_currentPlaylist.Name} reached.");
+                
+                // repeat playlist if activated
+                if (this.RepeatPlaylist)
+                {
+                    this._currentPlaylistIndex = 0;
+                    this.Play(this._currentPlaylist.Songs[this._currentPlaylistIndex]);
+                }
             }
         }
     }

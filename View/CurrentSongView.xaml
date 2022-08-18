@@ -67,8 +67,8 @@
                        Content="{Binding SongPlayer.TimerMax, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
             </Grid>
         </StackPanel>
-        
-        <!-- controls -->
+            
+        <!-- main controls -->
         <Grid HorizontalAlignment="Center">
             <!-- set margin on button sides -->
             <Grid.Resources>
@@ -79,6 +79,7 @@
             
             <!-- Grid layout -->
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -121,6 +122,13 @@
                     Command="{Binding PlayNextCommand}">
                 <Image Source="{svgc:SvgImage Resources/Icons/play-skip-forward.svg}" />
             </Button>
+            
+            <!-- repeat button -->
+            <ToggleButton Grid.Column="4" Padding="15" 
+                          Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
+                          Command="{Binding RepeatCommand}">
+                <Image Source="{svgc:SvgImage Resources/Icons/repeat.svg}" />
+            </ToggleButton>
         </Grid>
     </DockPanel>
 </UserControl>
