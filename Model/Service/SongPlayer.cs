@@ -173,6 +173,38 @@ public class SongPlayer : NotifyPropertyChangedImpl
             _mediaPlayer.Stop();
         }
     }
+
+    public void PlayPrevious()
+    {
+        // stop if no playlist is loaded
+        if (this._currentPlaylist == null)
+        {
+            return;
+        }
+        
+        // get the new index
+        // => use modulo division to go to the last song of the playlist if the current song is the first song
+        this._currentPlaylistIndex = MathUtil.MathMod(this._currentPlaylistIndex - 1, this._currentPlaylist.Songs.Count);
+
+        // Play previous song
+        this.Play(this._currentPlaylist.Songs[this._currentPlaylistIndex]);
+    }
+
+    public void PlayNext()
+    {
+        // stop if no playlist is loaded
+        if (this._currentPlaylist == null)
+        {
+            return;
+        }
+        
+        // get the new index
+        // => use modulo division to go to the first song of the playlist if the current song is the last song
+        this._currentPlaylistIndex = MathUtil.MathMod(this._currentPlaylistIndex + 1, this._currentPlaylist.Songs.Count);
+        
+        // Play previous song
+        this.Play(this._currentPlaylist.Songs[this._currentPlaylistIndex]);
+    }
     
     // ==============
     // HELPING METHODS

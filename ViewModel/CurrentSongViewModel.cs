@@ -21,6 +21,10 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
     public ICommand ResumeCommand { get; }
     
     public ICommand StopCommand { get; }
+    
+    public ICommand PlayPreviousCommand { get; }
+    
+    public ICommand PlayNextCommand { get; }
 
     public ICommand SongProgressDragStartedCommand { get; }
     
@@ -38,6 +42,8 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
         this.PauseCommand = new DelegateCommand(this.Pause);
         this.ResumeCommand = new DelegateCommand(this.Resume);
         this.StopCommand = new DelegateCommand(this.Stop);
+        this.PlayPreviousCommand = new DelegateCommand(this.PlayPrevious);
+        this.PlayNextCommand = new DelegateCommand(this.PlayNext);
         this.SongProgressDragStartedCommand = new DelegateCommand(this.SongProgressDragStarted);
         this.SongProgressDragCompletedCommand = new DelegateCommand(this.SongProgressUpdateCurrentTimeCommand);
     }
@@ -59,6 +65,16 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
     private void Stop()
     {
         this.SongPlayer.Stop();
+    }
+
+    private void PlayPrevious()
+    {
+        this.SongPlayer.PlayPrevious();
+    }
+
+    private void PlayNext()
+    {
+        this.SongPlayer.PlayNext();
     }
 
     private void SongProgressDragStarted()

@@ -87,7 +87,8 @@
             
             <!-- previous button -->
             <Button Grid.Column="0" Padding="15" 
-                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}">
+                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
+                    Command="{Binding PlayPreviousCommand}">
                 <Image Source="{svgc:SvgImage Resources/Icons/play-skip-back.svg}" />
             </Button>
             
@@ -116,7 +117,8 @@
             
             <!-- next button -->
             <Button Grid.Column="3" Padding="15" 
-                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}">
+                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
+                    Command="{Binding PlayNextCommand}">
                 <Image Source="{svgc:SvgImage Resources/Icons/play-skip-forward.svg}" />
             </Button>
         </Grid>
