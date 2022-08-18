@@ -80,6 +80,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     public ICommand OpenSubDirectoryCommand { get; set; }
     
     public ICommand PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand { get; set; }
+    
+    public ICommand GoBackCommand { get; }
 
     // ==============
     // INITIALIZATION
@@ -99,6 +101,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         this.OpenSubDirectoryCommand = new DelegateCommand(OpenSubDirectory);
         this.PlayMusicFileCommand = new DelegateCommand(PlaySelectedSong);
         this.PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand = new DelegateCommand(PlayAllSongsInDirectoryStartingWithTheSelectedSong);
+        this.GoBackCommand = new DelegateCommand(GoBack);
     }
     
     // ==============
@@ -161,6 +164,15 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
             // play the directory with the selected song as first song
             Console.WriteLine($"Play all songs in directory '{CurrentDirectoryPath}'");
             this._songPlayer.Play(this.PlaylistFromDirectory, this.SelectedPlaylistIndex);
+        }
+    }
+
+    private void GoBack()
+    {
+        if (Directory.Exists(this.CurrentDirectoryPath))
+        {
+            string parentPath = Directory.GetParent(this.CurrentDirectoryPath)!.FullName;
+            this.LoadAsCurrentDirectory(parentPath);
         }
     }
 }

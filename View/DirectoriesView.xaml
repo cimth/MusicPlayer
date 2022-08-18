@@ -19,7 +19,8 @@
         <!-- toolbar -->
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" 
                     Background="MintCream">
-            <Button Content="Add" Margin="5" />
+            <Button Content="Back" Margin="5"
+                    Command="{Binding GoBackCommand}"/>
         </StackPanel>
         
         <!-- Lists with directory contents -->
