@@ -11,6 +11,8 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter:DynamicExpanderToRowHeightConverter x:Key="DynamicExpanderToRowHeightConverter" />
+        <converter:DoubleSecondsToTimerStringConverter x:Key="DoubleSecondsToTimerStringConverter" />
+        <converter:StringArrayToCommaSeparatedStringConverter x:Key="StringArrayToCommaSeparatedStringConverter" />
     </UserControl.Resources>
     
     <DockPanel>
@@ -73,17 +75,35 @@
                 </Expander.Header>
             
                 <!-- Actual data -->
-                <ListView ItemsSource="{Binding MusicFilePaths}"
-                          SelectedItem="{Binding SelectedMusicFilePath}"
-                          SelectedIndex="{Binding SelectedMusicFileIndex}"
+                <ListView ItemsSource="{Binding PlaylistFromDirectory.Songs}"
+                          SelectedItem="{Binding SelectedSong}"
+                          SelectedIndex="{Binding SelectedPlaylistIndex}"
                           BorderThickness="0"
                           ScrollViewer.VerticalScrollBarVisibility="Auto"
                           ScrollViewer.CanContentScroll="True">
+                    <!-- 
+                        Use Interaction.Triggers to bind the mouse events to commands.
+                        With the ListView settings, only Code-Behind methods can be called.
+                    -->
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="MouseDoubleClick">
                             <b:InvokeCommandAction Command="{Binding PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand}"/>
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
+                    
+                    <!-- Show data as columns via GridView -->
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Title"
+                                            DisplayMemberBinding="{Binding Title}" />
+                            <GridViewColumn Header="Artists"
+                                            DisplayMemberBinding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}" />
+                            <GridViewColumn Header="Duration"
+                                            DisplayMemberBinding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
+                            <GridViewColumn Header="Album"
+                                            DisplayMemberBinding="{Binding Album}" />
+                        </GridView>
+                    </ListView.View>
                 </ListView>
             </Expander>
         </Grid>

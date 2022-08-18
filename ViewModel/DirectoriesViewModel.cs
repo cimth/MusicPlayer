@@ -17,7 +17,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
 
     private string? _currentDirectoryPath;
     private List<string> _subDirectoryPaths;
-    private List<string> _musicFilePaths;
+    
+    private Playlist? _playlistFromDirectory;
 
     private bool _hasSubDirectories;
     private bool _hasMusicFiles;
@@ -38,17 +39,17 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         set => SetField(ref _subDirectoryPaths, value);
     }
 
-    public List<string> MusicFilePaths
+    public Playlist? PlaylistFromDirectory
     {
-        get => _musicFilePaths;
-        set => SetField(ref _musicFilePaths, value);
+        get => _playlistFromDirectory;
+        set => SetField(ref _playlistFromDirectory, value);
     }
 
     public string? SelectedSubDirectoryPath { get; set; }
 
-    public string? SelectedMusicFilePath { get; set; }
+    public Song? SelectedSong { get; set; }
     
-    public int SelectedMusicFileIndex { get; set; }
+    public int SelectedPlaylistIndex { get; set; }
 
     public bool HasSubDirectories
     {
@@ -89,34 +90,44 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         this._songImporter = songImporter;
         this._songPlayer = songPlayer;
         this._subDirectoryPaths = new List<string>();
-        this._musicFilePaths = new List<string>();
 
         // test directory
         _currentDirectoryPath = "";
-        this.LoadDirectoryContent(_currentDirectoryPath);
+        this.LoadAsCurrentDirectory(_currentDirectoryPath);
 
         // init commands
         this.OpenSubDirectoryCommand = new DelegateCommand(OpenSubDirectory);
         this.PlayMusicFileCommand = new DelegateCommand(PlaySelectedSong);
         this.PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand = new DelegateCommand(PlayAllSongsInDirectoryStartingWithTheSelectedSong);
     }
-
-    private void LoadDirectoryContent(string directoryPath)
+    
+    // ==============
+    // CHANGE DIRECTORY
+    // ==============
+    
+    private void LoadAsCurrentDirectory(string directoryPath)
     {
-        if (Directory.Exists(directoryPath))
-        {
-            // load sub directories
-            string[] subDirectories = Directory.GetDirectories(directoryPath);
-            this.SubDirectoryPaths = new List<string>(subDirectories);
+        // Update current directory
+        this.CurrentDirectoryPath = directoryPath;
 
-            // load music files
-            string[] mp3Files = Directory.GetFiles(directoryPath, "*.mp3");
-            this.MusicFilePaths = new List<string>(mp3Files);
+        // Get only the directory name without the parent directories
+        // => You have to use Path.GetFilename() because Path.GetDirectoryName() would return the path to the
+        //    parent directory of CurrentDirectoryPath
+        string directoryName = Path.GetFileName(directoryPath);
 
-            // update bool variables for the content (for conditionally showing the ListViews and Separator)
-            this.HasSubDirectories = subDirectories.Length > 0;
-            this.HasMusicFiles = mp3Files.Length > 0;
-        }
+        // Load sub directories
+        string[] subDirectories = Directory.GetDirectories(directoryPath);
+        this.SubDirectoryPaths = new List<string>(subDirectories);
+
+        // Load music files
+        string[] mp3Files = Directory.GetFiles(directoryPath, "*.mp3");
+
+        // Update bool variables for the content (for conditionally showing the ListViews and Separator)
+        this.HasSubDirectories = subDirectories.Length > 0;
+        this.HasMusicFiles = mp3Files.Length > 0;
+
+        // Create Playlist if songs exist in the new directory, else reset to null
+        this.PlaylistFromDirectory = this.HasMusicFiles ? this._songImporter.Import(directoryName, mp3Files.ToList()) : null;
     }
 
     // ==============
@@ -125,43 +136,31 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
 
     private void OpenSubDirectory()
     {
-        if (Directory.Exists(SelectedSubDirectoryPath))
+        if (Directory.Exists(this.SelectedSubDirectoryPath))
         {
-            // update current directory
-            CurrentDirectoryPath = SelectedSubDirectoryPath;
-            this.LoadDirectoryContent(SelectedSubDirectoryPath);
+            this.LoadAsCurrentDirectory(this.SelectedSubDirectoryPath);
         }
     }
 
     private void PlaySelectedSong()
     {
-        if (File.Exists(this.SelectedMusicFilePath))
+        if (this.SelectedSong != null)
         {
             // convert file to playlist
             // => seems overcomplicated but it makes the logic easier to understand since internally only playlists are
             //    played by SongPlayer and there is basically no different logic for single songs and playlists
-            string songName = Path.GetFileName(this.SelectedMusicFilePath);
-            Playlist playlist = _songImporter.Import(songName, this.SelectedMusicFilePath);
+            Playlist playlist = new Playlist(this.SelectedSong);
             this._songPlayer.Play(playlist, 0);
         }
     }
 
     private void PlayAllSongsInDirectoryStartingWithTheSelectedSong()
     {
-        if (Directory.Exists(CurrentDirectoryPath))
+        if (Directory.Exists(CurrentDirectoryPath) && this.PlaylistFromDirectory != null)
         {
+            // play the directory with the selected song as first song
             Console.WriteLine($"Play all songs in directory '{CurrentDirectoryPath}'");
-            
-            // get only the directory name without the parent directories
-            // => you have to use Path.GetFilename() because Path.GetDirectoryName() would return the path to the
-            //    parent directory of CurrentDirectoryPath
-            string directoryName = Path.GetFileName(CurrentDirectoryPath);
-            
-            // convert directory to playlist
-            Playlist playlist = _songImporter.Import(directoryName, this.MusicFilePaths);
-            
-            // play the playlist with the selected song as first song
-            this._songPlayer.Play(playlist, this.SelectedMusicFileIndex);
+            this._songPlayer.Play(this.PlaylistFromDirectory, this.SelectedPlaylistIndex);
         }
     }
 }

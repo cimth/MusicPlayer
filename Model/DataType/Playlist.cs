@@ -19,4 +19,10 @@ public class Playlist
         this.Name = name;
         this.Songs = songs;
     }
+    
+    public Playlist(Song song)
+    {
+        this.Name = song.Title;
+        this.Songs = new List<Song> {song};
+    }
 }
