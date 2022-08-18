@@ -19,7 +19,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     private List<string> _subDirectoryPaths;
     private List<string> _musicFilePaths;
 
-    private bool _hasSubDirectoriesAndMusicFiles;
+    private bool _hasSubDirectories;
+    private bool _hasMusicFiles;
 
     // ==============
     // PROPERTIES 
@@ -49,12 +50,28 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     
     public int SelectedMusicFileIndex { get; set; }
 
-    public bool HasSubDirectoriesAndMusicFiles
+    public bool HasSubDirectories
     {
-        get => _hasSubDirectoriesAndMusicFiles;
-        set => SetField(ref _hasSubDirectoriesAndMusicFiles, value);
+        get => _hasSubDirectories;
+        set
+        {
+            SetField(ref _hasSubDirectories, value);
+            OnPropertyChanged(nameof(HasSubDirectoriesAndMusicFiles));
+        }
     }
-    
+
+    public bool HasMusicFiles
+    {
+        get => _hasMusicFiles;
+        set
+        {
+            SetField(ref _hasMusicFiles, value);
+            OnPropertyChanged(nameof(HasSubDirectoriesAndMusicFiles));
+        }
+    }
+
+    public bool HasSubDirectoriesAndMusicFiles => this.HasSubDirectories && this.HasMusicFiles;
+
     // commands
     
     public ICommand PlayMusicFileCommand { get; set; }
@@ -96,8 +113,9 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
             string[] mp3Files = Directory.GetFiles(directoryPath, "*.mp3");
             this.MusicFilePaths = new List<string>(mp3Files);
 
-            // check if both sub directories and music files exist (for conditionally showing a separator)
-            this.HasSubDirectoriesAndMusicFiles = subDirectories.Length > 0 && mp3Files.Length > 0;
+            // update bool variables for the content (for conditionally showing the ListViews and Separator)
+            this.HasSubDirectories = subDirectories.Length > 0;
+            this.HasMusicFiles = mp3Files.Length > 0;
         }
     }
 

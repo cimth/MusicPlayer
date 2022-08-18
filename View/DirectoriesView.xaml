@@ -4,11 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:View"
+             xmlns:converter="clr-namespace:View.Converter"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:DynamicExpanderToRowHeightConverter x:Key="DynamicExpanderToRowHeightConverter" />
     </UserControl.Resources>
     
     <DockPanel>
@@ -18,33 +20,72 @@
             <Button Content="Add" Margin="5" />
         </StackPanel>
         
-        <!-- lists with directory contents -->
-        <StackPanel Orientation="Vertical">
-            <!-- sub directories -->
-            <ListView ItemsSource="{Binding SubDirectoryPaths}"
-                      SelectedItem="{Binding SelectedSubDirectoryPath}"
-                      BorderThickness="0">
-                <b:Interaction.Triggers>
-                    <b:EventTrigger EventName="MouseDoubleClick">
-                        <b:InvokeCommandAction Command="{Binding OpenSubDirectoryCommand}"/>
-                    </b:EventTrigger>
-                </b:Interaction.Triggers>
-            </ListView>
+        <!-- Lists with directory contents -->
+        <Grid>
+            <!-- Grid layout -->
+            <Grid.RowDefinitions>
+                <!-- Bind height to IsExpanded so that on True the expander gets half of the height 
+                     and when on False its set to Auto so that the Expander does not take the (empty) half space -->
+                <RowDefinition Height="{Binding IsExpanded, ElementName=ExpSubDirectories, Converter={StaticResource DynamicExpanderToRowHeightConverter}}" />
+                <RowDefinition Height="{Binding IsExpanded, ElementName=ExpMusicFiles, Converter={StaticResource DynamicExpanderToRowHeightConverter}}" />
+            </Grid.RowDefinitions>
             
-            <!-- separator (only shown if sub directories AND music files exist) -->
-            <Separator Visibility="{Binding HasSubDirectoriesAndMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
-        
-            <!-- music files -->
-            <ListView ItemsSource="{Binding MusicFilePaths}"
-                      SelectedItem="{Binding SelectedMusicFilePath}"
-                      SelectedIndex="{Binding SelectedMusicFileIndex}"
-                      BorderThickness="0">
-                <b:Interaction.Triggers>
-                    <b:EventTrigger EventName="MouseDoubleClick">
-                        <b:InvokeCommandAction Command="{Binding PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand}"/>
-                    </b:EventTrigger>
-                </b:Interaction.Triggers>
-            </ListView>
-        </StackPanel>
+            <!-- Sub directories -->
+            <Expander x:Name="ExpSubDirectories" Grid.Row="0" 
+                   Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}"
+                   IsExpanded="True">
+                <!-- Header -->
+                <Expander.Header>
+                    <!-- 
+                         width binding is needed to fill the whole header horizontally
+                         see https://stackoverflow.com/questions/31161591/wpf-expander-header-horizontal-stretch
+                    --> 
+                    <Label Content="Sub directories" Background="Aquamarine"
+                           Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}"/>
+                </Expander.Header>
+            
+                <!-- Actual data -->
+                <ListView ItemsSource="{Binding SubDirectoryPaths}"
+                          SelectedItem="{Binding SelectedSubDirectoryPath}"
+                          BorderThickness="0"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          ScrollViewer.CanContentScroll="False">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="MouseDoubleClick">
+                            <b:InvokeCommandAction Command="{Binding OpenSubDirectoryCommand}"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ListView>
+            </Expander>
+            
+            <!-- Music files -->
+            <Expander x:Name="ExpMusicFiles" Grid.Row="1" 
+                   Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
+                   IsExpanded="True">
+                <!-- Header -->
+                <Expander.Header>
+                    <!-- 
+                         width binding is needed to fill the whole header horizontally
+                         see https://stackoverflow.com/questions/31161591/wpf-expander-header-horizontal-stretch
+                    --> 
+                    <Label Content="Music Files" Background="Aquamarine"
+                           Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}"/>
+                </Expander.Header>
+            
+                <!-- Actual data -->
+                <ListView ItemsSource="{Binding MusicFilePaths}"
+                          SelectedItem="{Binding SelectedMusicFilePath}"
+                          SelectedIndex="{Binding SelectedMusicFileIndex}"
+                          BorderThickness="0"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          ScrollViewer.CanContentScroll="True">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="MouseDoubleClick">
+                            <b:InvokeCommandAction Command="{Binding PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand}"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ListView>
+            </Expander>
+        </Grid>
     </DockPanel>
 </UserControl>
