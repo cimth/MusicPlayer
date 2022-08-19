@@ -16,11 +16,24 @@
     </UserControl.Resources>
     
     <DockPanel>
-        <!-- toolbar -->
+        <!-- Toolbar -->
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" 
                     Background="MintCream">
-            <Button Content="Back" Margin="5"
-                    Command="{Binding GoBackCommand}"/>
+            <!-- Set margin on buttons -->
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Margin" Value="5" />
+                </Style>
+            </StackPanel.Resources>
+            
+            <!-- Go back to parent directory -->
+            <Button Content="Back" Command="{Binding GoBackCommand}"/>
+            
+            <!-- Add music directory -->
+            <Button Content="Add" Command="{Binding AddMusicDirectoryCommand}"/>
+            
+            <!-- Remove music directory -->
+            <Button Content="Remove" Command="{Binding RemoveMusicDirectoryCommand}"/>
         </StackPanel>
         
         <!-- Lists with directory contents -->

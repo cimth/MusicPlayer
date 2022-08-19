@@ -14,6 +14,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
 
     private readonly SongImporter _songImporter;
     private readonly SongPlayer _songPlayer;
+    private readonly AppConfigurator _appConfigurator;
 
     private string? _currentDirectoryPath;
     private List<string> _subDirectoryPaths;
@@ -74,6 +75,10 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     public bool HasSubDirectoriesAndMusicFiles => this.HasSubDirectories && this.HasMusicFiles;
 
     // commands
+
+    public ICommand AddMusicDirectoryCommand { get; }
+    
+    public ICommand RemoveMusicDirectoryCommand { get; }
     
     public ICommand PlayMusicFileCommand { get; set; }
     
@@ -87,10 +92,11 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     // INITIALIZATION
     // ==============
 
-    public DirectoriesViewModel(SongImporter songImporter, SongPlayer songPlayer)
+    public DirectoriesViewModel(SongImporter songImporter, SongPlayer songPlayer, AppConfigurator appConfigurator)
     {
         this._songImporter = songImporter;
         this._songPlayer = songPlayer;
+        this._appConfigurator = appConfigurator;
         this._subDirectoryPaths = new List<string>();
 
         // test directory
@@ -98,6 +104,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         this.LoadAsCurrentDirectory(_currentDirectoryPath);
 
         // init commands
+        this.AddMusicDirectoryCommand = new DelegateCommand(AddMusicDirectory);
+        this.RemoveMusicDirectoryCommand = new DelegateCommand(RemoveMusicDirectory);
         this.OpenSubDirectoryCommand = new DelegateCommand(OpenSubDirectory);
         this.PlayMusicFileCommand = new DelegateCommand(PlaySelectedSong);
         this.PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand = new DelegateCommand(PlayAllSongsInDirectoryStartingWithTheSelectedSong);
@@ -136,6 +144,26 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     // ==============
     // COMMAND ACTIONS
     // ==============
+
+    private void AddMusicDirectory()
+    {
+        // Open dialog to select the directory to add
+        FolderBrowserDialog dialog = new FolderBrowserDialog();
+        DialogResult dialogResult = dialog.ShowDialog();
+        
+        if (dialogResult == DialogResult.OK && Directory.Exists(dialog.SelectedPath))
+        {
+            this._appConfigurator.AddDirectory(dialog.SelectedPath);
+        }
+    }
+    
+    private void RemoveMusicDirectory()
+    {
+        if (this.SelectedSubDirectoryPath != null)
+        {
+            this._appConfigurator.RemoveDirectory(this.SelectedSubDirectoryPath);
+        }
+    }
 
     private void OpenSubDirectory()
     {

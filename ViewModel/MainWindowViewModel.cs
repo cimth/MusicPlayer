@@ -11,6 +11,7 @@ public class MainWindowViewModel
     // dependencies for multiple view models
     private readonly SongImporter _songImporter;
     private readonly SongPlayer _songPlayer;
+    private readonly AppConfigurator _appConfigurator;
     
     // ==============
     // PROPERTIES
@@ -28,8 +29,9 @@ public class MainWindowViewModel
     {
         this._songImporter = new SongImporter();
         this._songPlayer = new SongPlayer();
+        this._appConfigurator = new AppConfigurator();
         
-        this.DirectoriesViewModel = new DirectoriesViewModel(_songImporter, _songPlayer);
+        this.DirectoriesViewModel = new DirectoriesViewModel(_songImporter, _songPlayer, _appConfigurator);
         this.CurrentSongViewModel = new CurrentSongViewModel(_songPlayer);
     }
 }
