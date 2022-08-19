@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Common;
 using Model.DataType;
@@ -18,6 +19,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
 
     private string? _currentDirectoryPath;
     private List<string> _subDirectoryPaths;
+    private string? _selectedSubDirectoryPath;
     
     private Playlist? _playlistFromDirectory;
 
@@ -27,6 +29,9 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     // ==============
     // PROPERTIES 
     // ==============
+
+    // Forward the app config data to avoid a to nested access in the View
+    public ObservableCollection<string> RootMusicDirectories => this._appConfigurator.AppConfig.MusicDirectories;
 
     public string? CurrentDirectoryPath
     {
@@ -46,7 +51,15 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         set => SetField(ref _playlistFromDirectory, value);
     }
 
-    public string? SelectedSubDirectoryPath { get; set; }
+    // Needs to be set up as observable Property because it is used in both the root directory GUI element and in the
+    // actual directory content GUI element.
+    // When only providing the Property with simple `get` and `set` implementation, entering sub directories after
+    // going back to the root directory element does not work any longer.
+    public string? SelectedSubDirectoryPath
+    {
+        get => _selectedSubDirectoryPath;
+        set => SetField(ref _selectedSubDirectoryPath, value); 
+    }
 
     public Song? SelectedSong { get; set; }
     
@@ -98,12 +111,11 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         this._songPlayer = songPlayer;
         this._appConfigurator = appConfigurator;
         this._subDirectoryPaths = new List<string>();
+        
+        // Set current directory to null to show the root directories first
+        this._currentDirectoryPath = null;
 
-        // test directory
-        _currentDirectoryPath = "";
-        this.LoadAsCurrentDirectory(_currentDirectoryPath);
-
-        // init commands
+        // Init commands
         this.AddMusicDirectoryCommand = new DelegateCommand(AddMusicDirectory);
         this.RemoveMusicDirectoryCommand = new DelegateCommand(RemoveMusicDirectory);
         this.OpenSubDirectoryCommand = new DelegateCommand(OpenSubDirectory);
@@ -200,7 +212,18 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         if (Directory.Exists(this.CurrentDirectoryPath))
         {
             string parentPath = Directory.GetParent(this.CurrentDirectoryPath)!.FullName;
-            this.LoadAsCurrentDirectory(parentPath);
+
+            if (this.RootMusicDirectories.Contains(this.CurrentDirectoryPath))
+            {
+                // The current directory is a root directory, thus set the current directory to null for showing
+                // the root directories instead of the current (root) directory's parent
+                this.CurrentDirectoryPath = null;
+            }
+            else
+            {
+                // The current directory is no root directory, thus load the contents of the parent directory
+                this.LoadAsCurrentDirectory(parentPath);
+            }
         }
     }
 }

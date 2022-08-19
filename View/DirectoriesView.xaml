@@ -13,12 +13,22 @@
         <converter:DoubleSecondsToTimerStringConverter x:Key="DoubleSecondsToTimerStringConverter" />
         <converter:StringArrayToCommaSeparatedStringConverter x:Key="StringArrayToCommaSeparatedStringConverter" />
         <converter:IsVisibleToRowHeightConverter x:Key="IsVisibleToRowHeightConverter" />
+        <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <converter:InvertNullToVisibilityConverter x:Key="InvertNullToVisibilityConverter" />
     </UserControl.Resources>
     
-    <DockPanel>
-        <!-- Toolbar -->
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" 
-                    Background="MintCream">
+    <Grid>
+        <!-- Grid layout -->
+        <Grid.RowDefinitions>
+            <!-- Toolbar -->
+            <RowDefinition Height="Auto" />
+            <!-- Grid with actual content -->
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Toolbar for Buttons (visible when showing the root music directories) -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="MintCream"
+                    Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
             <!-- Set margin on buttons -->
             <StackPanel.Resources>
                 <Style TargetType="{x:Type Button}">
@@ -28,6 +38,17 @@
             
             <!-- Go back to parent directory -->
             <Button Content="Back" Command="{Binding GoBackCommand}"/>
+        </StackPanel>
+        
+        <!-- Toolbar for Path (visible when in directory) -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="MintCream"
+                    Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource InvertNullToVisibilityConverter}}">
+            <!-- Set margin on buttons -->
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Margin" Value="5" />
+                </Style>
+            </StackPanel.Resources>
             
             <!-- Add music directory -->
             <Button Content="Add" Command="{Binding AddMusicDirectoryCommand}"/>
@@ -36,8 +57,33 @@
             <Button Content="Remove" Command="{Binding RemoveMusicDirectoryCommand}"/>
         </StackPanel>
         
-        <!-- Lists with directory contents -->
-        <Grid>
+        <!-- Root directories -->
+        <Grid Grid.Row="1" Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource InvertNullToVisibilityConverter}}">
+            <!-- Grid layout -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <!-- Root directories -->
+            <Label Grid.Row="0"
+                   Content="Root music directories"
+                   Background="Aquamarine" />
+            
+            <ListView Grid.Row="1"
+                      ItemsSource="{Binding RootMusicDirectories}"
+                      SelectedItem="{Binding SelectedSubDirectoryPath}"
+                      BorderThickness="0">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding OpenSubDirectoryCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </ListView>
+        </Grid>
+        
+        <!-- Lists with the current directory's contents -->
+        <Grid Grid.Row="1" Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
             <!-- Grid layout -->
             <Grid.RowDefinitions>
                 <!-- Bind height to IsExpanded so that on True the expander gets half of the height 
@@ -100,5 +146,5 @@
                 </DataGrid.Columns>
             </local:PlaylistGrid>
         </Grid>
-    </DockPanel>
+    </Grid>
 </UserControl>

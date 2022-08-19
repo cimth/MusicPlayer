@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace Model.DataType;
 
 public class AppConfig
@@ -6,7 +8,7 @@ public class AppConfig
     // PROPERTIES
     // ==============
     
-    public List<string> MusicDirectories { get; set; }
+    public ObservableCollection<string> MusicDirectories { get; set; }
     
     // ==============
     // INITIALIZATION
@@ -14,6 +16,6 @@ public class AppConfig
 
     public AppConfig()
     {
-        this.MusicDirectories = new List<string>();
+        this.MusicDirectories = new ObservableCollection<string>();
     }
 }

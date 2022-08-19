@@ -1,11 +1,12 @@
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using Common;
 using Model.DataType;
 
 namespace Model.Service;
 
-public class AppConfigurator
+public class AppConfigurator : NotifyPropertyChangedImpl
 {
     // ==============
     // FIELDS
@@ -15,15 +16,19 @@ public class AppConfigurator
     private static readonly string AppBaseDirectoryPath = Path.GetFullPath(AppContext.BaseDirectory);
     private static readonly string AppConfigFilePath = Path.GetFullPath(Path.Combine(AppBaseDirectoryPath, "config.json"));
     
-    private readonly AppConfig _appConfig;
-    
+    // ==============
+    // FIELDS
+    // ==============
+
+    public AppConfig AppConfig { get; }
+
     // ==============
     // INITIALIZATION
     // ==============
 
     public AppConfigurator()
     {
-        this._appConfig = this.LoadAppConfig();
+        this.AppConfig = this.LoadAppConfig();
     }
 
     private AppConfig LoadAppConfig()
@@ -52,7 +57,7 @@ public class AppConfigurator
             // pretty print
             WriteIndented = true
         };
-        string configJson = JsonSerializer.Serialize(this._appConfig, options);
+        string configJson = JsonSerializer.Serialize(this.AppConfig, options);
         File.WriteAllText(AppConfigurator.AppConfigFilePath, configJson, Encoding.UTF8);
     }
     
@@ -62,18 +67,18 @@ public class AppConfigurator
     
     public void AddDirectory(string directoryPath)
     {
-        if (!this._appConfig.MusicDirectories.Contains(directoryPath))
+        if (!this.AppConfig.MusicDirectories.Contains(directoryPath))
         {
-            this._appConfig.MusicDirectories.Add(directoryPath);
+            this.AppConfig.MusicDirectories.Add(directoryPath);
             this.SaveConfig();
         }
     }
 
     public void RemoveDirectory(string directoryPath)
     {
-        if (this._appConfig.MusicDirectories.Contains(directoryPath))
+        if (this.AppConfig.MusicDirectories.Contains(directoryPath))
         {
-            this._appConfig.MusicDirectories.Remove(directoryPath);
+            this.AppConfig.MusicDirectories.Remove(directoryPath);
             this.SaveConfig();
         }
     }
