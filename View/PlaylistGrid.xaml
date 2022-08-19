@@ -25,4 +25,5 @@
           Background="White"
           GridLinesVisibility="None"
           
+          RowStyle="{DynamicResource DataGridRowStyle}"
           CellStyle="{DynamicResource DataGridCellStyle}" />
