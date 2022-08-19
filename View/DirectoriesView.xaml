@@ -33,17 +33,15 @@
             <!-- Header -->
             <StackPanel Grid.Row="0" Style="{DynamicResource HeaderToolbarStyle}">
                 <!-- Heading -->
-                <Label x:Name="LabelRootMusicDirectories" Content="Root music directories" />
+                <Label Content="Root music directories" />
                 
                 <!-- Add music directory -->
-                <Button ToolTip="Add" Command="{Binding AddMusicDirectoryCommand}"
-                        Height="{Binding ActualHeight, ElementName=LabelRootMusicDirectories}">
+                <Button ToolTip="Add" Command="{Binding AddMusicDirectoryCommand}">
                     <Image Source="{svgc:SvgImage Resources/Icons/add-circle-outline.svg}" />
                 </Button>
             
                 <!-- Remove music directory -->
-                <Button ToolTip="Remove" Command="{Binding RemoveMusicDirectoryCommand}"
-                        Height="{Binding ActualHeight, ElementName=LabelRootMusicDirectories}">
+                <Button ToolTip="Remove" Command="{Binding RemoveMusicDirectoryCommand}">
                     <Image Source="{svgc:SvgImage Resources/Icons/remove-circle-outline.svg}" />
                 </Button>
             </StackPanel>
@@ -74,16 +72,15 @@
             </Grid.RowDefinitions>
             
             <!-- Header for sub directories -->
-            <StackPanel Grid.Row="0" Style="{DynamicResource HeaderToolbarStyle}"
+            <StackPanel x:Name="HeaderSubDirectories" Grid.Row="0" Style="{DynamicResource HeaderToolbarStyle}"
                         Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <!-- Go back to parent directory -->
-                <Button ToolTip="Back" Command="{Binding GoBackCommand}"
-                        Height="{Binding ActualHeight, ElementName=LabelSubDirectories}">
+                <Button ToolTip="Back" Command="{Binding GoBackCommand}">
                     <Image Source="{svgc:SvgImage Resources/Icons/arrow-back-circle-outline.svg}" />
                 </Button>
                 
                 <!-- Heading -->
-                <Label x:Name="LabelSubDirectories" Content="Sub directories" 
+                <Label Content="Sub directories" 
                        Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </StackPanel>
             
@@ -101,20 +98,20 @@
             </ListView>
             
             <!-- Header for music files -->
-            <StackPanel Grid.Row="2" Style="{DynamicResource HeaderToolbarStyle}">
+            <StackPanel Grid.Row="2" Style="{DynamicResource HeaderToolbarStyle}"
+                        Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <!-- 
                     Go back to parent directory.
                     Only show if no sub directories exist because then the sub directory header (including its 
                     back navigation button) are collapsed.
                  -->
                 <Button ToolTip="Back" Command="{Binding GoBackCommand}"
-                        Height="{Binding ActualHeight, ElementName=LabelMusicFiles}"
                         Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
                     <Image Source="{svgc:SvgImage Resources/Icons/arrow-back-circle-outline.svg}" />
                 </Button>
                 
                 <!-- Heading -->
-                <Label x:Name="LabelMusicFiles" Content="Music files"
+                <Label Content="Music files"
                        Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </StackPanel>
             

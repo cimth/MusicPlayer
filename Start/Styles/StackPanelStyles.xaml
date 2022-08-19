@@ -5,6 +5,7 @@
         <Setter Property="Background" Value="Aquamarine" /> 
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="Height" Value="35" />
         
         <Style.Resources>
             <Style TargetType="{x:Type Button}">
