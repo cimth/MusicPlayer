@@ -31,21 +31,23 @@
             </Grid.RowDefinitions>
             
             <!-- Header -->
-            <StackPanel Grid.Row="0" Style="{DynamicResource HeaderToolbarStyle}">
-                <!-- Heading -->
-                <Label Content="Root music directories" />
+            <Border Grid.Row="0" BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
+                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- Heading -->
+                    <Label Content="Root music directories" />
+                    
+                    <!-- Add music directory -->
+                    <Button ToolTip="Add" Command="{Binding AddMusicDirectoryCommand}">
+                        <Image Source="{svgc:SvgImage Resources/Icons/add-circle-outline.svg}" />
+                    </Button>
                 
-                <!-- Add music directory -->
-                <Button ToolTip="Add" Command="{Binding AddMusicDirectoryCommand}">
-                    <Image Source="{svgc:SvgImage Resources/Icons/add-circle-outline.svg}" />
-                </Button>
-            
-                <!-- Remove music directory -->
-                <Button ToolTip="Remove" Command="{Binding RemoveMusicDirectoryCommand}">
-                    <Image Source="{svgc:SvgImage Resources/Icons/remove-circle-outline.svg}" />
-                </Button>
-            </StackPanel>
-            
+                    <!-- Remove music directory -->
+                    <Button ToolTip="Remove" Command="{Binding RemoveMusicDirectoryCommand}">
+                        <Image Source="{svgc:SvgImage Resources/Icons/remove-circle-outline.svg}" />
+                    </Button>
+                </StackPanel>
+            </Border>
+                
             <!-- Actual root directories -->
             <local:PlaylistGrid Grid.Row="1"
                       ItemsSource="{Binding RootMusicDirectories}"
@@ -82,17 +84,20 @@
             </Grid.RowDefinitions>
             
             <!-- Header for sub directories -->
-            <StackPanel x:Name="HeaderSubDirectories" Grid.Row="0" Style="{DynamicResource HeaderToolbarStyle}"
-                        Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <!-- Go back to parent directory -->
-                <Button ToolTip="Back" Command="{Binding GoBackCommand}">
-                    <Image Source="{svgc:SvgImage Resources/Icons/arrow-back-circle-outline.svg}" />
-                </Button>
-                
-                <!-- Heading -->
-                <Label Content="Sub directories" 
-                       Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            </StackPanel>
+            <Border Grid.Row="0" 
+                    BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1"
+                    Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- Go back to parent directory -->
+                    <Button ToolTip="Back" Command="{Binding GoBackCommand}">
+                        <Image Source="{svgc:SvgImage Resources/Icons/arrow-back-circle-outline.svg}" />
+                    </Button>
+                    
+                    <!-- Heading -->
+                    <Label Content="Sub directories" 
+                           Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </StackPanel>
+            </Border>
             
             <!-- Sub directories -->
             <local:PlaylistGrid x:Name="SubDirectories" Grid.Row="1"
@@ -118,22 +123,25 @@
             </local:PlaylistGrid>
             
             <!-- Header for music files -->
-            <StackPanel Grid.Row="2" Style="{DynamicResource HeaderToolbarStyle}"
-                        Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <!-- 
-                    Go back to parent directory.
-                    Only show if no sub directories exist because then the sub directory header (including its 
-                    back navigation button) are collapsed.
-                 -->
-                <Button ToolTip="Back" Command="{Binding GoBackCommand}"
-                        Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
-                    <Image Source="{svgc:SvgImage Resources/Icons/arrow-back-circle-outline.svg}" />
-                </Button>
-                
-                <!-- Heading -->
-                <Label Content="Music files"
-                       Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            </StackPanel>
+            <Border Grid.Row="2" 
+                    BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1"
+                    Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- 
+                        Go back to parent directory.
+                        Only show if no sub directories exist because then the sub directory header (including its 
+                        back navigation button) are collapsed.
+                     -->
+                    <Button ToolTip="Back" Command="{Binding GoBackCommand}"
+                            Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                        <Image Source="{svgc:SvgImage Resources/Icons/arrow-back-circle-outline.svg}" />
+                    </Button>
+                    
+                    <!-- Heading -->
+                    <Label Content="Music files"
+                           Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </StackPanel>
+            </Border>
             
             <local:PlaylistGrid x:Name="MusicFiles" Grid.Row="3" 
                                 Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}"

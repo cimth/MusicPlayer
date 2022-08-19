@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- Headers / Toolbars, optionally with Buttons, e.g. used in DirectoryView -->
     <Style x:Key="HeaderToolbarStyle" TargetType="{x:Type StackPanel}">
-        <Setter Property="Background" Value="Aquamarine" /> 
+        <Setter Property="Background" Value="#e7f9f9" /> 
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Orientation" Value="Horizontal" />
         <Setter Property="Height" Value="35" />

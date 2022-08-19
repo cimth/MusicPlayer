@@ -12,7 +12,11 @@
         WindowState="Maximized">
     <DockPanel>
         <!-- current song (bottom) -->
-        <view:CurrentSongView DockPanel.Dock="Bottom" DataContext="{Binding CurrentSongViewModel}" />
+        <view:CurrentSongView DockPanel.Dock="Bottom" 
+                              DataContext="{Binding CurrentSongViewModel}" 
+                              Background="{DynamicResource AppTurquoiseDarkestBrush}"
+                              BorderBrush="{DynamicResource AppTurquoiseBorderBrush}"
+                              BorderThickness="0 1 0 0"/>
         
         <!-- main content (center) -->
         <Grid>
@@ -23,7 +27,9 @@
             </Grid.ColumnDefinitions>
         
             <!-- navigation sidebar -->
-            <view:NavigationSidebar Grid.Column="0" Background="WhiteSmoke" />
+            <view:NavigationSidebar Grid.Column="0" Background="{DynamicResource AppTurquoiseLightBrush}"
+                                    BorderBrush="{DynamicResource AppTurquoiseBorderBrush}"
+                                    BorderThickness="0 1 1 0" />
         
             <!-- directories view -->
             <view:DirectoriesView Grid.Column="1" DataContext="{Binding DirectoriesViewModel}" />
