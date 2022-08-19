@@ -10,20 +10,6 @@
         Title="MainWindow" 
         Height="600" Width="950" MinHeight="600" MinWidth="950"
         WindowState="Maximized">
-    <!-- 
-        Resources added here can be accessed via "{DynamicResource <Resource key>}" in all views.
-        Thus, the resources have only to be included here and not in every view element that actually
-        uses them.
-    -->
-    <Window.Resources>
-        <ResourceDictionary>
-            <!-- Styles -->
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Styles/DataGridStyles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
-    
     <DockPanel>
         <!-- current song (bottom) -->
         <view:CurrentSongView DockPanel.Dock="Bottom" DataContext="{Binding CurrentSongViewModel}" />

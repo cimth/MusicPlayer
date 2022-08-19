@@ -4,6 +4,16 @@
              xmlns:local="clr-namespace:Start"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <!-- 
+            Resources added here can be accessed via "{DynamicResource <Resource key>}" in all views.
+            Thus, the resources have only to be included here and not in every view element that actually
+            uses them.
+        -->
+        <ResourceDictionary>
+            <!-- Styles -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/DataGridStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
