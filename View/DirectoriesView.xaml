@@ -47,16 +47,26 @@
             </StackPanel>
             
             <!-- Actual root directories -->
-            <ListView Grid.Row="1"
+            <local:PlaylistGrid Grid.Row="1"
                       ItemsSource="{Binding RootMusicDirectories}"
                       SelectedItem="{Binding SelectedSubDirectoryPath}"
+                      HeadersVisibility="None"
                       BorderThickness="0">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the elements XML properties, only Code-Behind methods can be called.
+                -->
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="MouseDoubleClick">
                         <b:InvokeCommandAction Command="{Binding OpenSubDirectoryCommand}"/>
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
-            </ListView>
+                
+                <!-- Show data as columns -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding}" />
+                </DataGrid.Columns>
+            </local:PlaylistGrid>
         </Grid>
         
         <!-- The current directory's contents -->
@@ -85,17 +95,27 @@
             </StackPanel>
             
             <!-- Sub directories -->
-            <ListView x:Name="SubDirectories" Grid.Row="1"
+            <local:PlaylistGrid x:Name="SubDirectories" Grid.Row="1"
                       Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}"
                       ItemsSource="{Binding SubDirectoryPaths}"
                       SelectedItem="{Binding SelectedSubDirectoryPath}"
+                      HeadersVisibility="None"
                       BorderThickness="0">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the elements XML properties, only Code-Behind methods can be called.
+                -->
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="MouseDoubleClick">
                         <b:InvokeCommandAction Command="{Binding OpenSubDirectoryCommand}"/>
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
-            </ListView>
+                
+                <!-- Show data as columns -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding}" />
+                </DataGrid.Columns>
+            </local:PlaylistGrid>
             
             <!-- Header for music files -->
             <StackPanel Grid.Row="2" Style="{DynamicResource HeaderToolbarStyle}"
@@ -122,7 +142,7 @@
                                 SelectedIndex="{Binding SelectedPlaylistIndex}">
                 <!-- 
                     Use Interaction.Triggers to bind the mouse events to commands.
-                    With the ListView settings, only Code-Behind methods can be called.
+                    With the elements XML properties, only Code-Behind methods can be called.
                 -->
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="MouseDoubleClick">
@@ -130,7 +150,7 @@
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
                 
-                <!-- Show data as columns via GridView -->
+                <!-- Show data as columns -->
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Title" Width="2*"
                                         Binding="{Binding Title}" />
