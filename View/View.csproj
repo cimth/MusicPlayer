@@ -37,6 +37,18 @@
       <Resource Include="Resources\Icons\repeat.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <None Remove="Resources\Icons\add-circle-outline.svg" />
+      <Resource Include="Resources\Icons\add-circle-outline.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Resources\Icons\arrow-back-circle-outline.svg" />
+      <Resource Include="Resources\Icons\arrow-back-circle-outline.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Resources\Icons\remove-circle-outline.svg" />
+      <Resource Include="Resources\Icons\remove-circle-outline.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
 </Project>

@@ -6,10 +6,12 @@
              xmlns:local="clr-namespace:View"
              xmlns:converter="clr-namespace:View.Converter"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
         <converter:DoubleSecondsToTimerStringConverter x:Key="DoubleSecondsToTimerStringConverter" />
         <converter:StringArrayToCommaSeparatedStringConverter x:Key="StringArrayToCommaSeparatedStringConverter" />
         <converter:IsVisibleToRowHeightConverter x:Key="IsVisibleToRowHeightConverter" />
@@ -17,59 +19,36 @@
         <converter:InvertNullToVisibilityConverter x:Key="InvertNullToVisibilityConverter" />
     </UserControl.Resources>
     
+    <!-- Use wrapper Grid because two Grids cannot be the child of a UserControl
+         However, only one child Grid is shown at each time. -->
     <Grid>
-        <!-- Grid layout -->
-        <Grid.RowDefinitions>
-            <!-- Toolbar -->
-            <RowDefinition Height="Auto" />
-            <!-- Grid with actual content -->
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        
-        <!-- Toolbar for Buttons (visible when showing the root music directories) -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="MintCream"
-                    Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
-            <!-- Set margin on buttons -->
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="Margin" Value="5" />
-                </Style>
-            </StackPanel.Resources>
-            
-            <!-- Go back to parent directory -->
-            <Button Content="Back" Command="{Binding GoBackCommand}"/>
-        </StackPanel>
-        
-        <!-- Toolbar for Path (visible when in directory) -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="MintCream"
-                    Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource InvertNullToVisibilityConverter}}">
-            <!-- Set margin on buttons -->
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="Margin" Value="5" />
-                </Style>
-            </StackPanel.Resources>
-            
-            <!-- Add music directory -->
-            <Button Content="Add" Command="{Binding AddMusicDirectoryCommand}"/>
-            
-            <!-- Remove music directory -->
-            <Button Content="Remove" Command="{Binding RemoveMusicDirectoryCommand}"/>
-        </StackPanel>
-        
         <!-- Root directories -->
-        <Grid Grid.Row="1" Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource InvertNullToVisibilityConverter}}">
+        <Grid Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource InvertNullToVisibilityConverter}}">
             <!-- Grid layout -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             
-            <!-- Root directories -->
-            <Label Grid.Row="0"
-                   Content="Root music directories"
-                   Background="Aquamarine" />
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Style="{DynamicResource HeaderToolbarStyle}">
+                <!-- Heading -->
+                <Label x:Name="LabelRootMusicDirectories" Content="Root music directories" />
+                
+                <!-- Add music directory -->
+                <Button ToolTip="Add" Command="{Binding AddMusicDirectoryCommand}"
+                        Height="{Binding ActualHeight, ElementName=LabelRootMusicDirectories}">
+                    <Image Source="{svgc:SvgImage Resources/Icons/add-circle-outline.svg}" />
+                </Button>
             
+                <!-- Remove music directory -->
+                <Button ToolTip="Remove" Command="{Binding RemoveMusicDirectoryCommand}"
+                        Height="{Binding ActualHeight, ElementName=LabelRootMusicDirectories}">
+                    <Image Source="{svgc:SvgImage Resources/Icons/remove-circle-outline.svg}" />
+                </Button>
+            </StackPanel>
+            
+            <!-- Actual root directories -->
             <ListView Grid.Row="1"
                       ItemsSource="{Binding RootMusicDirectories}"
                       SelectedItem="{Binding SelectedSubDirectoryPath}"
@@ -82,8 +61,8 @@
             </ListView>
         </Grid>
         
-        <!-- Lists with the current directory's contents -->
-        <Grid Grid.Row="1" Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
+        <!-- The current directory's contents -->
+        <Grid Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
             <!-- Grid layout -->
             <Grid.RowDefinitions>
                 <!-- Bind height to IsExpanded so that on True the expander gets half of the height 
@@ -94,12 +73,21 @@
                 <RowDefinition Height="{Binding IsVisible, ElementName=MusicFiles, Converter={StaticResource IsVisibleToRowHeightConverter}}" />
             </Grid.RowDefinitions>
             
-            <!-- Sub directories -->
-            <Label Grid.Row="0"
-                   Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}"
-                   Content="Sub directories"
-                   Background="Aquamarine" />
+            <!-- Header for sub directories -->
+            <StackPanel Grid.Row="0" Style="{DynamicResource HeaderToolbarStyle}"
+                        Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <!-- Go back to parent directory -->
+                <Button ToolTip="Back" Command="{Binding GoBackCommand}"
+                        Height="{Binding ActualHeight, ElementName=LabelSubDirectories}">
+                    <Image Source="{svgc:SvgImage Resources/Icons/arrow-back-circle-outline.svg}" />
+                </Button>
+                
+                <!-- Heading -->
+                <Label x:Name="LabelSubDirectories" Content="Sub directories" 
+                       Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </StackPanel>
             
+            <!-- Sub directories -->
             <ListView x:Name="SubDirectories" Grid.Row="1"
                       Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}"
                       ItemsSource="{Binding SubDirectoryPaths}"
@@ -112,11 +100,23 @@
                 </b:Interaction.Triggers>
             </ListView>
             
-            <!-- Music files -->
-            <Label Grid.Row="2" 
-                   Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
-                   Content="Music Files" 
-                   Background="Aquamarine" />
+            <!-- Header for music files -->
+            <StackPanel Grid.Row="2" Style="{DynamicResource HeaderToolbarStyle}">
+                <!-- 
+                    Go back to parent directory.
+                    Only show if no sub directories exist because then the sub directory header (including its 
+                    back navigation button) are collapsed.
+                 -->
+                <Button ToolTip="Back" Command="{Binding GoBackCommand}"
+                        Height="{Binding ActualHeight, ElementName=LabelMusicFiles}"
+                        Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                    <Image Source="{svgc:SvgImage Resources/Icons/arrow-back-circle-outline.svg}" />
+                </Button>
+                
+                <!-- Heading -->
+                <Label x:Name="LabelMusicFiles" Content="Music files"
+                       Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </StackPanel>
             
             <local:PlaylistGrid x:Name="MusicFiles" Grid.Row="3" 
                                 Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
