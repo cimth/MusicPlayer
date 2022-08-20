@@ -12,9 +12,9 @@
         <ResourceDictionary>
             <!-- Styles -->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Styles/Colors.xaml" />
-                <ResourceDictionary Source="../Styles/DataGridStyles.xaml" />
-                <ResourceDictionary Source="../Styles/StackPanelStyles.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/DataGridStyles.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/StackPanelStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

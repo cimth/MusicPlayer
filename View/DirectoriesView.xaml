@@ -38,12 +38,12 @@
                     
                     <!-- Add music directory -->
                     <Button ToolTip="Add" Command="{Binding AddMusicDirectoryCommand}">
-                        <Image Source="{svgc:SvgImage Resources/Icons/add-circle-outline.svg}" />
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
                     </Button>
                 
                     <!-- Remove music directory -->
                     <Button ToolTip="Remove" Command="{Binding RemoveMusicDirectoryCommand}">
-                        <Image Source="{svgc:SvgImage Resources/Icons/remove-circle-outline.svg}" />
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
                     </Button>
                 </StackPanel>
             </Border>
@@ -90,7 +90,7 @@
                 <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
                     <!-- Go back to parent directory -->
                     <Button ToolTip="Back" Command="{Binding GoBackCommand}">
-                        <Image Source="{svgc:SvgImage Resources/Icons/arrow-back-circle-outline.svg}" />
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
                     </Button>
                     
                     <!-- Heading -->
@@ -134,7 +134,7 @@
                      -->
                     <Button ToolTip="Back" Command="{Binding GoBackCommand}"
                             Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
-                        <Image Source="{svgc:SvgImage Resources/Icons/arrow-back-circle-outline.svg}" />
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
                     </Button>
                     
                     <!-- Heading -->
