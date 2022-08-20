@@ -22,17 +22,21 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             
-            <!-- current playlist -->
-            <RadioButton Content="Current Playlist" Grid.Row="0" />
+            <!-- Current playlist -->
+            <RadioButton Content="Current Playlist" Grid.Row="0"
+                         Command="{Binding ShowCurrentPlaylistCommand}" />
 
-            <!-- favorites -->
-            <RadioButton Content="Favorites" Grid.Row="1" />
+            <!-- Favorites -->
+            <RadioButton Content="Favorites" Grid.Row="1"
+                         Command="{Binding ShowFavoritesCommand}" />
             
-            <!-- directories -->
-            <RadioButton Content="Directories" Grid.Row="2" IsChecked="True" />
+            <!-- Directories -->
+            <RadioButton Content="Directories" Grid.Row="2" IsChecked="True"
+                         Command="{Binding ShowDirectoriesCommand}" />
             
-            <!-- playlists -->
-            <RadioButton Content="Playlists" Grid.Row="3" />
+            <!-- Playlists -->
+            <RadioButton Content="Playlists" Grid.Row="3"
+                         Command="{Binding ShowPlaylistsCommand}" />
         </Grid>
     </StackPanel>
 </UserControl>

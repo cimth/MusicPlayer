@@ -5,11 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Start"
         xmlns:view="clr-namespace:View;assembly=View"
-        xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" 
         Height="600" Width="950" MinHeight="600" MinWidth="950"
         WindowState="Maximized">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
+    
     <DockPanel>
         <!-- current song (bottom) -->
         <view:CurrentSongView DockPanel.Dock="Bottom" 
@@ -27,12 +30,32 @@
             </Grid.ColumnDefinitions>
         
             <!-- navigation sidebar -->
-            <view:NavigationSidebar Grid.Column="0" Background="{DynamicResource AppTurquoiseLightBrush}"
+            <view:NavigationSidebar Grid.Column="0" DataContext="{Binding NavigationSidebarViewModel}" 
+                                    Background="{DynamicResource AppTurquoiseLightBrush}"
                                     BorderBrush="{DynamicResource AppTurquoiseBorderBrush}"
                                     BorderThickness="0 1 1 0" />
-        
-            <!-- directories view -->
-            <view:DirectoriesView Grid.Column="1" DataContext="{Binding DirectoriesViewModel}" />
+            
+            <!-- 
+                Main content view (only one is shown at each time).
+                Wrap in additional Grids to regulate the visibility by MainWindowViewModel.
+                The Visibility of the View elements cannot be set directly because they get their own 
+                ViewModel classes as DataContext.
+             -->
+            <Grid Grid.Column="1" Visibility="{Binding IsCurrentPlaylistViewShown, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <view:CurrentPlaylistView DataContext="{Binding CurrentPlaylistViewModel}" />
+            </Grid>
+            
+            <Grid Grid.Column="1" Visibility="{Binding IsFavoritesViewShown, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <view:FavoritesView DataContext="{Binding FavoritesViewModel}" />
+            </Grid>
+            
+            <Grid Grid.Column="1" Visibility="{Binding IsDirectoriesViewShown, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <view:DirectoriesView DataContext="{Binding DirectoriesViewModel}" />
+            </Grid>
+            
+            <Grid Grid.Column="1" Visibility="{Binding IsPlaylistsViewShown, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <view:PlaylistsView DataContext="{Binding PlaylistsViewModel}" />
+            </Grid>
         </Grid>
     </DockPanel>
 </Window>
