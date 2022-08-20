@@ -24,7 +24,7 @@
             <!-- IsSelected -->
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Foreground" Value="Black" />
-                <Setter Property="Background" Value="#b7efef" />
+                <Setter Property="Background" Value="{StaticResource AppTurquoiseSelectedBrush}" />
                 
                 <!-- Hide borders -->
                 <Setter Property="BorderBrush" Value="{Binding Background, RelativeSource={RelativeSource Mode=Self}}"/>
@@ -33,7 +33,7 @@
             
             <!-- IsMouseOver -->
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#d7f6f6" />
+                <Setter Property="Background" Value="{StaticResource AppTurquoiseHighlightedBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>

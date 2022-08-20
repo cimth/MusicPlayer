@@ -5,10 +5,14 @@
     <Color x:Key="AppTurquoiseMedium">#e7f9f9</Color>
     <Color x:Key="AppTurquoiseLight">#f7fdfd</Color>
     <Color x:Key="AppTurquoiseBorder">#9dd6d6</Color>
+    <Color x:Key="AppTurquoiseSelected">#b7efef</Color>
+    <Color x:Key="AppTurquoiseHighlighted">#d7f6f6</Color>
     
     <!-- Brushes (You have to use Brushes when setting a Background color or similar) -->
     <SolidColorBrush x:Key="AppTurquoiseDarkestBrush" Color="{StaticResource AppTurquoiseDarkest}" />
     <SolidColorBrush x:Key="AppTurquoiseMediumBrush" Color="{StaticResource AppTurquoiseMedium}" />
     <SolidColorBrush x:Key="AppTurquoiseLightBrush" Color="{StaticResource AppTurquoiseLight}" />
     <SolidColorBrush x:Key="AppTurquoiseBorderBrush" Color="{StaticResource AppTurquoiseBorder}" />
+    <SolidColorBrush x:Key="AppTurquoiseSelectedBrush" Color="{StaticResource AppTurquoiseSelected}" />
+    <SolidColorBrush x:Key="AppTurquoiseHighlightedBrush" Color="{StaticResource AppTurquoiseHighlighted}" />
 </ResourceDictionary>
