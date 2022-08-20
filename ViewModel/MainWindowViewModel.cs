@@ -20,12 +20,7 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
     // ==============
     // FIELDS
     // ==============
-    
-    // Dependencies for multiple view models
-    private readonly SongImporter _songImporter;
-    private readonly SongPlayer _songPlayer;
-    private readonly AppConfigurator _appConfigurator;
-    
+
     // Variables to hide/show the correct main content view
     private bool _isCurrentPlaylistViewShown;
     private bool _isFavoritesViewShown;
@@ -71,17 +66,18 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
 
     public MainWindowViewModel()
     {
-        this._songImporter = new SongImporter();
-        this._songPlayer = new SongPlayer();
-        this._appConfigurator = new AppConfigurator();
-        
+        // Create model instances that are shared by the view model instances
+        SongImporter songImporter = new SongImporter();
+        SongPlayer songPlayer = new SongPlayer();
+        AppConfigurator appConfigurator = new AppConfigurator();;
+
         // Init view models
         this.CurrentPlaylistViewModel = new CurrentPlaylistViewModel();
         this.FavoritesViewModel = new FavoritesViewModel();
-        this.DirectoriesViewModel = new DirectoriesViewModel(_songImporter, _songPlayer, _appConfigurator);
+        this.DirectoriesViewModel = new DirectoriesViewModel(songImporter, songPlayer, appConfigurator);
         this.PlaylistsViewModel = new PlaylistsViewModel();
         
-        this.CurrentSongViewModel = new CurrentSongViewModel(_songPlayer);
+        this.CurrentSongViewModel = new CurrentSongViewModel(songPlayer);
         this.NavigationSidebarViewModel = new NavigationSidebarViewModel(this);
         
         // Init first shown main content view
