@@ -17,13 +17,36 @@
         <converter:IsVisibleToRowHeightConverter x:Key="IsVisibleToRowHeightConverter" />
         <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
         <converter:InvertNullToVisibilityConverter x:Key="InvertNullToVisibilityConverter" />
+        <converter:FullPathToLastPathPartConverter x:Key="FullPathToLastPathPartConverter" />
     </UserControl.Resources>
     
-    <!-- Use wrapper Grid because two Grids cannot be the child of a UserControl
-         However, only one child Grid is shown at each time. -->
     <Grid>
+        <!-- Grid layout -->
+        <Grid.RowDefinitions>
+            <!-- Label for current directory (or no directory selected information) -->
+            <RowDefinition Height="Auto" />
+            <!-- Grid with root directories or with the directory's content (only one of the Grids is shown at
+                 each time) -->
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Current directory -->
+        <Label Grid.Row="0" FontWeight="Bold"
+               Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}"
+               Content="{Binding CurrentDirectoryPath}"
+               BorderBrush="{StaticResource AppTurquoiseBorderBrush}" BorderThickness="0 1 0 0"
+               Background="{StaticResource AppTurquoiseDarkestBrush}"/>
+        
+        <!-- No directory selected -->
+        <Label Grid.Row="0" FontWeight="Bold"
+               Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource InvertNullToVisibilityConverter}}"
+               Content="No directory selected"
+               BorderBrush="{StaticResource AppTurquoiseBorderBrush}" BorderThickness="0 1 0 0"
+               Background="{StaticResource AppTurquoiseDarkestBrush}"/>
+        
         <!-- Root directories -->
-        <Grid Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource InvertNullToVisibilityConverter}}">
+        <Grid Grid.Row="1" 
+              Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource InvertNullToVisibilityConverter}}">
             <!-- Grid layout -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -72,7 +95,8 @@
         </Grid>
         
         <!-- The current directory's contents -->
-        <Grid Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
+        <Grid Grid.Row="1" 
+              Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
             <!-- Grid layout -->
             <Grid.RowDefinitions>
                 <!-- Bind height to IsExpanded so that on True the expander gets half of the height 
@@ -118,7 +142,7 @@
                 
                 <!-- Show data as columns -->
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="*" Binding="{Binding}" />
+                    <DataGridTextColumn Width="*" Binding="{Binding Converter={StaticResource FullPathToLastPathPartConverter}}" />
                 </DataGrid.Columns>
             </local:PlaylistGrid>
             
