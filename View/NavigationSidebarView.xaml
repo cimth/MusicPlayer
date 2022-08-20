@@ -8,17 +8,10 @@
              d:DesignHeight="400" d:DesignWidth="750">
     <StackPanel Orientation="Vertical">
         <Grid>
-            <!-- set Button style -->
-            <!-- base on ToggleButton to get a nice look but use RadioButton to make 
-                 only one button at one time selectable -->
+            <!-- Set Button style -->
             <Grid.Resources>
                 <Style TargetType="{x:Type RadioButton}"
-                       BasedOn="{StaticResource {x:Type ToggleButton}}">
-                    <Setter Property="Margin" Value="0, 2" />
-                    <Setter Property="Padding" Value="10" />
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
-                </Style>
+                       BasedOn="{StaticResource NavigationButtonStyle}" />
             </Grid.Resources>
             
             <!-- Grid layout -->
@@ -36,7 +29,7 @@
             <RadioButton Content="Favorites" Grid.Row="1" />
             
             <!-- directories -->
-            <RadioButton Content="Directories" Grid.Row="2" />
+            <RadioButton Content="Directories" Grid.Row="2" IsChecked="True" />
             
             <!-- playlists -->
             <RadioButton Content="Playlists" Grid.Row="3" />
