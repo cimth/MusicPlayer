@@ -14,7 +14,6 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     // ==============
 
     private readonly SongImporter _songImporter;
-    private readonly SongPlayer _songPlayer;
     private readonly AppConfigurator _appConfigurator;
 
     private string? _currentDirectoryPath;
@@ -29,6 +28,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     // ==============
     // PROPERTIES 
     // ==============
+    
+    public SongPlayer SongPlayer { get; }
 
     // Forward the app config data to avoid a to nested access in the View
     public ObservableCollection<string> RootMusicDirectories => this._appConfigurator.AppConfig.MusicDirectories;
@@ -107,8 +108,9 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
 
     public DirectoriesViewModel(SongImporter songImporter, SongPlayer songPlayer, AppConfigurator appConfigurator)
     {
+        this.SongPlayer = songPlayer;
+        
         this._songImporter = songImporter;
-        this._songPlayer = songPlayer;
         this._appConfigurator = appConfigurator;
         this._subDirectoryPaths = new List<string>();
         
@@ -193,7 +195,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
             // => seems overcomplicated but it makes the logic easier to understand since internally only playlists are
             //    played by SongPlayer and there is basically no different logic for single songs and playlists
             Playlist playlist = new Playlist(this.SelectedSong);
-            this._songPlayer.Play(playlist, 0);
+            this.SongPlayer.Play(playlist, 0);
         }
     }
 
@@ -203,7 +205,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         {
             // play the directory with the selected song as first song
             Console.WriteLine($"Play all songs in directory '{CurrentDirectoryPath}'");
-            this._songPlayer.Play(this.PlaylistFromDirectory, this.SelectedPlaylistIndex);
+            this.SongPlayer.Play(this.PlaylistFromDirectory, this.SelectedPlaylistIndex);
         }
     }
 

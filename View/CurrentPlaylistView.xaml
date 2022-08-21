@@ -13,6 +13,7 @@
         <converter:InvertNullToVisibilityConverter x:Key="InvertNullToVisibilityConverter" />
         <converter:DoubleSecondsToTimerStringConverter x:Key="DoubleSecondsToTimerStringConverter" />
         <converter:StringArrayToCommaSeparatedStringConverter x:Key="StringArrayToCommaSeparatedStringConverter" />
+        <converter:EqualsConverter x:Key="EqualsConverter" />
     </UserControl.Resources>
     
     <Grid>
@@ -68,6 +69,28 @@
                         <b:InvokeCommandAction Command="{Binding PlaySelectedSongCommand}"/>
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
+                
+                <!-- Mark the current song -->
+                <DataGrid.RowStyle>
+                    <!-- Base the style on the original style of the PlaylistGrid -->
+                    <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource DataGridRowStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Value="True">
+                                <!-- Only apply the style if the song of the considered row is the currently played song -->
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource EqualsConverter}">
+                                        <Binding Path="DataContext.SongPlayer.CurrentSong" 
+                                                 RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                                        <Binding Path="." />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                
+                                <!-- The style to be applied -->
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
                 
                 <!-- Show data as columns -->
                 <DataGrid.Columns>
