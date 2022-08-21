@@ -4,9 +4,83 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:View"
+             xmlns:converter="clr-namespace:View.Converter"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <converter:InvertNullToVisibilityConverter x:Key="InvertNullToVisibilityConverter" />
+        <converter:DoubleSecondsToTimerStringConverter x:Key="DoubleSecondsToTimerStringConverter" />
+        <converter:StringArrayToCommaSeparatedStringConverter x:Key="StringArrayToCommaSeparatedStringConverter" />
+    </UserControl.Resources>
+    
     <Grid>
-        <Label HorizontalAlignment="Center" VerticalAlignment="Center">Current Playlist</Label>
+        <!-- Grid layout -->
+        <Grid.RowDefinitions>
+            <!-- Label for current directory (or no directory selected information) -->
+            <RowDefinition Height="Auto" />
+            <!-- Grid with root directories or with the directory's content (only one of the Grids is shown at
+                 each time) -->
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Current playlist (if loaded) -->
+        <Label Grid.Row="0" FontWeight="Bold"
+               Visibility="{Binding SongPlayer.CurrentPlaylist, Converter={StaticResource NullToVisibilityConverter}}"
+               Content="{Binding SongPlayer.CurrentPlaylist.Name}"
+               BorderBrush="{StaticResource AppTurquoiseBorderBrush}" BorderThickness="0 1 0 0"
+               Background="{StaticResource AppTurquoiseDarkestBrush}"/>
+        
+        <!-- No playlist loaded -->
+        <Label Grid.Row="0" FontWeight="Bold"
+               Visibility="{Binding SongPlayer.CurrentPlaylist, Converter={StaticResource InvertNullToVisibilityConverter}}"
+               Content="No playlist loaded"
+               BorderBrush="{StaticResource AppTurquoiseBorderBrush}" BorderThickness="0 1 0 0"
+               Background="{StaticResource AppTurquoiseDarkestBrush}"/>
+        
+        <!-- Songs -->
+        <Grid Grid.Row="1">
+            <!-- Grid layout -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <!-- Header for music files -->
+            <Border Grid.Row="0" 
+                    BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
+                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- Heading -->
+                    <Label Content="Songs" />
+                </StackPanel>
+            </Border>
+            
+            <local:PlaylistGrid Grid.Row="1" 
+                                ItemsSource="{Binding SongPlayer.CurrentPlaylist.Songs}"
+                                SelectedIndex="{Binding SelectedPlaylistIndex}">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the elements XML properties, only Code-Behind methods can be called.
+                -->
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding PlaySelectedSongCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+                
+                <!-- Show data as columns -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Title" Width="2*"
+                                        Binding="{Binding Title}" />
+                    <DataGridTextColumn Header="Artists" Width="*"
+                                        Binding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}" />
+                    <DataGridTextColumn Header="Duration" Width="Auto"
+                                        Binding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
+                    <DataGridTextColumn Header="Album" Width="Auto"
+                                        Binding="{Binding Album}" />
+                </DataGrid.Columns>
+            </local:PlaylistGrid>
+        </Grid>
     </Grid>
 </UserControl>

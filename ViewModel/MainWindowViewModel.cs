@@ -69,10 +69,10 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         // Create model instances that are shared by the view model instances
         SongImporter songImporter = new SongImporter();
         SongPlayer songPlayer = new SongPlayer();
-        AppConfigurator appConfigurator = new AppConfigurator();;
+        AppConfigurator appConfigurator = new AppConfigurator();
 
         // Init view models
-        this.CurrentPlaylistViewModel = new CurrentPlaylistViewModel();
+        this.CurrentPlaylistViewModel = new CurrentPlaylistViewModel(songPlayer);
         this.FavoritesViewModel = new FavoritesViewModel();
         this.DirectoriesViewModel = new DirectoriesViewModel(songImporter, songPlayer, appConfigurator);
         this.PlaylistsViewModel = new PlaylistsViewModel();
