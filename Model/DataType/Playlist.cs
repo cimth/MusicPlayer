@@ -9,6 +9,19 @@ public class Playlist
     public string Name { get; set; }
     
     public List<Song> Songs { get; set; }
+
+    public TimeSpan TotalDuration
+    {
+        get
+        {
+            TimeSpan totalDuration = TimeSpan.Zero;
+            foreach (var song in this.Songs)
+            {
+                totalDuration.Add(song.Duration);
+            }
+            return totalDuration;
+        }
+    }
     
     // ==============
     // INITIALIZATION

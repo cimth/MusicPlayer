@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Common\Common.csproj" />
+      <ProjectReference Include="..\Dialog\Dialog.csproj" />
       <ProjectReference Include="..\Model\Model.csproj" />
     </ItemGroup>
 

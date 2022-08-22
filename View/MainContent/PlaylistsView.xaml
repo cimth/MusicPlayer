@@ -4,10 +4,147 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:View"
+             xmlns:converter="clr-namespace:View.Converter"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:templates="clr-namespace:View.Templates"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              BorderBrush="{StaticResource AppTurquoiseBorderBrush}" BorderThickness="0 1 0 0">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
+        <converter:FullPathToLastPathPartConverter x:Key="FullPathToLastPathPartConverter" />
+        <converter:DoubleSecondsToTimerStringConverter x:Key="DoubleSecondsToTimerStringConverter" />
+        <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <converter:InvertNullToVisibilityConverter x:Key="InvertNullToVisibilityConverter" />
+    </UserControl.Resources>
+    
     <Grid>
-        <Label HorizontalAlignment="Center" VerticalAlignment="Center">Playlists</Label>
+        <!-- Grid layout -->
+        <Grid.RowDefinitions>
+            <!-- Label for current playlist (or no playlist selected information) -->
+            <RowDefinition Height="Auto" />
+            <!-- Grid with playlist directories or the playlist's content (only one shown at each time) -->
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Header Labels -->
+        
+        <!-- Current directory (if selected) -->
+        <Label Grid.Row="0" FontWeight="Bold"
+               Visibility="{Binding ShowDirectory, Converter={StaticResource BooleanToVisibilityConverter}}"
+               Content="{Binding ShowDirectory}"
+               Background="{StaticResource AppTurquoiseDarkestBrush}" />
+        
+        <!-- Current playlist (if selected) -->
+        <Label Grid.Row="0" FontWeight="Bold"
+               Visibility="{Binding ShowPlaylist, Converter={StaticResource BooleanToVisibilityConverter}}"
+               Content="{Binding CurrentPlaylist.Name}"
+               Background="{StaticResource AppTurquoiseDarkestBrush}" />
+        
+        <!-- No playlist or directory selected -->
+        <Label Grid.Row="0" FontWeight="Bold"
+               Visibility="{Binding CurrentDirectory, Converter={StaticResource InvertNullToVisibilityConverter}}"
+               Content="No playlist or playlist directory selected"
+               Background="{StaticResource AppTurquoiseDarkestBrush}" />
+        
+        <!-- Show directories on top and playlists on bottom for root directory and sub directories
+             (use !ShowPlaylist for simplifying the condition) -->
+        <Grid Grid.Row="1" 
+              Visibility="{Binding ShowPlaylist, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+            <!-- Grid layout -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <!-- Header for playlist directories -->
+            <Border Grid.Row="0" 
+                    BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
+                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- Go back to parent directory (if not in root directory) -->
+                    <Button ToolTip="Back" Command="{Binding GoBackCommand}"
+                            Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
+                    </Button>
+                    
+                    <!-- Heading -->
+                    <Label Content="Sub Directories" />
+                    
+                    <!-- Add playlist sub directory -->
+                    <Button ToolTip="Add" Command="{Binding AddSubDirectoryCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
+                    </Button>
+                
+                    <!-- Remove playlist sub directory -->
+                    <Button ToolTip="Remove" Command="{Binding RemoveSubDirectoryCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
+                    </Button>
+                </StackPanel>
+            </Border>
+            
+            <!-- Directories -->
+            <templates:PlaylistGrid Grid.Row="1"
+                      ItemsSource="{Binding SubDirectoryPaths}"
+                      SelectedItem="{Binding SelectedSubDirectoryPath}"
+                      SelectedIndex="{Binding SelectedSubDirectoryIndex}"
+                      HeadersVisibility="None"
+                      BorderThickness="0">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the elements XML properties, only Code-Behind methods can be called.
+                -->
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding OpenSubDirectoryCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+                
+                <!-- Show data as columns -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding Converter={StaticResource FullPathToLastPathPartConverter}}" />
+                </DataGrid.Columns>
+            </templates:PlaylistGrid>
+            
+            <!-- Header for playlists inside the current directory -->
+            <Border Grid.Row="2" 
+                    BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
+                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- Heading -->
+                    <Label Content="Playlists" />
+                </StackPanel>
+            </Border>
+            
+            <templates:PlaylistGrid Grid.Row="3" 
+                                ItemsSource="{Binding PlaylistPaths}"
+                                SelectedItem="{Binding  SelectedPlaylistPath}">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the elements XML properties, only Code-Behind methods can be called.
+                -->
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding OpenPlaylistCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+                
+                <!-- Show data as columns -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Width="*"
+                                        Binding="{Binding }" />
+                    <!--
+                    <DataGridTextColumn Header="Name" Width="2*"
+                                        Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="Songs" Width="*"
+                                        Binding="{Binding Songs.Count}" />
+                    <DataGridTextColumn Header="Duration" Width="Auto"
+                                        Binding="{Binding TotalDuration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
+                    -->
+                </DataGrid.Columns>
+            </templates:PlaylistGrid>
+        </Grid>
     </Grid>
 </UserControl>

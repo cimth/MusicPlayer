@@ -9,15 +9,7 @@ namespace Model.Service;
 public class AppConfigurator : NotifyPropertyChangedImpl
 {
     // ==============
-    // FIELDS
-    // ==============
-
-    // The app's config file is placed under "<App base directory>/config.json" (if existing)
-    private static readonly string AppBaseDirectoryPath = Path.GetFullPath(AppContext.BaseDirectory);
-    private static readonly string AppConfigFilePath = Path.GetFullPath(Path.Combine(AppBaseDirectoryPath, "config.json"));
-    
-    // ==============
-    // FIELDS
+    // PROPERTIES
     // ==============
 
     public AppConfig AppConfig { get; }
@@ -36,9 +28,9 @@ public class AppConfigurator : NotifyPropertyChangedImpl
         // Load app config if existing
         // => The config file (if existing) is placed inside the app's base directory
         AppConfig? appConfig = null;        
-        if (File.Exists(AppConfigurator.AppConfigFilePath))
+        if (File.Exists(AppConfig.AppConfigFilePath))
         {
-            string configJson = File.ReadAllText(AppConfigurator.AppConfigFilePath);
+            string configJson = File.ReadAllText(AppConfig.AppConfigFilePath);
             appConfig = JsonSerializer.Deserialize<AppConfig>(configJson) ?? throw new InvalidOperationException();
         }
 
@@ -58,7 +50,7 @@ public class AppConfigurator : NotifyPropertyChangedImpl
             WriteIndented = true
         };
         string configJson = JsonSerializer.Serialize(this.AppConfig, options);
-        File.WriteAllText(AppConfigurator.AppConfigFilePath, configJson, Encoding.UTF8);
+        File.WriteAllText(AppConfig.AppConfigFilePath, configJson, Encoding.UTF8);
     }
     
     // ==============

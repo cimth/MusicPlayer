@@ -71,12 +71,13 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         SongImporter songImporter = new SongImporter();
         SongPlayer songPlayer = new SongPlayer();
         AppConfigurator appConfigurator = new AppConfigurator();
+        PlaylistManager playlistManager = new PlaylistManager();
 
         // Init view models
         this.CurrentPlaylistViewModel = new CurrentPlaylistViewModel(songPlayer);
         this.FavoritesViewModel = new FavoritesViewModel();
         this.DirectoriesViewModel = new DirectoriesViewModel(songImporter, songPlayer, appConfigurator);
-        this.PlaylistsViewModel = new PlaylistsViewModel();
+        this.PlaylistsViewModel = new PlaylistsViewModel(songImporter, playlistManager);
         
         this.CurrentSongViewModel = new CurrentSongViewModel(songPlayer);
         this.NavigationSidebarViewModel = new NavigationSidebarViewModel(this);
