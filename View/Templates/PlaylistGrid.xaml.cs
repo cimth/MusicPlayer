@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace View;
+namespace View.Templates;
 
 public partial class PlaylistGrid : DataGrid
 {

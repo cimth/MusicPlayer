@@ -1,4 +1,4 @@
-namespace ViewModel;
+namespace ViewModel.MainContent;
 
 public class FavoritesViewModel
 {

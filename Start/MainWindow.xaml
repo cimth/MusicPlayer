@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Start"
         xmlns:view="clr-namespace:View;assembly=View"
+        xmlns:mainContent="clr-namespace:View.MainContent;assembly=View"
         mc:Ignorable="d"
         Title="MainWindow" 
         Height="600" Width="950" MinHeight="600" MinWidth="950"
@@ -42,19 +43,19 @@
                 ViewModel classes as DataContext.
              -->
             <Grid Grid.Column="1" Visibility="{Binding IsCurrentPlaylistViewShown, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <view:CurrentPlaylistView DataContext="{Binding CurrentPlaylistViewModel}" />
+                <mainContent:CurrentPlaylistView DataContext="{Binding CurrentPlaylistViewModel}" />
             </Grid>
             
             <Grid Grid.Column="1" Visibility="{Binding IsFavoritesViewShown, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <view:FavoritesView DataContext="{Binding FavoritesViewModel}" />
+                <mainContent:FavoritesView DataContext="{Binding FavoritesViewModel}" />
             </Grid>
             
             <Grid Grid.Column="1" Visibility="{Binding IsDirectoriesViewShown, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <view:DirectoriesView DataContext="{Binding DirectoriesViewModel}" />
+                <mainContent:DirectoriesView DataContext="{Binding DirectoriesViewModel}" />
             </Grid>
             
             <Grid Grid.Column="1" Visibility="{Binding IsPlaylistsViewShown, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <view:PlaylistsView DataContext="{Binding PlaylistsViewModel}" />
+                <mainContent:PlaylistsView DataContext="{Binding PlaylistsViewModel}" />
             </Grid>
         </Grid>
     </DockPanel>

@@ -5,7 +5,7 @@ using Model.DataType;
 using Model.Service;
 using ViewModel.Command;
 
-namespace ViewModel;
+namespace ViewModel.MainContent;
 
 public class DirectoriesViewModel : NotifyPropertyChangedImpl
 {

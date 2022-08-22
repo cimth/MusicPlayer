@@ -1,4 +1,4 @@
-<UserControl x:Class="View.CurrentPlaylistView"
+<UserControl x:Class="View.MainContent.CurrentPlaylistView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:View"
              xmlns:converter="clr-namespace:View.Converter"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:templates="clr-namespace:View.Templates"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -57,7 +58,7 @@
                 </StackPanel>
             </Border>
             
-            <local:PlaylistGrid Grid.Row="1" 
+            <templates:PlaylistGrid Grid.Row="1" 
                                 ItemsSource="{Binding SongPlayer.CurrentPlaylist.Songs}"
                                 SelectedIndex="{Binding SelectedPlaylistIndex}">
                 <!-- 
@@ -103,7 +104,7 @@
                     <DataGridTextColumn Header="Album" Width="Auto"
                                         Binding="{Binding Album}" />
                 </DataGrid.Columns>
-            </local:PlaylistGrid>
+            </templates:PlaylistGrid>
         </Grid>
     </Grid>
 </UserControl>

@@ -1,5 +1,5 @@
 <!-- Set attributes that are common to all PlaylistGrid elements in the application -->
-<DataGrid x:Class="View.PlaylistGrid"
+<DataGrid x:Class="View.Templates.PlaylistGrid"
           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"

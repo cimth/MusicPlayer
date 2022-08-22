@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace View;
+namespace View.MainContent;
 
 public partial class DirectoriesView : UserControl
 {

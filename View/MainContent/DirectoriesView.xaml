@@ -1,4 +1,4 @@
-<UserControl x:Class="View.DirectoriesView"
+<UserControl x:Class="View.MainContent.DirectoriesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,6 +7,7 @@
              xmlns:converter="clr-namespace:View.Converter"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:templates="clr-namespace:View.Templates"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.Resources>
@@ -73,7 +74,7 @@
             </Border>
                 
             <!-- Actual root directories -->
-            <local:PlaylistGrid Grid.Row="1"
+            <templates:PlaylistGrid Grid.Row="1"
                       ItemsSource="{Binding RootMusicDirectories}"
                       SelectedItem="{Binding SelectedSubDirectoryPath}"
                       HeadersVisibility="None"
@@ -92,7 +93,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Binding="{Binding}" />
                 </DataGrid.Columns>
-            </local:PlaylistGrid>
+            </templates:PlaylistGrid>
         </Grid>
         
         <!-- The current directory's contents -->
@@ -125,7 +126,7 @@
             </Border>
             
             <!-- Sub directories -->
-            <local:PlaylistGrid x:Name="SubDirectories" Grid.Row="1"
+            <templates:PlaylistGrid x:Name="SubDirectories" Grid.Row="1"
                       Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}"
                       ItemsSource="{Binding SubDirectoryPaths}"
                       SelectedItem="{Binding SelectedSubDirectoryPath}"
@@ -145,7 +146,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Binding="{Binding Converter={StaticResource FullPathToLastPathPartConverter}}" />
                 </DataGrid.Columns>
-            </local:PlaylistGrid>
+            </templates:PlaylistGrid>
             
             <!-- Header for music files -->
             <Border Grid.Row="2" 
@@ -168,7 +169,7 @@
                 </StackPanel>
             </Border>
             
-            <local:PlaylistGrid x:Name="MusicFiles" Grid.Row="3" 
+            <templates:PlaylistGrid x:Name="MusicFiles" Grid.Row="3" 
                                 Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 ItemsSource="{Binding PlaylistFromDirectory.Songs}"
                                 SelectedItem="{Binding SelectedSong}"
@@ -216,7 +217,7 @@
                     <DataGridTextColumn Header="Album" Width="Auto"
                                         Binding="{Binding Album}" />
                 </DataGrid.Columns>
-            </local:PlaylistGrid>
+            </templates:PlaylistGrid>
         </Grid>
     </Grid>
 </UserControl>
