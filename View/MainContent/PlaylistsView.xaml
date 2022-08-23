@@ -130,6 +130,11 @@
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
                 
+                <!-- KeyBindings -->
+                <templates:PlaylistGrid.InputBindings>
+                    <KeyBinding Key="Delete" Command="{Binding RemoveSubDirectoryCommand}" />
+                </templates:PlaylistGrid.InputBindings>
+                
                 <!-- Show data as columns -->
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Binding="{Binding Converter={StaticResource FullPathToLastPathPartConverter}}" />
@@ -168,6 +173,11 @@
                         <b:InvokeCommandAction Command="{Binding OpenPlaylistCommand}"/>
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
+                
+                <!-- KeyBindings -->
+                <templates:PlaylistGrid.InputBindings>
+                    <KeyBinding Key="Delete" Command="{Binding RemovePlaylistCommand}" />
+                </templates:PlaylistGrid.InputBindings>
                 
                 <!-- Show data as columns -->
                 <DataGrid.Columns>
@@ -235,6 +245,11 @@
                         <b:CallMethodAction TargetObject="{Binding}" MethodName="DropFileOntoPlaylist"  />
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
+                
+                <!-- KeyBindings -->
+                <templates:PlaylistGrid.InputBindings>
+                    <KeyBinding Key="Delete" Command="{Binding RemoveSongFromPlaylistCommand}" />
+                </templates:PlaylistGrid.InputBindings>
                 
                 <!-- Mark the current song -->
                 <DataGrid.RowStyle>
