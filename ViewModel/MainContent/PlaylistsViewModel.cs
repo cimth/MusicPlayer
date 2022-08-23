@@ -23,7 +23,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     private string? _currentDirectoryNameFromRoot;
     private ObservableCollection<string> _subDirectoryPaths;
 
-    private ObservableCollection<string> _playlistPaths;
+    private ObservableCollection<Playlist> _playlistsInDirectory;
 
     private bool _isPlaylistShown;
 
@@ -60,13 +60,13 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public int SelectedSubDirectoryIndex { get; set; }
 
-    public ObservableCollection<string> PlaylistPaths
+    public ObservableCollection<Playlist> PlaylistsInDirectory
     {
-        get => _playlistPaths;
-        private set => SetField(ref _playlistPaths, value);
+        get => _playlistsInDirectory;
+        private set => SetField(ref _playlistsInDirectory, value);
     }
     
-    public string? SelectedPlaylistPath { get; set; }
+    public Playlist? SelectedPlaylist { get; set; }
 
     public bool IsPlaylistShown
     {
@@ -96,7 +96,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this._playlistManager = playlistManager;
 
         this._subDirectoryPaths = new ObservableCollection<string>();
-        this._playlistPaths = new ObservableCollection<string>();
+        this._playlistsInDirectory = new ObservableCollection<Playlist>();
         
         // Init commands
         this.GoBackCommand = new DelegateCommand(this.GoBack);
@@ -123,9 +123,16 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         string[] subDirectories = Directory.GetDirectories(directoryPath);
         this.SubDirectoryPaths = new ObservableCollection<string>(subDirectories);
 
-        // Load playlist files
+        // Load playlists
         string[] playlistFiles = Directory.GetFiles(directoryPath, "*.json");
-        this.PlaylistPaths = new ObservableCollection<string>(playlistFiles);
+        
+        ObservableCollection<Playlist> importedPlaylists = new ObservableCollection<Playlist>();
+        foreach (var filePath in playlistFiles)
+        {
+            importedPlaylists.Add(this._playlistImporter.ImportFromPlaylistFile(filePath));
+        }
+
+        this.PlaylistsInDirectory = importedPlaylists;
     }
     
     // ==============
@@ -190,6 +197,6 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
     private void OpenPlaylist()
     {
-        
+        Console.WriteLine($"Selected playlist: {this.SelectedPlaylist?.Name}");
     }
 }

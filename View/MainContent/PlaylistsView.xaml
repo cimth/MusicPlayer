@@ -143,8 +143,8 @@
             </Border>
             
             <templates:PlaylistGrid Grid.Row="3" 
-                                ItemsSource="{Binding PlaylistPaths}"
-                                SelectedItem="{Binding  SelectedPlaylistPath}">
+                                ItemsSource="{Binding PlaylistsInDirectory}"
+                                SelectedItem="{Binding  SelectedPlaylist}">
                 <!-- 
                     Use Interaction.Triggers to bind the mouse events to commands.
                     With the elements XML properties, only Code-Behind methods can be called.
@@ -157,16 +157,12 @@
                 
                 <!-- Show data as columns -->
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Width="*"
-                                        Binding="{Binding }" />
-                    <!--
                     <DataGridTextColumn Header="Name" Width="2*"
                                         Binding="{Binding Name}" />
                     <DataGridTextColumn Header="Songs" Width="*"
                                         Binding="{Binding Songs.Count}" />
                     <DataGridTextColumn Header="Duration" Width="Auto"
                                         Binding="{Binding TotalDuration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
-                    -->
                 </DataGrid.Columns>
             </templates:PlaylistGrid>
         </Grid>
