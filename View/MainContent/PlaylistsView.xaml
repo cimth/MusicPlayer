@@ -194,9 +194,9 @@
             <Border Grid.Row="0" 
                     BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
                 <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
-                    <!-- Go back to parent directory (if not in root directory) -->
-                    <Button ToolTip="Back" Command="{Binding GoBackCommand}"
-                            Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
+                    <!-- Go back to parent directory or to root directory -->
+                    <!-- Note that the button never should be hidden because you should always go back to a directory -->
+                    <Button ToolTip="Back" Command="{Binding GoBackCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
                     </Button>
                     
