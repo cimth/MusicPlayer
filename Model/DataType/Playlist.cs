@@ -17,7 +17,7 @@ public class Playlist
             TimeSpan totalDuration = TimeSpan.Zero;
             foreach (var song in this.Songs)
             {
-                totalDuration.Add(song.Duration);
+                totalDuration = totalDuration.Add(song.Duration);
             }
             return totalDuration;
         }
