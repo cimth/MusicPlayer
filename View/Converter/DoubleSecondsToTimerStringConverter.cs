@@ -21,7 +21,7 @@ public class DoubleSecondsToTimerStringConverter : IValueConverter
     {
         if (value is double timeInSeconds)
         {
-            String targetFormat = timeInSeconds >= TimeSpan.TicksPerHour ? @"hh\:mm\:ss" : @"mm\:ss";
+            String targetFormat = timeInSeconds >= 3600 ? @"hh\:mm\:ss" : @"mm\:ss";
             return TimeSpan.FromSeconds(timeInSeconds).ToString(targetFormat);
         }
 
