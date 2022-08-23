@@ -61,10 +61,12 @@
             
             <!-- Current directory (if selected) -->
             <Label Grid.Column="0" FontWeight="Bold"
+                   Visibility="{Binding CurrentDirectoryNameFromRoot, Converter={StaticResource NullToVisibilityConverter}}"
                    Content="{Binding CurrentDirectoryNameFromRoot}"
                    Background="{StaticResource AppTurquoiseDarkestBrush}" />
             
             <Label Grid.Column="1" FontWeight="Bold" 
+                   Visibility="{Binding CurrentDirectoryNameFromRoot, Converter={StaticResource NullToVisibilityConverter}}"
                    Content=" | "
                    Background="{StaticResource AppTurquoiseDarkestBrush}" />
             
