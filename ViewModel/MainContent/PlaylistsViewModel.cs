@@ -327,4 +327,38 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             this._playlistManager.CreatePlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
         }
     }
+
+    // ==============
+    // METHOD ACTIONS
+    // ==============
+    
+    // Methods which are called from XAML by CallMethodAction from Microsoft.Xaml.Behaviors
+    // => Works with default Event method signature '(object sender, System.Windows.EventArgs args)'
+    // => Can only use empty constructor or the '(sender, args)' constructor
+
+    public void DropFileOntoPlaylist(object sender, System.Windows.DragEventArgs args)
+    {
+        if (args.Data != null && args.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            // Get the paths of the dropped files
+            string[] filePaths = (string[]) args.Data.GetData(DataFormats.FileDrop)!;
+
+            // Add to playlist
+            if (this.SelectedPlaylist != null)
+            {
+                // Update playlist
+                foreach (var filePath in filePaths)
+                {
+                    Song song = this._songImporter.Import(filePath);
+                    this.SelectedPlaylist.Songs.Add(song);
+                }
+
+                // Sort playlist
+                this.SelectedPlaylist.SortByTitle();
+
+                // Save changes
+                this._playlistManager.CreatePlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+            }
+        }
+    }
 }

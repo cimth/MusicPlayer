@@ -219,6 +219,7 @@
             <templates:PlaylistGrid Grid.Row="1"
                       ItemsSource="{Binding SelectedPlaylist.Songs}"
                       SelectedIndex="{Binding SelectedSongIndex}"
+                      AllowDrop="True"
                       BorderThickness="0">
                 <!-- 
                     Use Interaction.Triggers to bind the mouse events to commands.
@@ -227,6 +228,11 @@
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="MouseDoubleClick">
                         <b:InvokeCommandAction Command="{Binding StartPlaylistBeginningWithTheSelectedSongCommand}"/>
+                    </b:EventTrigger>
+                    <b:EventTrigger EventName="PreviewDrop">
+                        <!-- Use CallMethodAction to give the EventArgs (including the dropped files) to the
+                             called method -->
+                        <b:CallMethodAction TargetObject="{Binding}" MethodName="DropFileOntoPlaylist"  />
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
                 
