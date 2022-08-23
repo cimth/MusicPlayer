@@ -16,6 +16,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     // FIELDS 
     // ==============
 
+    private readonly SongImporter _songImporter;
     private readonly PlaylistImporter _playlistImporter;
     private readonly PlaylistManager _playlistManager;
     private readonly SongPlayer _songPlayer;
@@ -108,12 +109,17 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand RemovePlaylistCommand { get; }
     
+    public ICommand AddSongToPlaylistCommand { get; }
+    
+    public ICommand RemoveSongFromPlaylistCommand { get; }
+    
     // ==============
     // INITIALIZATION 
     // ==============
 
-    public PlaylistsViewModel(PlaylistImporter playlistImporter, PlaylistManager playlistManager, SongPlayer songPlayer)
+    public PlaylistsViewModel(SongImporter songImporter, PlaylistImporter playlistImporter, PlaylistManager playlistManager, SongPlayer songPlayer)
     {
+        this._songImporter = songImporter;
         this._playlistImporter = playlistImporter;
         this._playlistManager = playlistManager;
         this._songPlayer = songPlayer;
@@ -130,7 +136,9 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.StartPlaylistBeginningWithTheSelectedSongCommand = new DelegateCommand(this.StartPlaylistBeginningWithTheSelectedSong);
         this.AddPlaylistCommand = new DelegateCommand(this.AddPlaylist);
         this.RemovePlaylistCommand = new DelegateCommand(this.RemovePlaylist);
-        
+        this.AddSongToPlaylistCommand = new DelegateCommand(this.AddSongToPlaylist);
+        this.RemoveSongFromPlaylistCommand = new DelegateCommand(this.RemoveSongFromPlaylist);
+
         // Set elements that are shown first
         this._isPlaylistShown = false;
         this.LoadContents(null);
@@ -237,7 +245,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     private void StartPlaylistBeginningWithTheSelectedSong()
     {
         if (this.SelectedPlaylist != null 
-            && this.SelectedSongIndex > 0 
+            && this.SelectedSongIndex >= 0 
             && this.SelectedSongIndex < this.SelectedPlaylist.Songs.Count)
         {
             this.SongPlayer.Play(this.SelectedPlaylist, this.SelectedSongIndex);
@@ -275,6 +283,45 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             
             // Update GUI
             this.PlaylistsInDirectory.RemoveAt(this.SelectedPlaylistIndex);
+        }
+    }
+    
+    private void AddSongToPlaylist()
+    {
+        // Open dialog to select the songs to add
+        OpenFileDialog dialog = new OpenFileDialog()
+        {
+            Multiselect = true,
+            Filter = "Music files (*.mp3)|*.mp3",
+        };
+        DialogResult dialogResult = dialog.ShowDialog();
+        
+        // Add songs
+        if (dialogResult == DialogResult.OK && this.SelectedPlaylist != null)
+        {
+            // Update playlist
+            foreach (var filePath in dialog.FileNames)
+            {
+                Song song = this._songImporter.Import(filePath);
+                this.SelectedPlaylist.Songs.Add(song);
+            }
+                
+            // Save changes
+            this._playlistManager.CreatePlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+        }
+    }
+
+    private void RemoveSongFromPlaylist()
+    {
+        if (this.SelectedPlaylist != null 
+            && this.SelectedSongIndex >= 0 
+            && this.SelectedSongIndex < this.SelectedPlaylist.Songs.Count)
+        {
+            // Update playlist
+            this.SelectedPlaylist.Songs.RemoveAt(this.SelectedSongIndex);
+            
+            // Save changes
+            this._playlistManager.CreatePlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
         }
     }
 }

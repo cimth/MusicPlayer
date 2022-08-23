@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace Model.DataType;
 
 public class Playlist
@@ -8,7 +10,7 @@ public class Playlist
     
     public string Name { get; set; }
     
-    public List<Song> Songs { get; set; }
+    public ObservableCollection<Song> Songs { get; set; }
 
     public TimeSpan TotalDuration
     {
@@ -27,7 +29,7 @@ public class Playlist
     // INITIALIZATION
     // ==============
 
-    public Playlist(string name, List<Song> songs)
+    public Playlist(string name, ObservableCollection<Song> songs)
     {
         this.Name = name;
         this.Songs = songs;
@@ -36,12 +38,12 @@ public class Playlist
     public Playlist(Song song)
     {
         this.Name = song.Title;
-        this.Songs = new List<Song> {song};
+        this.Songs = new ObservableCollection<Song> {song};
     }
 
     public Playlist(string name)
     {
         this.Name = name;
-        this.Songs = new List<Song>();
+        this.Songs = new ObservableCollection<Song>();
     }
 }

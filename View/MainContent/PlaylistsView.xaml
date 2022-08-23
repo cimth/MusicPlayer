@@ -202,12 +202,12 @@
                     <Label Content="Songs" />
                     
                     <!-- Add playlist sub directory -->
-                    <Button ToolTip="Add" Command="{Binding AddSubDirectoryCommand}">
+                    <Button ToolTip="Add" Command="{Binding AddSongToPlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
                     </Button>
                 
                     <!-- Remove playlist sub directory -->
-                    <Button ToolTip="Remove" Command="{Binding RemoveSubDirectoryCommand}">
+                    <Button ToolTip="Remove" Command="{Binding RemoveSongFromPlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
                     </Button>
                 </StackPanel>
@@ -217,7 +217,6 @@
             <templates:PlaylistGrid Grid.Row="1"
                       ItemsSource="{Binding SelectedPlaylist.Songs}"
                       SelectedIndex="{Binding SelectedSongIndex}"
-                      HeadersVisibility="None"
                       BorderThickness="0">
                 <!-- 
                     Use Interaction.Triggers to bind the mouse events to commands.
