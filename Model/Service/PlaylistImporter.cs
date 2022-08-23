@@ -1,3 +1,5 @@
+using System.IO;
+using System.Text.Json;
 using Model.DataType;
 
 namespace Model.Service;
@@ -13,7 +15,7 @@ public class PlaylistImporter
     {
         // create list from single song
         List<Song> songs = new List<Song>();
-        Song song = this.Import(songPath);
+        Song song = this.ImportSong(songPath);
         songs.Add(song);
         
         return new Playlist(songName, songs);
@@ -25,17 +27,34 @@ public class PlaylistImporter
         
         foreach (string songPath in songPaths)
         {
-            songs.Add(this.Import(songPath));
+            songs.Add(this.ImportSong(songPath));
         }
         
         return new Playlist(playlistName, songs);
+    }
+
+    public Playlist ImportFromPlaylistFile(string filePath)
+    {
+        // Read file
+        string playlistJson = File.ReadAllText(filePath);
+        PlaylistFileData fileData = JsonSerializer.Deserialize<PlaylistFileData>(playlistJson) ?? throw new InvalidOperationException();
+        
+        // Create actual Song objects from the song paths in the file
+        List<Song> songs = new List<Song>();
+        foreach (var songPath in fileData.SongPaths)
+        {
+            songs.Add(this.ImportSong(songPath));
+        }
+        
+        // return resolved Playlist
+        return new Playlist(fileData.Name, songs);
     }
     
     // ==============
     // HELPING METHOD
     // ==============
     
-    private Song Import(string songPath)
+    private Song ImportSong(string songPath)
     {
         var songFile = TagLib.File.Create(songPath);
 
