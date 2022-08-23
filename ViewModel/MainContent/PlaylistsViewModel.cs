@@ -18,18 +18,24 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
     private readonly PlaylistImporter _playlistImporter;
     private readonly PlaylistManager _playlistManager;
+    private readonly SongPlayer _songPlayer;
 
     private string? _currentDirectoryPath;
     private string? _currentDirectoryNameFromRoot;
     private ObservableCollection<string> _subDirectoryPaths;
 
     private ObservableCollection<Playlist> _playlistsInDirectory;
+    private Playlist? _selectedPlaylist;
 
     private bool _isPlaylistShown;
 
     // ==============
     // PROPERTIES 
     // ==============
+
+    public SongPlayer SongPlayer => _songPlayer;
+    
+    // Properties for choosing a directory and a playlist
 
     public string? CurrentDirectoryPath
     {
@@ -66,14 +72,22 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         private set => SetField(ref _playlistsInDirectory, value);
     }
     
-    public Playlist? SelectedPlaylist { get; set; }
+    // Properties for showing the current playlist details
+
+    public Playlist? SelectedPlaylist
+    {
+        get => _selectedPlaylist; 
+        set => SetField(ref _selectedPlaylist, value);
+    }
+
+    public int SelectedSongIndex { get; set; }
 
     public bool IsPlaylistShown
     {
         get => _isPlaylistShown;
         set => SetField(ref _isPlaylistShown, value);
-    } 
-    
+    }
+
     // Commands
     
     public ICommand GoBackCommand { get; }
@@ -86,14 +100,17 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand OpenPlaylistCommand { get; }
     
+    public ICommand StartPlaylistBeginningWithTheSelectedSongCommand { get; }
+    
     // ==============
     // INITIALIZATION 
     // ==============
 
-    public PlaylistsViewModel(PlaylistImporter playlistImporter, PlaylistManager playlistManager)
+    public PlaylistsViewModel(PlaylistImporter playlistImporter, PlaylistManager playlistManager, SongPlayer songPlayer)
     {
         this._playlistImporter = playlistImporter;
         this._playlistManager = playlistManager;
+        this._songPlayer = songPlayer;
 
         this._subDirectoryPaths = new ObservableCollection<string>();
         this._playlistsInDirectory = new ObservableCollection<Playlist>();
@@ -104,6 +121,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.RemoveSubDirectoryCommand = new DelegateCommand(this.RemoveSubDirectory);
         this.OpenSubDirectoryCommand = new DelegateCommand(this.OpenSubDirectory);
         this.OpenPlaylistCommand = new DelegateCommand(this.OpenPlaylist);
+        this.StartPlaylistBeginningWithTheSelectedSongCommand = new DelegateCommand(this.StartPlaylistBeginningWithTheSelectedSong);
         
         // Set elements that are shown first
         this._isPlaylistShown = false;
@@ -141,6 +159,14 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
     private void GoBack()
     {
+        // Just go back to the directory view (the current directory path is still set correctly)
+        if (this.IsPlaylistShown)
+        {
+            this.IsPlaylistShown = false;
+            return;
+        } 
+        
+        // Already inside directory view, thus go back to parent directory
         if (Directory.Exists(this.CurrentDirectoryPath))
         {
             string parentPath = Directory.GetParent(this.CurrentDirectoryPath)!.FullName;
@@ -197,6 +223,16 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
     private void OpenPlaylist()
     {
-        Console.WriteLine($"Selected playlist: {this.SelectedPlaylist?.Name}");
+        this.IsPlaylistShown = true;
+    }
+    
+    private void StartPlaylistBeginningWithTheSelectedSong()
+    {
+        if (this.SelectedPlaylist != null 
+            && this.SelectedSongIndex > 0 
+            && this.SelectedSongIndex < this.SelectedPlaylist.Songs.Count)
+        {
+            this.SongPlayer.Play(this.SelectedPlaylist, this.SelectedSongIndex);
+        }
     }
 }

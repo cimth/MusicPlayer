@@ -18,6 +18,8 @@
         <converter:DoubleSecondsToTimerStringConverter x:Key="DoubleSecondsToTimerStringConverter" />
         <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
         <converter:InvertNullToVisibilityConverter x:Key="InvertNullToVisibilityConverter" />
+        <converter:EqualsConverter x:Key="EqualsConverter" />
+        <converter:StringArrayToCommaSeparatedStringConverter x:Key="StringArrayToCommaSeparatedStringConverter" />
     </UserControl.Resources>
     
     <Grid>
@@ -48,28 +50,27 @@
         </Grid>
         
         <!-- Playlist shown -->
-        <Grid Grid.Row="0" 
+        <Grid Grid.Row="0" HorizontalAlignment="Stretch"
               Visibility="{Binding IsPlaylistShown, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <!-- Grid layout -->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             
             <!-- Current directory (if selected) -->
             <Label Grid.Column="0" FontWeight="Bold"
-                   Visibility="{Binding CurrentDirectoryNameFromRoot, Converter={StaticResource NullToVisibilityConverter}}"
                    Content="{Binding CurrentDirectoryNameFromRoot}"
                    Background="{StaticResource AppTurquoiseDarkestBrush}" />
             
-            <Label Grid.Column="1" FontWeight="Bold" Content=" | " 
-                   Visibility="{Binding CurrentDirectoryNameFromRoot, Converter={StaticResource NullToVisibilityConverter}}"
+            <Label Grid.Column="1" FontWeight="Bold" 
+                   Content=" | "
                    Background="{StaticResource AppTurquoiseDarkestBrush}" />
             
             <!-- Current playlist (if selected) -->
             <Label Grid.Column="2" FontWeight="Bold"
-                   Visibility="{Binding IsPlaylistShown, Converter={StaticResource BooleanToVisibilityConverter}}"
-                   Content="{Binding CurrentPlaylist.Name}"
+                   Content="{Binding SelectedPlaylist.Name}"
                    Background="{StaticResource AppTurquoiseDarkestBrush}" />
         </Grid>
         
@@ -163,6 +164,92 @@
                                         Binding="{Binding Songs.Count}" />
                     <DataGridTextColumn Header="Duration" Width="Auto"
                                         Binding="{Binding TotalDuration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
+                </DataGrid.Columns>
+            </templates:PlaylistGrid>
+        </Grid>
+        
+        <!-- Show playlist songs -->
+        <Grid Grid.Row="1" 
+              Visibility="{Binding IsPlaylistShown, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <!-- Grid layout -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <!-- Header for playlist directories -->
+            <Border Grid.Row="0" 
+                    BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
+                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- Go back to parent directory (if not in root directory) -->
+                    <Button ToolTip="Back" Command="{Binding GoBackCommand}"
+                            Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
+                    </Button>
+                    
+                    <!-- Heading -->
+                    <Label Content="Songs" />
+                    
+                    <!-- Add playlist sub directory -->
+                    <Button ToolTip="Add" Command="{Binding AddSubDirectoryCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
+                    </Button>
+                
+                    <!-- Remove playlist sub directory -->
+                    <Button ToolTip="Remove" Command="{Binding RemoveSubDirectoryCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
+                    </Button>
+                </StackPanel>
+            </Border>
+            
+            <!-- Songs -->
+            <templates:PlaylistGrid Grid.Row="1"
+                      ItemsSource="{Binding SelectedPlaylist.Songs}"
+                      SelectedIndex="{Binding SelectedSongIndex}"
+                      HeadersVisibility="None"
+                      BorderThickness="0">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the elements XML properties, only Code-Behind methods can be called.
+                -->
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding StartPlaylistBeginningWithTheSelectedSongCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+                
+                <!-- Mark the current song -->
+                <DataGrid.RowStyle>
+                    <!-- Base the style on the original style of the PlaylistGrid -->
+                    <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource DataGridRowStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Value="True">
+                                <!-- Only apply the style if the song of the considered row is the currently played song -->
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource EqualsConverter}">
+                                        <Binding Path="DataContext.SongPlayer.CurrentSong" 
+                                                 RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                                        <Binding Path="." />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                
+                                <!-- The style to be applied -->
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                
+                <!-- Show data as columns -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Title" Width="2*"
+                                        Binding="{Binding Title}" />
+                    <DataGridTextColumn Header="Artists" Width="*"
+                                        Binding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}" />
+                    <DataGridTextColumn Header="Duration" Width="Auto"
+                                        Binding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
+                    <DataGridTextColumn Header="Album" Width="Auto"
+                                        Binding="{Binding Album}" />
                 </DataGrid.Columns>
             </templates:PlaylistGrid>
         </Grid>
