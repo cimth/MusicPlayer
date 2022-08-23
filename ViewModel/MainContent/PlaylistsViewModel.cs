@@ -72,6 +72,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         private set => SetField(ref _playlistsInDirectory, value);
     }
     
+    public int SelectedPlaylistIndex { get; set; }
+    
     // Properties for showing the current playlist details
 
     public Playlist? SelectedPlaylist
@@ -102,6 +104,10 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand StartPlaylistBeginningWithTheSelectedSongCommand { get; }
     
+    public ICommand AddPlaylistCommand { get; }
+    
+    public ICommand RemovePlaylistCommand { get; }
+    
     // ==============
     // INITIALIZATION 
     // ==============
@@ -122,6 +128,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.OpenSubDirectoryCommand = new DelegateCommand(this.OpenSubDirectory);
         this.OpenPlaylistCommand = new DelegateCommand(this.OpenPlaylist);
         this.StartPlaylistBeginningWithTheSelectedSongCommand = new DelegateCommand(this.StartPlaylistBeginningWithTheSelectedSong);
+        this.AddPlaylistCommand = new DelegateCommand(this.AddPlaylist);
+        this.RemovePlaylistCommand = new DelegateCommand(this.RemovePlaylist);
         
         // Set elements that are shown first
         this._isPlaylistShown = false;
@@ -233,6 +241,40 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             && this.SelectedSongIndex < this.SelectedPlaylist.Songs.Count)
         {
             this.SongPlayer.Play(this.SelectedPlaylist, this.SelectedSongIndex);
+        }
+    }
+    
+    private void AddPlaylist()
+    {
+        // Open dialog to request the sub directory name
+        DialogService dialogService = new DialogService();
+        InputDialogViewModel dialogViewModel = new InputDialogViewModel("Which name should the playlist have?");
+        bool? result = dialogService.ShowInputDialog(dialogViewModel);
+        
+        // Add the playlist if the dialog was successful
+        if (result != null && result.Value)
+        {
+            // Create playlist
+            string playlistName = dialogViewModel.InputValue;
+            Playlist playlist = new Playlist(playlistName);
+            this._playlistManager.CreatePlaylistFile(this.CurrentDirectoryPath, playlist);
+            
+            // Update GUI
+            this.PlaylistsInDirectory.Insert(0, playlist);
+        }
+    }
+
+    private void RemovePlaylist()
+    {
+        if (this.SelectedPlaylist != null 
+            && this.SelectedPlaylistIndex >= 0 
+            && this.SelectedPlaylistIndex < this.PlaylistsInDirectory.Count)
+        {
+            // Remove file
+            this._playlistManager.RemovePlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+            
+            // Update GUI
+            this.PlaylistsInDirectory.RemoveAt(this.SelectedPlaylistIndex);
         }
     }
 }

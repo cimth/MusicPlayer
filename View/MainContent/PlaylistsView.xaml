@@ -140,12 +140,23 @@
                 <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
                     <!-- Heading -->
                     <Label Content="Playlists" />
+                    
+                    <!-- Add playlist -->
+                    <Button ToolTip="Add" Command="{Binding AddPlaylistCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
+                    </Button>
+                
+                    <!-- Remove playlist -->
+                    <Button ToolTip="Remove" Command="{Binding RemovePlaylistCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
+                    </Button>
                 </StackPanel>
             </Border>
             
             <templates:PlaylistGrid Grid.Row="3" 
                                 ItemsSource="{Binding PlaylistsInDirectory}"
-                                SelectedItem="{Binding  SelectedPlaylist}">
+                                SelectedItem="{Binding  SelectedPlaylist}"
+                                SelectedIndex="{Binding  SelectedPlaylistIndex}">
                 <!-- 
                     Use Interaction.Triggers to bind the mouse events to commands.
                     With the elements XML properties, only Code-Behind methods can be called.

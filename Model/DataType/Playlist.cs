@@ -38,4 +38,10 @@ public class Playlist
         this.Name = song.Title;
         this.Songs = new List<Song> {song};
     }
+
+    public Playlist(string name)
+    {
+        this.Name = name;
+        this.Songs = new List<Song>();
+    }
 }
