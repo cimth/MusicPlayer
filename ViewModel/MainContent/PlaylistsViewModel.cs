@@ -11,16 +11,6 @@ namespace ViewModel.MainContent;
 
 public class PlaylistsViewModel : NotifyPropertyChangedImpl
 {
-    // ==============
-    // ENUM FOR DIFFERENT SHOWN ELEMENTS
-    // ==============
-
-    private enum ShownElements
-    {
-        ShowPlaylistRootDirectory,
-        ShowDirectory,
-        ShowPlaylist,
-    }
     
     // ==============
     // FIELDS 
@@ -30,13 +20,12 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     private readonly PlaylistManager _playlistManager;
 
     private string? _currentDirectoryPath;
+    private string? _currentDirectoryNameFromRoot;
     private ObservableCollection<string> _subDirectoryPaths;
 
     private ObservableCollection<string> _playlistPaths;
 
-    private bool _showDirectory;
-    private bool _showPlaylist;
-    private bool _showPlaylistRootDirectory;
+    private bool _isPlaylistShown;
 
     // ==============
     // PROPERTIES 
@@ -45,8 +34,21 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     public string? CurrentDirectoryPath
     {
         get => _currentDirectoryPath;
-        private set => SetField(ref _currentDirectoryPath, value);
+        private set
+        {
+            SetField(ref _currentDirectoryPath, value);
+            
+            // Update the directory name from the playlist root path
+            // => The directory '<Full path to root>/<dir1>/<dir2>' will result in '<dir1>/<dir2>'
+            this.CurrentDirectoryNameFromRoot = _currentDirectoryPath != null ? Path.GetRelativePath(AppConfig.PlaylistsRootPath, _currentDirectoryPath) : null;
+        } 
     }
+
+    public string? CurrentDirectoryNameFromRoot
+    {
+        get => _currentDirectoryNameFromRoot;
+        private set => SetField(ref _currentDirectoryNameFromRoot, value);
+    } 
 
     public ObservableCollection<string> SubDirectoryPaths
     {
@@ -66,16 +68,11 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public string? SelectedPlaylistPath { get; set; }
 
-    // Current shown elements
-    // => Only return the current value. The property changed method is called separate when changing the values to
-    //    avoid missing one of the necessary variables (all bool variables have to be updated once because only one
-    //    variable is set to true at each time).
-
-    public bool ShowDirectory => _showDirectory;
-
-    public bool ShowPlaylist => _showPlaylist;
-
-    public bool ShowPlaylistRootDirectory => _showPlaylistRootDirectory;
+    public bool IsPlaylistShown
+    {
+        get => _isPlaylistShown;
+        set => SetField(ref _isPlaylistShown, value);
+    } 
     
     // Commands
     
@@ -109,39 +106,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.OpenPlaylistCommand = new DelegateCommand(this.OpenPlaylist);
         
         // Set elements that are shown first
-        this.UpdateCurrentShownElements(ShownElements.ShowPlaylistRootDirectory);
+        this._isPlaylistShown = false;
         this.LoadContents(null);
-    }
-    
-    // ==============
-    // UPDATE WHICH ELEMENTS SHOULD BE SHOWN
-    // ==============
-
-    private void UpdateCurrentShownElements(ShownElements elementToShow)
-    {
-        // Hide all elements
-        this._showDirectory = false;
-        this._showPlaylist = false;
-        this._showPlaylistRootDirectory = false;
-        
-        // Set the correct main content variable to true
-        switch (elementToShow)
-        {
-            case ShownElements.ShowDirectory:
-                this._showDirectory = true;
-                break;
-            case ShownElements.ShowPlaylist:
-                this._showPlaylist = true;
-                break;
-            case ShownElements.ShowPlaylistRootDirectory:
-                this._showPlaylistRootDirectory = true;
-                break;
-        }
-        
-        // Raise property changed event for all variables
-        OnPropertyChanged(nameof(ShowDirectory));
-        OnPropertyChanged(nameof(ShowPlaylist));
-        OnPropertyChanged(nameof(ShowPlaylistRootDirectory));
     }
     
     // ==============

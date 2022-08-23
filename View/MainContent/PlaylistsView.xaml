@@ -31,28 +31,52 @@
         
         <!-- Header Labels -->
         
-        <!-- Current directory (if selected) -->
-        <Label Grid.Row="0" FontWeight="Bold"
-               Visibility="{Binding ShowDirectory, Converter={StaticResource BooleanToVisibilityConverter}}"
-               Content="{Binding ShowDirectory}"
-               Background="{StaticResource AppTurquoiseDarkestBrush}" />
+        <!-- No playlist shown (navigate through directories) -->
+        <Grid Grid.Row="0" 
+              Visibility="{Binding IsPlaylistShown, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+            <!-- Current directory (if selected) -->
+            <Label FontWeight="Bold"
+                   Visibility="{Binding CurrentDirectoryNameFromRoot, Converter={StaticResource NullToVisibilityConverter}}"
+                   Content="{Binding CurrentDirectoryNameFromRoot}"
+                   Background="{StaticResource AppTurquoiseDarkestBrush}" />
+            
+            <!-- No directory or playlist selected -->
+            <Label FontWeight="Bold"
+                   Visibility="{Binding CurrentDirectoryNameFromRoot, Converter={StaticResource InvertNullToVisibilityConverter}}"
+                   Content="No playlist directory and playlist selected"
+                   Background="{StaticResource AppTurquoiseDarkestBrush}" />
+        </Grid>
         
-        <!-- Current playlist (if selected) -->
-        <Label Grid.Row="0" FontWeight="Bold"
-               Visibility="{Binding ShowPlaylist, Converter={StaticResource BooleanToVisibilityConverter}}"
-               Content="{Binding CurrentPlaylist.Name}"
-               Background="{StaticResource AppTurquoiseDarkestBrush}" />
-        
-        <!-- No playlist or directory selected -->
-        <Label Grid.Row="0" FontWeight="Bold"
-               Visibility="{Binding CurrentDirectory, Converter={StaticResource InvertNullToVisibilityConverter}}"
-               Content="No playlist or playlist directory selected"
-               Background="{StaticResource AppTurquoiseDarkestBrush}" />
+        <!-- Playlist shown -->
+        <Grid Grid.Row="0" 
+              Visibility="{Binding IsPlaylistShown, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <!-- Current directory (if selected) -->
+            <Label Grid.Column="0" FontWeight="Bold"
+                   Visibility="{Binding CurrentDirectoryNameFromRoot, Converter={StaticResource NullToVisibilityConverter}}"
+                   Content="{Binding CurrentDirectoryNameFromRoot}"
+                   Background="{StaticResource AppTurquoiseDarkestBrush}" />
+            
+            <Label Grid.Column="1" FontWeight="Bold" Content=" | " 
+                   Visibility="{Binding CurrentDirectoryNameFromRoot, Converter={StaticResource NullToVisibilityConverter}}"
+                   Background="{StaticResource AppTurquoiseDarkestBrush}" />
+            
+            <!-- Current playlist (if selected) -->
+            <Label Grid.Column="2" FontWeight="Bold"
+                   Visibility="{Binding IsPlaylistShown, Converter={StaticResource BooleanToVisibilityConverter}}"
+                   Content="{Binding CurrentPlaylist.Name}"
+                   Background="{StaticResource AppTurquoiseDarkestBrush}" />
+        </Grid>
         
         <!-- Show directories on top and playlists on bottom for root directory and sub directories
-             (use !ShowPlaylist for simplifying the condition) -->
+             (use !IsPlaylistShown for simplifying the condition) -->
         <Grid Grid.Row="1" 
-              Visibility="{Binding ShowPlaylist, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+              Visibility="{Binding IsPlaylistShown, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
             <!-- Grid layout -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
