@@ -39,12 +39,12 @@ public class PlaylistManager
     }
 
     /// <summary>
-    /// Creates a playlist file from the given playlist inside the given parent directory.
+    /// Creates or updates the playlist file for the given playlist inside the given parent directory.
     /// If no parent directory is given, the file will be created inside the playlist root directory.
     /// </summary>
     /// <param name="parentDirectoryPath"></param>
     /// <param name="playlist"></param>
-    public void CreatePlaylistFile(string? parentDirectoryPath, Playlist playlist)
+    public void SaveInPlaylistFile(string? parentDirectoryPath, Playlist playlist)
     {
         // Get full path '<parent directory>/<directory path>' or '<playlists root directory>/<directory path>'
         string fileName = playlist.Name + ".json";

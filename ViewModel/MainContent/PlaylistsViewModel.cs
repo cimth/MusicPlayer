@@ -265,7 +265,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             // Create playlist
             string playlistName = dialogViewModel.InputValue;
             Playlist playlist = new Playlist(playlistName);
-            this._playlistManager.CreatePlaylistFile(this.CurrentDirectoryPath, playlist);
+            this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, playlist);
             
             // Update GUI
             this.PlaylistsInDirectory.Insert(0, playlist);
@@ -310,7 +310,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             this.SelectedPlaylist.SortByTitle();
                 
             // Save changes
-            this._playlistManager.CreatePlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+            this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
         }
     }
 
@@ -324,7 +324,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             this.SelectedPlaylist.Songs.RemoveAt(this.SelectedSongIndex);
             
             // Save changes
-            this._playlistManager.CreatePlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+            this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
         }
     }
 
@@ -357,7 +357,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
                 this.SelectedPlaylist.SortByTitle();
 
                 // Save changes
-                this._playlistManager.CreatePlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+                this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
             }
         }
     }
