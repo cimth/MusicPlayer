@@ -68,7 +68,7 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
     public MainWindowViewModel()
     {
         // Create model instances that are shared by the view model instances
-        SongImporter songImporter = new SongImporter();
+        PlaylistImporter playlistImporter = new PlaylistImporter();
         SongPlayer songPlayer = new SongPlayer();
         AppConfigurator appConfigurator = new AppConfigurator();
         PlaylistManager playlistManager = new PlaylistManager();
@@ -76,8 +76,8 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         // Init view models
         this.CurrentPlaylistViewModel = new CurrentPlaylistViewModel(songPlayer);
         this.FavoritesViewModel = new FavoritesViewModel();
-        this.DirectoriesViewModel = new DirectoriesViewModel(songImporter, songPlayer, appConfigurator);
-        this.PlaylistsViewModel = new PlaylistsViewModel(songImporter, playlistManager);
+        this.DirectoriesViewModel = new DirectoriesViewModel(playlistImporter, songPlayer, appConfigurator);
+        this.PlaylistsViewModel = new PlaylistsViewModel(playlistImporter, playlistManager);
         
         this.CurrentSongViewModel = new CurrentSongViewModel(songPlayer);
         this.NavigationSidebarViewModel = new NavigationSidebarViewModel(this);

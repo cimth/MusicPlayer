@@ -16,7 +16,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     // FIELDS 
     // ==============
 
-    private readonly SongImporter _songImporter;
+    private readonly PlaylistImporter _playlistImporter;
     private readonly PlaylistManager _playlistManager;
 
     private string? _currentDirectoryPath;
@@ -90,9 +90,9 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     // INITIALIZATION 
     // ==============
 
-    public PlaylistsViewModel(SongImporter songImporter, PlaylistManager playlistManager)
+    public PlaylistsViewModel(PlaylistImporter playlistImporter, PlaylistManager playlistManager)
     {
-        this._songImporter = songImporter;
+        this._playlistImporter = playlistImporter;
         this._playlistManager = playlistManager;
 
         this._subDirectoryPaths = new ObservableCollection<string>();

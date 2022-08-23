@@ -13,7 +13,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     // FIELDS
     // ==============
 
-    private readonly SongImporter _songImporter;
+    private readonly PlaylistImporter _playlistImporter;
     private readonly AppConfigurator _appConfigurator;
 
     private string? _currentDirectoryPath;
@@ -106,11 +106,11 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     // INITIALIZATION
     // ==============
 
-    public DirectoriesViewModel(SongImporter songImporter, SongPlayer songPlayer, AppConfigurator appConfigurator)
+    public DirectoriesViewModel(PlaylistImporter playlistImporter, SongPlayer songPlayer, AppConfigurator appConfigurator)
     {
         this.SongPlayer = songPlayer;
         
-        this._songImporter = songImporter;
+        this._playlistImporter = playlistImporter;
         this._appConfigurator = appConfigurator;
         this._subDirectoryPaths = new List<string>();
         
@@ -152,7 +152,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         this.HasMusicFiles = mp3Files.Length > 0;
 
         // Create Playlist if songs exist in the new directory, else reset to null
-        this.PlaylistFromDirectory = this.HasMusicFiles ? this._songImporter.Import(directoryName, mp3Files.ToList()) : null;
+        this.PlaylistFromDirectory = this.HasMusicFiles ? this._playlistImporter.Import(directoryName, mp3Files.ToList()) : null;
     }
 
     // ==============

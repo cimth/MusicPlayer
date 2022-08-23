@@ -2,7 +2,7 @@ using Model.DataType;
 
 namespace Model.Service;
 
-public class SongImporter
+public class PlaylistImporter
 {
     // ==============
     // PUBLIC METHODS
