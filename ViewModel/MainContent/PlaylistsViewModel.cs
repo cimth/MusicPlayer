@@ -305,6 +305,9 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
                 Song song = this._songImporter.Import(filePath);
                 this.SelectedPlaylist.Songs.Add(song);
             }
+            
+            // Sort playlist
+            this.SelectedPlaylist.SortByTitle();
                 
             // Save changes
             this._playlistManager.CreatePlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);

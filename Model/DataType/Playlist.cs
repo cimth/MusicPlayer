@@ -46,4 +46,25 @@ public class Playlist
         this.Name = name;
         this.Songs = new ObservableCollection<Song>();
     }
+    
+    // ==============
+    // SORTING
+    // ==============
+    
+    public void SortByTitle()
+    {
+        // Sort a copy of the collection
+        ObservableCollection<Song> sorted = new ObservableCollection<Song>(this.Songs);
+        sorted = new ObservableCollection<Song>(sorted.OrderBy(song => song.Title));
+
+        // Clear the current collection and re-add the songs (which are now ordered).
+        // Do not simply assign the new sorted collection because then this model class 
+        // would have to implement INotifyOnPropertyChanged to notify the GUI on changing
+        // the collection which is not desired inside this simple DataType.
+        this.Songs.Clear();
+        foreach (var song in sorted)
+        {
+            this.Songs.Add(song);
+        }
+    }
 }
