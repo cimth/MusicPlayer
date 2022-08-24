@@ -30,6 +30,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
     private bool _isPlaylistShown;
 
+    private PlaylistSortOrder _selectedPlaylistSortOrder;
+
     // ==============
     // PROPERTIES 
     // ==============
@@ -90,6 +92,22 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         get => _isPlaylistShown;
         set => SetField(ref _isPlaylistShown, value);
     }
+    
+    // Sort playlist
+
+    // Creates pairs of <enum value, string representation of enum value>
+    // Access inside XAML:
+    // * Enum value: `SelectedValue='Key'`
+    // * String representation: `DisplayMemberPath='value'`
+    // Also use `SelectedValue` instead of `SelectedItem` in XAML for the correct binding below.
+    public Dictionary<PlaylistSortOrder, string> PlaylistSortOrders 
+        => Enum.GetValues<PlaylistSortOrder>().ToDictionary(sortOrder => sortOrder, PlaylistSortOrderToString.ToString);
+
+    public PlaylistSortOrder SelectedPlaylistSortOrder
+    {
+        get => _selectedPlaylistSortOrder;
+        set => SetField(ref _selectedPlaylistSortOrder, value);
+    }
 
     // Commands
     
@@ -144,6 +162,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
         // Set elements that are shown first
         this._isPlaylistShown = false;
+        this._selectedPlaylistSortOrder = PlaylistSortOrder.Alphabetical;
         this.LoadContents(null);
     }
     

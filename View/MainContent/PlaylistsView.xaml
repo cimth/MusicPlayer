@@ -203,26 +203,55 @@
             <!-- Header for playlist directories -->
             <Border Grid.Row="0" 
                     BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
-                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                <Grid Style="{DynamicResource HeaderToolbarGridStyle}">
+                    <!-- Grid layout -->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
                     <!-- Go back to parent directory or to root directory -->
                     <!-- Note that the button never should be hidden because you should always go back to a directory -->
-                    <Button ToolTip="Back" Command="{Binding GoBackCommand}">
+                    <Button Grid.Column="0" ToolTip="Back" Command="{Binding GoBackCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
                     </Button>
                     
                     <!-- Heading -->
-                    <Label Content="Songs" />
+                    <Label Grid.Column="1" Content="Songs" />
                     
-                    <!-- Add playlist sub directory -->
-                    <Button ToolTip="Add" Command="{Binding AddSongToPlaylistCommand}">
+                    <!-- Add song -->
+                    <Button Grid.Column="2" ToolTip="Add" Command="{Binding AddSongToPlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
                     </Button>
                 
-                    <!-- Remove playlist sub directory -->
-                    <Button ToolTip="Remove" Command="{Binding RemoveSongFromPlaylistCommand}">
+                    <!-- Remove song -->
+                    <Button Grid.Column="3" ToolTip="Remove" Command="{Binding RemoveSongFromPlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
                     </Button>
-                </StackPanel>
+                    
+                    <!-- Sort playlist -->
+                    <StackPanel Grid.Column="4" HorizontalAlignment="Right" Margin="2,0">
+                        <Label Content="Sort playlist:" />
+                        <ComboBox Text="Please select"
+                                  ItemsSource="{Binding PlaylistSortOrders}"
+                                  SelectedValue="{Binding SelectedPlaylistSortOrder}"
+                                  SelectedValuePath="Key"
+                                  DisplayMemberPath="Value">
+                            <!-- Show the 'Description' of the enum,
+                                 see: https://stackoverflow.com/questions/24344327/wpf-change-string-values-of-enum-in-combo-box -->
+                            <!--
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentPresenter Content="{Binding Converter={StaticResource PlaylistSortOrderConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            -->
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
             </Border>
             
             <!-- Songs -->
