@@ -160,7 +160,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.RemovePlaylistCommand = new DelegateCommand(this.RemovePlaylist);
         this.AddSongToPlaylistCommand = new DelegateCommand(this.AddSongToPlaylist);
         this.RemoveSongFromPlaylistCommand = new DelegateCommand(this.RemoveSongFromPlaylist);
-        this.SelectedPlaylist_OnSongMovedCommand = new DelegateCommand(this.SelectedPlaylist_OnRowMoved);
+        this.SelectedPlaylist_OnSongMovedCommand = new DelegateCommand(this.SelectedPlaylist_OnSongMoved);
         this.ChangePlaylistSortOrderCommand = new DelegateCommand(this.ChangePlaylistSortOrder);
 
         // Set elements that are shown first
@@ -173,7 +173,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     // ACTION AFTER DRAGGING ROWS
     // ==============
 
-    private void SelectedPlaylist_OnRowMoved()
+    private void SelectedPlaylist_OnSongMoved()
     {
         // Save changes
         if (this.SelectedPlaylist != null)
