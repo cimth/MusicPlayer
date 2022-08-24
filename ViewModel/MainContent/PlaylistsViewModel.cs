@@ -243,10 +243,11 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         {
             // Create directory
             string directoryName = dialogViewModel.InputValue;
-            this._playlistManager.CreatePlaylistDirectory(this.CurrentDirectoryPath, directoryName);
+            string fullPath = this._playlistManager.CreatePlaylistDirectory(this.CurrentDirectoryPath, directoryName);
             
             // Update GUI
-            this.SubDirectoryPaths.Insert(0, directoryName);
+            this.SubDirectoryPaths.Add(fullPath);
+            this.SubDirectoryPaths = new ObservableCollection<string>(this.SubDirectoryPaths.OrderBy(s => s));
         }
     }
 

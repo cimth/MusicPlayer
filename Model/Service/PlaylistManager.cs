@@ -18,11 +18,14 @@ public class PlaylistManager
     /// </summary>
     /// <param name="parentDirectoryPath">The parent directory path, might be null</param>
     /// <param name="directoryName">The name of the new playlist directory</param>
-    public void CreatePlaylistDirectory(string? parentDirectoryPath, string directoryName)
+    /// <returns>The full path of the created directory</returns>
+    public string CreatePlaylistDirectory(string? parentDirectoryPath, string directoryName)
     {
         // Create in '<parent directory>/<directory path>' or in '<playlists root directory>/<directory path>'
         string fullPath = this.GetFullPath(parentDirectoryPath, directoryName);
         Directory.CreateDirectory(fullPath);
+
+        return fullPath;
     }
     
     /// <summary>
