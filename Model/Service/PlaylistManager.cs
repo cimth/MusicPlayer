@@ -60,7 +60,7 @@ public class PlaylistManager
             songPaths.Add(song.FilePath);
         }
         
-        PlaylistFileData fileData = new PlaylistFileData(playlist.Name, songPaths);
+        PlaylistFileData fileData = new PlaylistFileData(playlist.Name, songPaths, playlist.SortOrder.ToString());
         
         // Save playlist as JSON
         JsonSerializerOptions options = new JsonSerializerOptions

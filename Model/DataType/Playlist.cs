@@ -13,6 +13,7 @@ public class Playlist : NotifyPropertyChangedImpl
     private string _name;
     private ObservableCollection<Song> _songs;
     private TimeSpan _totalDuration;
+    private PlaylistSortOrder _sortOrder = PlaylistSortOrder.Individual;
 
     // ==============
     // PROPERTIES
@@ -31,10 +32,26 @@ public class Playlist : NotifyPropertyChangedImpl
         get => _totalDuration;
         set => SetField(ref _totalDuration, value);
     }
+
+    public PlaylistSortOrder SortOrder
+    {
+        get => _sortOrder;
+        set => SetField(ref _sortOrder, value);
+    }
     
     // ==============
     // INITIALIZATION
     // ==============
+    
+    public Playlist(string name, ObservableCollection<Song> songs, PlaylistSortOrder sortOrder)
+    {
+        this._name = name;
+        this._songs = songs;
+        this._sortOrder = sortOrder;
+        
+        this._songs.CollectionChanged += UpdateTotalDuration;
+        this.UpdateTotalDuration(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+    }
 
     public Playlist(string name, ObservableCollection<Song> songs)
     {
@@ -81,10 +98,10 @@ public class Playlist : NotifyPropertyChangedImpl
     // SORTING
     // ==============
     
-    public void Sort(PlaylistSortOrder sortOrder)
+    public void Sort()
     {
         List<Song> ordered;
-        switch (sortOrder)
+        switch (this.SortOrder)
         {
             case PlaylistSortOrder.Alphabetical:
                 ordered = this.Songs.OrderBy(song => song.Title).ToList();

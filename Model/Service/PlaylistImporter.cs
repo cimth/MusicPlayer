@@ -61,7 +61,10 @@ public class PlaylistImporter
             songs.Add(this._songImporter.Import(songPath));
         }
         
+        // Get sort order
+        Enum.TryParse(fileData.SortOrder, out PlaylistSortOrder sortOrder);
+        
         // return resolved Playlist
-        return new Playlist(fileData.Name, songs);
+        return new Playlist(fileData.Name, songs, sortOrder);
     }
 }

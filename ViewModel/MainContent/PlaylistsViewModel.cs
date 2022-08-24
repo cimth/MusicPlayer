@@ -172,7 +172,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
         // Set elements that are shown first
         this._isPlaylistShown = false;
-        this._selectedPlaylistSortOrder = PlaylistSortOrder.Alphabetical;
+        this._selectedPlaylistSortOrder = PlaylistSortOrder.Individual;
         this.LoadContents(null);
     }
     
@@ -288,7 +288,11 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
     private void OpenPlaylist()
     {
-        this.IsPlaylistShown = true;
+        if (this.SelectedPlaylist != null)
+        {
+            this.SelectedPlaylistSortOrder = this.SelectedPlaylist.SortOrder;
+            this.IsPlaylistShown = true;
+        }
     }
     
     private void StartPlaylistBeginningWithTheSelectedSong()
@@ -356,7 +360,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             }
             
             // Sort playlist
-            this.SelectedPlaylist.Sort(this.SelectedPlaylistSortOrder);
+            this.SelectedPlaylist.Sort();
                 
             // Save changes
             this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
@@ -382,7 +386,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         if (this.SelectedPlaylist != null)
         {
             // Sort
-            this.SelectedPlaylist.Sort(this.SelectedPlaylistSortOrder);
+            this.SelectedPlaylist.SortOrder = this.SelectedPlaylistSortOrder;
+            this.SelectedPlaylist.Sort();
 
             // Save changes
             this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
@@ -415,7 +420,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
                 }
 
                 // Sort playlist
-                this.SelectedPlaylist.Sort(this.SelectedPlaylistSortOrder);
+                this.SelectedPlaylist.Sort();
 
                 // Save changes
                 this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
