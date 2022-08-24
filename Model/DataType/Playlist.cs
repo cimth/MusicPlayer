@@ -24,15 +24,7 @@ public class Playlist : NotifyPropertyChangedImpl
         set => SetField(ref _name, value);
     }
 
-    public ObservableCollection<Song> Songs
-    {
-        get => _songs;
-        set
-        {
-            SetField(ref _songs, value);
-            this.UpdateTotalDuration(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-    }
+    public ObservableCollection<Song> Songs => _songs;
 
     public TimeSpan TotalDuration
     {
@@ -91,17 +83,38 @@ public class Playlist : NotifyPropertyChangedImpl
     
     public void Sort(PlaylistSortOrder sortOrder)
     {
+        List<Song> ordered;
         switch (sortOrder)
         {
             case PlaylistSortOrder.Alphabetical:
-                this.Songs = new ObservableCollection<Song>(this.Songs.OrderBy(song => song.Title));
+                ordered = this.Songs.OrderBy(song => song.Title).ToList();
+                this.ReAddToSongs(ordered);
                 break;
             case PlaylistSortOrder.Individual:
                 // No further ordering, only display it for the sake of completeness
                 break;
             case PlaylistSortOrder.TitleNumber:
-                this.Songs = new ObservableCollection<Song>(this.Songs.OrderBy(song => song.TrackNumber));
+                ordered = this.Songs.OrderBy(song => song.TrackNumber).ToList();
+                this.ReAddToSongs(ordered);
                 break;
+        }
+    }
+
+    /// <summary>
+    /// Clear the current collection and re-add the given songs (which should already be ordered).
+    /// Do not simply assign the new sorted collection because then the registered Observers of the
+    /// CollectionChanged event of the current collection would not be notified anymore on changes.
+    /// </summary>
+    /// <param name="ordered"></param>
+    private void ReAddToSongs(List<Song> ordered)
+    {
+        // Clear the current collection and re-add the songs (which are now ordered).
+        // Do not simply assign the new sorted collection because then the registered Observers of the
+        // CollectionChanged event of the current collection would not be notified anymore on changes.
+        this.Songs.Clear();
+        foreach (var song in ordered)
+        {
+            this.Songs.Add(song);
         }
     }
 }

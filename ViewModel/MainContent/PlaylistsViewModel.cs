@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Windows.Input;
 using Common;
 using Dialog;
@@ -81,8 +82,17 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
     public Playlist? SelectedPlaylist
     {
-        get => _selectedPlaylist; 
-        set => SetField(ref _selectedPlaylist, value);
+        get => _selectedPlaylist;
+        set
+        {
+            SetField(ref _selectedPlaylist, value);
+            
+            // Call update method when the collection is changed
+            if (_selectedPlaylist != null)
+            {
+                _selectedPlaylist.Songs.CollectionChanged += this.UpdateAfterPlaylistChange;
+            }
+        } 
     }
 
     public int SelectedSongIndex { get; set; }
@@ -131,8 +141,6 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand RemoveSongFromPlaylistCommand { get; }
     
-    public ICommand SelectedPlaylist_OnSongMovedCommand { get; }
-    
     public ICommand ChangePlaylistSortOrderCommand { get; }
     
     // ==============
@@ -160,7 +168,6 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.RemovePlaylistCommand = new DelegateCommand(this.RemovePlaylist);
         this.AddSongToPlaylistCommand = new DelegateCommand(this.AddSongToPlaylist);
         this.RemoveSongFromPlaylistCommand = new DelegateCommand(this.RemoveSongFromPlaylist);
-        this.SelectedPlaylist_OnSongMovedCommand = new DelegateCommand(this.SelectedPlaylist_OnSongMoved);
         this.ChangePlaylistSortOrderCommand = new DelegateCommand(this.ChangePlaylistSortOrder);
 
         // Set elements that are shown first
@@ -170,10 +177,10 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     }
     
     // ==============
-    // ACTION AFTER DRAGGING ROWS
+    // PLAYLIST WAS UPDATED
     // ==============
-
-    private void SelectedPlaylist_OnSongMoved()
+    
+    private void UpdateAfterPlaylistChange(object? sender, NotifyCollectionChangedEventArgs args)
     {
         // Set the sort order to 'Individual' because the original order might be messed up now
         this.SelectedPlaylistSortOrder = PlaylistSortOrder.Individual;

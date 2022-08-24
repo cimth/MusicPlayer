@@ -39,7 +39,16 @@ public class SongPlayer : NotifyPropertyChangedImpl
     public Playlist? CurrentPlaylist
     {
         get => _currentPlaylist;
-        set => SetField(ref _currentPlaylist, value);
+        private set
+        {
+            SetField(ref _currentPlaylist, value);
+            
+            // Get notified when the playlist is changed (e.g. by moving or deleting songs)
+            if (_currentPlaylist != null)
+            {
+                _currentPlaylist.Songs.CollectionChanged += this.UpdateAfterPlaylistChange;
+            }
+        } 
     }
     
     public Song? CurrentSong
@@ -185,9 +194,6 @@ public class SongPlayer : NotifyPropertyChangedImpl
         
         this.CurrentPlaylist = playlist;
         this._currentPlaylistIndex = indexOfFirstSongToBePlayed;
-        
-        // Get notified when the playlist is changed (e.g. by moving or deleting songs)
-        this.CurrentPlaylist.Songs.CollectionChanged += this.UpdateAfterPlaylistChange;
 
         // Play the first song
         Song songToPlay = playlist.Songs[indexOfFirstSongToBePlayed];
