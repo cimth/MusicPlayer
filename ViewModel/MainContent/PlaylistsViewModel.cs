@@ -175,6 +175,9 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
     private void SelectedPlaylist_OnSongMoved()
     {
+        // Set the sort order to 'Individual' because the original order might be messed up now
+        this.SelectedPlaylistSortOrder = PlaylistSortOrder.Individual;
+        
         // Save changes
         if (this.SelectedPlaylist != null)
         {
