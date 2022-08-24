@@ -30,4 +30,5 @@
           CellStyle="{DynamicResource DataGridCellStyle}" 
           
           PreviewMouseLeftButtonDown="PlaylistGrid_OnPreviewMouseLeftButtonDown"
-          PreviewMouseLeftButtonUp="PlaylistGrid_OnPreviewMouseLeftButtonUp"/>
+          PreviewMouseLeftButtonUp="PlaylistGrid_OnPreviewMouseLeftButtonUp"
+          PreviewMouseMove="PlaylistGrid_OnPreviewMouseMove"/>

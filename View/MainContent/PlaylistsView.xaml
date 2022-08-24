@@ -230,6 +230,7 @@
                       ItemsSource="{Binding SelectedPlaylist.Songs}"
                       SelectedIndex="{Binding SelectedSongIndex}"
                       BorderThickness="0"
+                      AllowDraggingRows="True"
                       AllowDrop="True">
                 <!-- 
                     Use Interaction.Triggers to bind the mouse events to commands.

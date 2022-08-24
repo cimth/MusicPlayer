@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,6 +14,21 @@ public partial class PlaylistGrid : DataGrid
     private int _moveRowSourceIndex;
     
     // ==============
+    // PROPERTIES THAT CAN BE SET BY XAML
+    // => See: https://stackoverflow.com/questions/25895011/how-to-add-custom-properties-to-wpf-user-control
+    // ==============
+    
+    public bool AllowDraggingRows
+    {
+        get => (bool) GetValue(AllowDraggingRowsProperty);
+        set => SetValue(AllowDraggingRowsProperty, value);
+    }
+    
+    public static readonly DependencyProperty AllowDraggingRowsProperty = DependencyProperty.Register(
+        "AllowDraggingRows", typeof(bool), typeof(PlaylistGrid), new PropertyMetadata(false)
+    );
+
+    // ==============
     // INITIALIZATION
     // ==============
     
@@ -31,30 +43,52 @@ public partial class PlaylistGrid : DataGrid
 
     private void PlaylistGrid_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        this._moveRowSourceIndex = this.FindRowIndex(e);
+        // Start dragging
+        if (this.AllowDraggingRows)
+        {
+            this._moveRowSourceIndex = this.FindRowIndex(e);
+        }
+    }
+    
+    private void PlaylistGrid_OnPreviewMouseMove(object sender, MouseEventArgs e)
+    {
+        // Move the source row to the target index
+        if (this.AllowDraggingRows)
+        {
+            this.MoveRowToTargetIndex(e);
+        }
     }
 
     private void PlaylistGrid_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
-        if (this.AllowDrop)
+        // Reset move variable to stop moving the row
+        if (this.AllowDraggingRows)
         {
-            this.MoveRowViaDragAndDrop(e);
+            this._moveRowSourceIndex = -1;
         }
     }
 
-    private void MoveRowViaDragAndDrop(MouseButtonEventArgs e)
+    private void MoveRowToTargetIndex(MouseEventArgs e)
     {
         int moveRowTargetIndex = this.FindRowIndex(e);
         if (this._moveRowSourceIndex != -1 && moveRowTargetIndex != -1 && moveRowTargetIndex != this._moveRowSourceIndex)
         {
             //Console.WriteLine($"Move {this._moveRowSourceIndex} to {moveRowTargetIndex}");
             
-            IEnumerable? dataCollection = this.GridElem.ItemsSource;
+            var dataCollection = this.GridElem.ItemsSource;
             if (dataCollection != null)
             {
-                var col = new ObservableCollection<object>(dataCollection.Cast<object>());
-                col.Move(this._moveRowSourceIndex, moveRowTargetIndex);
-                this.GridElem.ItemsSource = col;
+                // Call the 'Move' method of the ObservableCollection via Reflection to avoid using the ViewModel
+                // type.When using an ObservableCollection, this type would be necessary and you cannot cast to
+                // ObservableCollection<object>.
+                // See: https://stackoverflow.com/questions/37999337/how-to-cast-and-manipulate-observablecollection-of-unknown-type
+                var method = dataCollection.GetType().GetMethod("Move", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                method?.Invoke(dataCollection, new object[] {this._moveRowSourceIndex, moveRowTargetIndex});
+
+                // Set the new index as source index to make it possible to drag the row farther.
+                // If not updating the index, the row would flicker between the original source index and the current
+                // target index.
+                this._moveRowSourceIndex = moveRowTargetIndex;
             }
         }
     }
@@ -66,7 +100,7 @@ public partial class PlaylistGrid : DataGrid
     /// </summary>
     /// <param name="e"></param>
     /// <returns></returns>
-    private int FindRowIndex(MouseButtonEventArgs e)
+    private int FindRowIndex(MouseEventArgs e )
     {
         // Return value, is -1 if no index found
         int index = -1;
