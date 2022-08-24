@@ -240,15 +240,15 @@
                                   SelectedValue="{Binding SelectedPlaylistSortOrder}"
                                   SelectedValuePath="Key"
                                   DisplayMemberPath="Value">
-                            <!-- Show the 'Description' of the enum,
-                                 see: https://stackoverflow.com/questions/24344327/wpf-change-string-values-of-enum-in-combo-box -->
-                            <!--
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <ContentPresenter Content="{Binding Converter={StaticResource PlaylistSortOrderConverter}}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
+                            <!-- 
+                                Use Interaction.Triggers to bind the events to commands.
+                                With the elements XML properties, only Code-Behind methods can be called.
                             -->
+                            <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="SelectionChanged">
+                                    <b:InvokeCommandAction Command="{Binding ChangePlaylistSortOrderCommand}"/>
+                                </b:EventTrigger>
+                            </b:Interaction.Triggers>
                         </ComboBox>
                     </StackPanel>
                 </Grid>

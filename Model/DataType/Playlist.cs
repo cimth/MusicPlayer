@@ -89,8 +89,19 @@ public class Playlist : NotifyPropertyChangedImpl
     // SORTING
     // ==============
     
-    public void SortByTitle()
+    public void Sort(PlaylistSortOrder sortOrder)
     {
-        this.Songs = new ObservableCollection<Song>(this.Songs.OrderBy(song => song.Title));
+        switch (sortOrder)
+        {
+            case PlaylistSortOrder.Alphabetical:
+                this.Songs = new ObservableCollection<Song>(this.Songs.OrderBy(song => song.Title));
+                break;
+            case PlaylistSortOrder.Individual:
+                // No further ordering, only display it for the sake of completeness
+                break;
+            case PlaylistSortOrder.TitleNumber:
+                this.Songs = new ObservableCollection<Song>(this.Songs.OrderBy(song => song.TrackNumber));
+                break;
+        }
     }
 }

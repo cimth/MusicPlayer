@@ -133,6 +133,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand SelectedPlaylist_OnSongMovedCommand { get; }
     
+    public ICommand ChangePlaylistSortOrderCommand { get; }
+    
     // ==============
     // INITIALIZATION 
     // ==============
@@ -159,6 +161,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.AddSongToPlaylistCommand = new DelegateCommand(this.AddSongToPlaylist);
         this.RemoveSongFromPlaylistCommand = new DelegateCommand(this.RemoveSongFromPlaylist);
         this.SelectedPlaylist_OnSongMovedCommand = new DelegateCommand(this.SelectedPlaylist_OnRowMoved);
+        this.ChangePlaylistSortOrderCommand = new DelegateCommand(this.ChangePlaylistSortOrder);
 
         // Set elements that are shown first
         this._isPlaylistShown = false;
@@ -343,7 +346,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             }
             
             // Sort playlist
-            this.SelectedPlaylist.SortByTitle();
+            this.SelectedPlaylist.Sort(this.SelectedPlaylistSortOrder);
                 
             // Save changes
             this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
@@ -359,6 +362,18 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             // Update playlist
             this.SelectedPlaylist.Songs.RemoveAt(this.SelectedSongIndex);
             
+            // Save changes
+            this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+        }
+    }
+
+    private void ChangePlaylistSortOrder()
+    {
+        if (this.SelectedPlaylist != null)
+        {
+            // Sort
+            this.SelectedPlaylist.Sort(this.SelectedPlaylistSortOrder);
+
             // Save changes
             this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
         }
@@ -390,7 +405,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
                 }
 
                 // Sort playlist
-                this.SelectedPlaylist.SortByTitle();
+                this.SelectedPlaylist.Sort(this.SelectedPlaylistSortOrder);
 
                 // Save changes
                 this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
