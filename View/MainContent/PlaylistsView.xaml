@@ -229,8 +229,8 @@
             <templates:PlaylistGrid Grid.Row="1"
                       ItemsSource="{Binding SelectedPlaylist.Songs}"
                       SelectedIndex="{Binding SelectedSongIndex}"
-                      AllowDrop="True"
-                      BorderThickness="0">
+                      BorderThickness="0"
+                      AllowDrop="True">
                 <!-- 
                     Use Interaction.Triggers to bind the mouse events to commands.
                     With the elements XML properties, only Code-Behind methods can be called.
