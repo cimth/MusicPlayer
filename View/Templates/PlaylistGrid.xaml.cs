@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,6 +13,7 @@ public partial class PlaylistGrid : DataGrid
     // ==============
 
     private int _moveRowSourceIndex;
+    private bool _isMovingRow = false;
     
     // ==============
     // PROPERTIES THAT CAN BE SET BY XAML
@@ -27,6 +29,12 @@ public partial class PlaylistGrid : DataGrid
     public static readonly DependencyProperty AllowDraggingRowsProperty = DependencyProperty.Register(
         "AllowDraggingRows", typeof(bool), typeof(PlaylistGrid), new PropertyMetadata(false)
     );
+    
+    // ==============
+    // CUSTOM EVENTS
+    // ==============
+
+    public event EventHandler? OnRowMoved;
 
     // ==============
     // INITIALIZATION
@@ -64,6 +72,17 @@ public partial class PlaylistGrid : DataGrid
         // Reset move variable to stop moving the row
         if (this.AllowDraggingRows)
         {
+            // Fire moving event
+            if (this._isMovingRow)
+            {
+                if (OnRowMoved != null)
+                {
+                    OnRowMoved(this, EventArgs.Empty);
+                }
+                this._isMovingRow = false;
+            }
+            
+            // Reset source index
             this._moveRowSourceIndex = -1;
         }
     }
@@ -89,6 +108,9 @@ public partial class PlaylistGrid : DataGrid
                 // If not updating the index, the row would flicker between the original source index and the current
                 // target index.
                 this._moveRowSourceIndex = moveRowTargetIndex;
+                
+                // Set the target flag for moving
+                this._isMovingRow = true;
             }
         }
     }

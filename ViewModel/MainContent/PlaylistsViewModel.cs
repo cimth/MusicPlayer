@@ -143,6 +143,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand ChangePlaylistSortOrderCommand { get; }
     
+    public ICommand UpdateOnRowMovedCommand { get; }
+    
     // ==============
     // INITIALIZATION 
     // ==============
@@ -169,6 +171,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.AddSongToPlaylistCommand = new DelegateCommand(this.AddSongToPlaylist);
         this.RemoveSongFromPlaylistCommand = new DelegateCommand(this.RemoveSongFromPlaylist);
         this.ChangePlaylistSortOrderCommand = new DelegateCommand(this.ChangePlaylistSortOrder);
+        this.UpdateOnRowMovedCommand = new DelegateCommand(this.UpdateOnRowMoved);
 
         // Set elements that are shown first
         this._isPlaylistShown = false;
@@ -182,13 +185,19 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     private void UpdateAfterPlaylistChange(object? sender, NotifyCollectionChangedEventArgs args)
     {
-        // Set the sort order to 'Individual' because the original order might be messed up now
-        this.SelectedPlaylistSortOrder = PlaylistSortOrder.Individual;
-        
         // Save changes
         if (this.SelectedPlaylist != null)
         {
             this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+        }
+    }
+
+    private void UpdateOnRowMoved()
+    {
+        if (this.SelectedPlaylist != null)
+        {
+            this.SelectedPlaylist.SortOrder = PlaylistSortOrder.Individual;
+            this.SelectedPlaylistSortOrder = PlaylistSortOrder.Individual;
         }
     }
 

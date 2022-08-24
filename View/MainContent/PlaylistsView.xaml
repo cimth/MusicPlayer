@@ -272,16 +272,16 @@
                         <b:InvokeCommandAction Command="{Binding StartPlaylistBeginningWithTheSelectedSongCommand}"/>
                     </b:EventTrigger>
                     
-                    <!-- Action in ViewModel after row dragging -->
-                    <b:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                        <b:InvokeCommandAction Command="{Binding SelectedPlaylist_OnSongMovedCommand}"/>
-                    </b:EventTrigger>
-                    
                     <!-- Import dropped files -->
                     <b:EventTrigger EventName="PreviewDrop">
                         <!-- Use CallMethodAction to give the EventArgs (including the dropped files) to the
                              called method -->
                         <b:CallMethodAction TargetObject="{Binding}" MethodName="DropFileOntoPlaylist"  />
+                    </b:EventTrigger>
+                    
+                    <!-- React on moved rows -->
+                    <b:EventTrigger EventName="OnRowMoved">
+                        <b:InvokeCommandAction Command="{Binding UpdateOnRowMovedCommand}"/>
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
                 
