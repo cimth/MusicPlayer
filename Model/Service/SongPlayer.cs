@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Common;
@@ -124,6 +125,29 @@ public class SongPlayer : NotifyPropertyChangedImpl
     }
     
     // ==============
+    // PLAYLIST WAS UPDATED
+    // ==============
+    
+    private void UpdateAfterPlaylistChange(object? sender, NotifyCollectionChangedEventArgs args)
+    {
+        if (this.CurrentPlaylist != null && this.CurrentSong != null)
+        {
+            // Re-initialize the index of the played song in the current playlist.
+            // The index might have changed because the song itself was moved or because another song was
+            // inserted or removed before the current song.
+            for (int i = 0; i < this.CurrentPlaylist.Songs.Count; i++)
+            {
+                Song song = this.CurrentPlaylist.Songs[i];
+                if (song == this.CurrentSong)
+                {
+                    this._currentPlaylistIndex = i;
+                    break;
+                }
+            }
+        }
+    }
+    
+    // ==============
     // SONG ENDED
     // ==============
 
@@ -161,6 +185,9 @@ public class SongPlayer : NotifyPropertyChangedImpl
         
         this.CurrentPlaylist = playlist;
         this._currentPlaylistIndex = indexOfFirstSongToBePlayed;
+        
+        // Get notified when the playlist is changed (e.g. by moving or deleting songs)
+        this.CurrentPlaylist.Songs.CollectionChanged += this.UpdateAfterPlaylistChange;
 
         // Play the first song
         Song songToPlay = playlist.Songs[indexOfFirstSongToBePlayed];
