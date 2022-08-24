@@ -228,6 +228,7 @@
             <!-- Songs -->
             <templates:PlaylistGrid Grid.Row="1"
                       ItemsSource="{Binding SelectedPlaylist.Songs}"
+                      SelectedItem="{Binding SelectedSong}"
                       SelectedIndex="{Binding SelectedSongIndex}"
                       BorderThickness="0"
                       AllowDraggingRows="True"
@@ -237,9 +238,17 @@
                     With the elements XML properties, only Code-Behind methods can be called.
                 -->
                 <b:Interaction.Triggers>
+                    <!-- Play song on double click -->
                     <b:EventTrigger EventName="MouseDoubleClick">
                         <b:InvokeCommandAction Command="{Binding StartPlaylistBeginningWithTheSelectedSongCommand}"/>
                     </b:EventTrigger>
+                    
+                    <!-- Action in ViewModel after row dragging -->
+                    <b:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                        <b:InvokeCommandAction Command="{Binding SelectedPlaylist_OnSongMovedCommand}"/>
+                    </b:EventTrigger>
+                    
+                    <!-- Import dropped files -->
                     <b:EventTrigger EventName="PreviewDrop">
                         <!-- Use CallMethodAction to give the EventArgs (including the dropped files) to the
                              called method -->

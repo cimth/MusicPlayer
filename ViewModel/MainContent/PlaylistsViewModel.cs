@@ -113,6 +113,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand RemoveSongFromPlaylistCommand { get; }
     
+    public ICommand SelectedPlaylist_OnSongMovedCommand { get; }
+    
     // ==============
     // INITIALIZATION 
     // ==============
@@ -126,7 +128,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
         this._subDirectoryPaths = new ObservableCollection<string>();
         this._playlistsInDirectory = new ObservableCollection<Playlist>();
-        
+
         // Init commands
         this.GoBackCommand = new DelegateCommand(this.GoBack);
         this.AddSubDirectoryCommand = new DelegateCommand(this.AddSubDirectory);
@@ -138,12 +140,26 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.RemovePlaylistCommand = new DelegateCommand(this.RemovePlaylist);
         this.AddSongToPlaylistCommand = new DelegateCommand(this.AddSongToPlaylist);
         this.RemoveSongFromPlaylistCommand = new DelegateCommand(this.RemoveSongFromPlaylist);
+        this.SelectedPlaylist_OnSongMovedCommand = new DelegateCommand(this.SelectedPlaylist_OnRowMoved);
 
         // Set elements that are shown first
         this._isPlaylistShown = false;
         this.LoadContents(null);
     }
     
+    // ==============
+    // ACTION AFTER DRAGGING ROWS
+    // ==============
+
+    private void SelectedPlaylist_OnRowMoved()
+    {
+        // Save changes
+        if (this.SelectedPlaylist != null)
+        {
+            this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+        }
+    }
+
     // ==============
     // CHANGE DIRECTORY
     // ==============
