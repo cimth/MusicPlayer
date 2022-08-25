@@ -28,6 +28,10 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
     private ObservableCollection<Playlist> _playlistsInDirectory;
     private Playlist? _selectedPlaylist;
+    
+    private int _selectedSubDirectoryIndex = -1;
+    private int _selectedPlaylistIndex = -1;
+    private int _selectedSongIndex = -1;
 
     private bool _isPlaylistShown;
 
@@ -67,16 +71,24 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     }
     
     public string? SelectedSubDirectoryPath { get; set; }
-    
-    public int SelectedSubDirectoryIndex { get; set; }
+
+    public int SelectedSubDirectoryIndex
+    {
+        get => _selectedSubDirectoryIndex; 
+        set => SetField(ref _selectedSubDirectoryIndex, value);
+    }
 
     public ObservableCollection<Playlist> PlaylistsInDirectory
     {
         get => _playlistsInDirectory;
         private set => SetField(ref _playlistsInDirectory, value);
     }
-    
-    public int SelectedPlaylistIndex { get; set; }
+
+    public int SelectedPlaylistIndex
+    {
+        get => _selectedPlaylistIndex; 
+        set => SetField(ref _selectedPlaylistIndex, value);
+    }
     
     // Properties for showing the current playlist details
 
@@ -95,7 +107,11 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         } 
     }
 
-    public int SelectedSongIndex { get; set; }
+    public int SelectedSongIndex
+    {
+        get => _selectedSongIndex; 
+        set => SetField(ref _selectedSongIndex, value);
+    }
 
     public bool IsPlaylistShown
     {
@@ -277,12 +293,18 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     {
         if (this.SelectedSubDirectoryIndex >= 0 && this.SelectedSubDirectoryIndex < this.SubDirectoryPaths.Count)
         {
+            // Save index to re-assign it after the GUI update
+            int origSelectedIndex = this.SelectedSubDirectoryIndex;
+            
             // Remove directory
             string directoryName = this.SubDirectoryPaths[this.SelectedSubDirectoryIndex];
             this._playlistManager.RemovePlaylistDirectory(this.CurrentDirectoryPath, directoryName);
             
             // Update GUI
             this.SubDirectoryPaths.RemoveAt(this.SelectedSubDirectoryIndex);
+            
+            // Re-assign the index to select the next item (or the last one if the removed item was the last one)
+            this.SelectedSubDirectoryIndex = origSelectedIndex < this.SubDirectoryPaths.Count ? origSelectedIndex : this.SubDirectoryPaths.Count - 1;
         }
     }
 
@@ -330,7 +352,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, playlist);
             
             // Update GUI
-            this.PlaylistsInDirectory.Insert(0, playlist);
+            this.PlaylistsInDirectory.Add(playlist);
+            this.PlaylistsInDirectory = new ObservableCollection<Playlist>(this.PlaylistsInDirectory.OrderBy(p => p.Name));
         }
     }
 
@@ -340,11 +363,17 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             && this.SelectedPlaylistIndex >= 0 
             && this.SelectedPlaylistIndex < this.PlaylistsInDirectory.Count)
         {
+            // Save index to re-assign it after the GUI update
+            int origSelectedIndex = this.SelectedPlaylistIndex;
+            
             // Remove file
             this._playlistManager.RemovePlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
             
             // Update GUI
             this.PlaylistsInDirectory.RemoveAt(this.SelectedPlaylistIndex);
+            
+            // Re-assign the index to select the next item (or the last one if the removed item was the last one)
+            this.SelectedPlaylistIndex = origSelectedIndex < this.PlaylistsInDirectory.Count ? origSelectedIndex : this.PlaylistsInDirectory.Count - 1;
         }
     }
     
@@ -382,11 +411,17 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             && this.SelectedSongIndex >= 0 
             && this.SelectedSongIndex < this.SelectedPlaylist.Songs.Count)
         {
+            // Save index to re-assign it after the GUI update
+            int origSelectedIndex = this.SelectedSongIndex;
+            
             // Update playlist
             this.SelectedPlaylist.Songs.RemoveAt(this.SelectedSongIndex);
             
             // Save changes
             this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+            
+            // Re-assign the index to select the next item (or the last one if the removed item was the last one)
+            this.SelectedSongIndex = origSelectedIndex < this.SelectedPlaylist.Songs.Count ? origSelectedIndex : this.SelectedPlaylist.Songs.Count - 1;
         }
     }
 

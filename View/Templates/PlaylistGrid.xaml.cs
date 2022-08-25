@@ -144,4 +144,18 @@ public partial class PlaylistGrid : DataGrid
 
         return index;
     }
+    
+    // ==============
+    // FOCUS GRID WHEN SELECTION IS CHANGED
+    // ==============
+
+    private void PlaylistGrid_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        // Set the focus to the Grid so that you can directly delete the next entry or else
+        int selectedRowIndex = GridElem.SelectedIndex;
+        if (selectedRowIndex != -1)
+        {
+            GridElem.Focus();
+        }
+    }
 }
