@@ -21,6 +21,9 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     private string? _selectedSubDirectoryPath;
     
     private Playlist? _playlistFromDirectory;
+    
+    private int _selectedSubDirectoryIndex = -1;
+    private int _selectedPlaylistIndex = -1;
 
     private bool _hasSubDirectories;
     private bool _hasMusicFiles;
@@ -63,8 +66,18 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     }
 
     public Song? SelectedSong { get; set; }
+
+    public int SelectedSubDirectoryIndex
+    {
+        get => _selectedSubDirectoryIndex;
+        set => SetField(ref _selectedPlaylistIndex, value);
+    }
     
-    public int SelectedPlaylistIndex { get; set; }
+    public int SelectedPlaylistIndex
+    {
+        get => _selectedPlaylistIndex; 
+        set => SetField(ref _selectedPlaylistIndex, value);
+    }
 
     public bool HasSubDirectories
     {

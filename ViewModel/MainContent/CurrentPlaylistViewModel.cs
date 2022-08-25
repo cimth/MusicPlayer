@@ -8,12 +8,22 @@ namespace ViewModel.MainContent;
 public class CurrentPlaylistViewModel : NotifyPropertyChangedImpl
 {
     // ==============
+    // FIELDS
+    // ==============
+
+    private int _selectedPlaylistIndex = -1;
+    
+    // ==============
     // PROPERTIES
     // ==============
 
     public SongPlayer SongPlayer { get; }
-    
-    public int SelectedPlaylistIndex { get; set; }
+
+    public int SelectedPlaylistIndex
+    {
+        get => _selectedPlaylistIndex; 
+        set => SetField(ref _selectedPlaylistIndex, value);
+    }
     
     // Commands
     

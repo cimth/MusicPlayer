@@ -76,6 +76,7 @@
             <templates:PlaylistGrid Grid.Row="1"
                       ItemsSource="{Binding RootMusicDirectories}"
                       SelectedItem="{Binding SelectedSubDirectoryPath}"
+                      SelectedIndex="{Binding SelectedSubDirectoryIndex}"
                       HeadersVisibility="None"
                       BorderThickness="0">
                 <!-- 
@@ -129,6 +130,7 @@
                       Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}"
                       ItemsSource="{Binding SubDirectoryPaths}"
                       SelectedItem="{Binding SelectedSubDirectoryPath}"
+                      SelectedIndex="{Binding SelectedSubDirectoryIndex}"
                       HeadersVisibility="None"
                       BorderThickness="0">
                 <!-- 
