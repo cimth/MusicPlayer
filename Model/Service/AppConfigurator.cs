@@ -74,4 +74,14 @@ public class AppConfigurator : NotifyPropertyChangedImpl
             this.SaveConfig();
         }
     }
+    
+    // ==============
+    // ACTION FOR REPEAT
+    // ==============
+
+    public void SaveRepeatPlaylist(bool isRepeatActivated)
+    {
+        this.AppConfig.RepeatPlaylist = isRepeatActivated;
+        this.SaveConfig();
+    }
 }

@@ -70,8 +70,8 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         // Create model instances that are shared by the view model instances
         SongImporter songImporter = new SongImporter();
         PlaylistImporter playlistImporter = new PlaylistImporter(songImporter);
-        SongPlayer songPlayer = new SongPlayer();
         AppConfigurator appConfigurator = new AppConfigurator();
+        SongPlayer songPlayer = new SongPlayer(appConfigurator);
         PlaylistManager playlistManager = new PlaylistManager();
 
         // Init view models

@@ -130,8 +130,8 @@
             
             <!-- Repeat button -->
             <ToggleButton Grid.Column="4" Padding="15" 
-                          Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
-                          Command="{Binding RepeatCommand}">
+                          IsChecked="{Binding SongPlayer.RepeatPlaylist}"
+                          Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}">
                 <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/repeat.svg}" />
             </ToggleButton>
         </Grid>

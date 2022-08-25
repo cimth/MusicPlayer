@@ -25,8 +25,6 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
     public ICommand PlayPreviousCommand { get; }
     
     public ICommand PlayNextCommand { get; }
-    
-    public ICommand RepeatCommand { get; }
 
     public ICommand SongProgressDragStartedCommand { get; }
     
@@ -46,7 +44,6 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
         this.StopCommand = new DelegateCommand(this.Stop);
         this.PlayPreviousCommand = new DelegateCommand(this.PlayPrevious);
         this.PlayNextCommand = new DelegateCommand(this.PlayNext);
-        this.RepeatCommand = new DelegateCommand(this.Repeat);
         this.SongProgressDragStartedCommand = new DelegateCommand(this.SongProgressDragStarted);
         this.SongProgressDragCompletedCommand = new DelegateCommand(this.SongProgressUpdateCurrentTimeCommand);
     }
@@ -78,13 +75,6 @@ public class CurrentSongViewModel : NotifyPropertyChangedImpl
     private void PlayNext()
     {
         this.SongPlayer.PlayNext();
-    }
-
-    private void Repeat()
-    {
-        // revert the current status of the repeat variable
-        // => if true, set to false (and vice versa)
-        this.SongPlayer.RepeatPlaylist = !this.SongPlayer.RepeatPlaylist;
     }
 
     private void SongProgressDragStarted()

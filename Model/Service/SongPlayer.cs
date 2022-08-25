@@ -11,6 +11,8 @@ public class SongPlayer : NotifyPropertyChangedImpl
     // ==============
     // FIELDS
     // ==============
+
+    private readonly AppConfigurator _appConfigurator;
     
     private readonly MediaPlayer _mediaPlayer;
 
@@ -33,7 +35,13 @@ public class SongPlayer : NotifyPropertyChangedImpl
     public bool RepeatPlaylist
     {
         get => _repeatPlaylist;
-        set => SetField(ref _repeatPlaylist, value);
+        set
+        {
+            SetField(ref _repeatPlaylist, value);
+            
+            // Save in config to restore on restart
+            this._appConfigurator.SaveRepeatPlaylist(this.RepeatPlaylist);
+        } 
     }
 
     public Playlist? CurrentPlaylist
@@ -87,11 +95,14 @@ public class SongPlayer : NotifyPropertyChangedImpl
     // INITIALIZATION
     // ==============
 
-    public SongPlayer()
+    public SongPlayer(AppConfigurator appConfigurator)
     {
+        this._appConfigurator = appConfigurator;
+        this._repeatPlaylist = this._appConfigurator.AppConfig.RepeatPlaylist;
+        
         this._mediaPlayer = new MediaPlayer();
         this._mediaPlayer.MediaEnded += this.mediaPlayer_Ended;
-        
+
         this.InitTimer();
     }
 
@@ -269,7 +280,7 @@ public class SongPlayer : NotifyPropertyChangedImpl
             this.Play(this.CurrentPlaylist.Songs[selectedPlaylistIndex]);
         }
     }
-    
+
     // ==============
     // HELPING METHODS
     // ==============

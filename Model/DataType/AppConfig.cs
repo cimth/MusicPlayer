@@ -20,6 +20,8 @@ public class AppConfig
     // ==============
 
     public ObservableCollection<string> MusicDirectories { get; set; }
+    
+    public bool RepeatPlaylist { get; set; }
 
     // ==============
     // INITIALIZATION
