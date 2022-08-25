@@ -11,7 +11,7 @@ public class SongImporter
         string title = songFile.Tag.Title;
         string album = songFile.Tag.Album;
         string[] artists = songFile.Tag.Performers;
-        uint trackNumber = songFile.Tag.Disc;
+        uint trackNumber = songFile.Tag.Track;
         TimeSpan duration = songFile.Properties.Duration;
 
         return new Song(songPath, title, album, artists, trackNumber, duration);
