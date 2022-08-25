@@ -12,7 +12,8 @@ public partial class PlaylistGrid : DataGrid
     // FIELDS
     // ==============
 
-    private int _moveRowSourceIndex;
+    // Initialize with -1 and false to avoid moving a row when showing the Grid first time
+    private int _moveRowSourceIndex = -1;
     private bool _isMovingRow = false;
     
     // ==============
