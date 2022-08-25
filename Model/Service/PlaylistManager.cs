@@ -40,18 +40,31 @@ public class PlaylistManager
         string fullPath = this.GetFullPath(parentDirectoryPath, directoryName);
         Directory.Delete(fullPath, true);
     }
-
+    
     /// <summary>
-    /// Creates or updates the playlist file for the given playlist inside the given parent directory.
-    /// If no parent directory is given, the file will be created inside the playlist root directory.
+    /// Returns the full path for a playlist with the given name which might include a specific
+    /// parent directory path.
     /// </summary>
     /// <param name="parentDirectoryPath"></param>
-    /// <param name="playlist"></param>
-    public void SaveInPlaylistFile(string? parentDirectoryPath, Playlist playlist)
+    /// <param name="playlistName"></param>
+    /// <returns></returns>
+    public string GetFilePathForNewPlaylist(string? parentDirectoryPath, string playlistName)
     {
-        // Get full path '<parent directory>/<directory path>' or '<playlists root directory>/<directory path>'
-        string fileName = playlist.Name + ".json";
-        string fullPath = this.GetFullPath(parentDirectoryPath, fileName);
+        return this.GetFullPath(parentDirectoryPath, $"{playlistName}.json");
+    }
+
+    /// <summary>
+    /// Creates or updates the playlist file for the given playlist if the file path is set.
+    /// </summary>
+    /// <param name="playlist"></param>
+    public void SaveInPlaylistFile(Playlist playlist)
+    {
+        // Only continue if the playlist has set a file path
+        if (playlist.FilePath == null)
+        {
+            Console.WriteLine($"No file path set for playlist '{playlist.Name}'");
+            return;
+        }
         
         // Convert playlist object to file object for only saving the necessary data
         List<string> songPaths = new List<string>();
@@ -69,22 +82,19 @@ public class PlaylistManager
             WriteIndented = true
         };
         string dataJson = JsonSerializer.Serialize(fileData, options);
-        File.WriteAllText(fullPath, dataJson, Encoding.UTF8);
+        File.WriteAllText(playlist.FilePath, dataJson, Encoding.UTF8);
     }
     
     /// <summary>
-    /// Removes the file corresponding to the given playlist from the given parent directory.
-    /// If no parent directory is given, the directory will be removed from the playlist root directory.
+    /// Removes the file for the given playlist if existing.
     /// </summary>
-    /// <param name="parentDirectoryPath"></param>
     /// <param name="playlist"></param>
-    public void RemovePlaylistFile(string? parentDirectoryPath, Playlist playlist)
+    public void RemovePlaylistFile(Playlist playlist)
     {
-        // Get full path '<parent directory>/<directory path>' or '<playlists root directory>/<directory path>'
-        string fileName = playlist.Name + ".json";
-        string fullPath = this.GetFullPath(parentDirectoryPath, fileName);
-        
-        File.Delete(fullPath);
+        if (playlist.FilePath != null)
+        {
+            File.Delete(playlist.FilePath);
+        }
     }
     
     // ==============

@@ -204,7 +204,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         // Save changes
         if (this.SelectedPlaylist != null)
         {
-            this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+            this._playlistManager.SaveInPlaylistFile(this.SelectedPlaylist);
         }
     }
 
@@ -348,8 +348,9 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         {
             // Create playlist
             string playlistName = dialogViewModel.InputValue;
-            Playlist playlist = new Playlist(playlistName);
-            this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, playlist);
+            string filePath = this._playlistManager.GetFilePathForNewPlaylist(this.CurrentDirectoryPath, playlistName);
+            Playlist playlist = new Playlist(playlistName, filePath);
+            this._playlistManager.SaveInPlaylistFile(playlist);
             
             // Update GUI
             this.PlaylistsInDirectory.Add(playlist);
@@ -367,7 +368,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             int origSelectedIndex = this.SelectedPlaylistIndex;
             
             // Remove file
-            this._playlistManager.RemovePlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+            this._playlistManager.RemovePlaylistFile(this.SelectedPlaylist);
             
             // Update GUI
             this.PlaylistsInDirectory.RemoveAt(this.SelectedPlaylistIndex);
@@ -401,7 +402,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             this.SelectedPlaylist.Sort();
                 
             // Save changes
-            this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+            this._playlistManager.SaveInPlaylistFile(this.SelectedPlaylist);
         }
     }
 
@@ -418,7 +419,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             this.SelectedPlaylist.Songs.RemoveAt(this.SelectedSongIndex);
             
             // Save changes
-            this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+            this._playlistManager.SaveInPlaylistFile(this.SelectedPlaylist);
             
             // Re-assign the index to select the next item (or the last one if the removed item was the last one)
             this.SelectedSongIndex = origSelectedIndex < this.SelectedPlaylist.Songs.Count ? origSelectedIndex : this.SelectedPlaylist.Songs.Count - 1;
@@ -434,7 +435,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             this.SelectedPlaylist.Sort();
 
             // Save changes
-            this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+            this._playlistManager.SaveInPlaylistFile(this.SelectedPlaylist);
         }
     }
 
@@ -467,7 +468,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
                 this.SelectedPlaylist.Sort();
 
                 // Save changes
-                this._playlistManager.SaveInPlaylistFile(this.CurrentDirectoryPath, this.SelectedPlaylist);
+                this._playlistManager.SaveInPlaylistFile(this.SelectedPlaylist);
             }
         }
     }

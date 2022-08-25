@@ -14,6 +14,7 @@ public class Playlist : NotifyPropertyChangedImpl
     private ObservableCollection<Song> _songs;
     private TimeSpan _totalDuration;
     private PlaylistSortOrder _sortOrder = PlaylistSortOrder.Individual;
+    private string? _filePath;
 
     // ==============
     // PROPERTIES
@@ -38,16 +39,23 @@ public class Playlist : NotifyPropertyChangedImpl
         get => _sortOrder;
         set => SetField(ref _sortOrder, value);
     }
+
+    public string? FilePath
+    {
+        get => _filePath;
+        set => SetField(ref _filePath, value);
+    }
     
     // ==============
     // INITIALIZATION
     // ==============
     
-    public Playlist(string name, ObservableCollection<Song> songs, PlaylistSortOrder sortOrder)
+    public Playlist(string name, ObservableCollection<Song> songs, PlaylistSortOrder sortOrder, string filePath)
     {
         this._name = name;
         this._songs = songs;
         this._sortOrder = sortOrder;
+        this._filePath = filePath;
         
         this._songs.CollectionChanged += UpdateTotalDuration;
         this.UpdateTotalDuration(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
@@ -71,10 +79,11 @@ public class Playlist : NotifyPropertyChangedImpl
         this.UpdateTotalDuration(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
 
-    public Playlist(string name)
+    public Playlist(string name, string filePath)
     {
         this._name = name;
         this._songs = new ObservableCollection<Song>();
+        this._filePath = filePath;
         
         this._songs.CollectionChanged += UpdateTotalDuration;
         this.UpdateTotalDuration(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));

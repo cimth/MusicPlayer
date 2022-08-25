@@ -65,6 +65,6 @@ public class PlaylistImporter
         Enum.TryParse(fileData.SortOrder, out PlaylistSortOrder sortOrder);
         
         // return resolved Playlist
-        return new Playlist(fileData.Name, songs, sortOrder);
+        return new Playlist(fileData.Name, songs, sortOrder, filePath);
     }
 }
