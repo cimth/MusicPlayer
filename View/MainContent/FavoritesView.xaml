@@ -9,7 +9,7 @@
              BorderBrush="{StaticResource AppTurquoiseBorderBrush}" BorderThickness="0 1 0 0">
     <Grid>
         <Grid>
-            <Label HorizontalAlignment="Center" VerticalAlignment="Center">Favorites</Label>
+            <Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="{DynamicResource Str_Favorites}" />
         </Grid>
     </Grid>
 </UserControl>

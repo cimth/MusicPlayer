@@ -42,7 +42,7 @@
         <!-- No directory selected -->
         <Label Grid.Row="0" FontWeight="Bold"
                Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource InvertNullToVisibilityConverter}}"
-               Content="No directory selected"
+               Content="{DynamicResource Str_NoDirectorySelected}"
                Background="{StaticResource AppTurquoiseDarkestBrush}" />
         
         <!-- Root directories -->
@@ -58,15 +58,15 @@
             <Border Grid.Row="0" BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
                 <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
                     <!-- Heading -->
-                    <Label Content="Root music directories" />
+                    <Label Content="{DynamicResource Str_RootMusicDirectories}" />
                     
                     <!-- Add music directory -->
-                    <Button ToolTip="Add" Command="{Binding AddMusicDirectoryCommand}">
+                    <Button ToolTip="{DynamicResource Str_Add}" Command="{Binding AddMusicDirectoryCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
                     </Button>
                 
                     <!-- Remove music directory -->
-                    <Button ToolTip="Remove" Command="{Binding RemoveMusicDirectoryCommand}">
+                    <Button ToolTip="{DynamicResource Str_Remove}" Command="{Binding RemoveMusicDirectoryCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
                     </Button>
                 </StackPanel>
@@ -115,12 +115,12 @@
                     Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
                     <!-- Go back to parent directory -->
-                    <Button ToolTip="Back" Command="{Binding GoBackCommand}">
+                    <Button ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
                     </Button>
                     
                     <!-- Heading -->
-                    <Label Content="Sub directories" 
+                    <Label Content="{DynamicResource Str_SubDirectories}" 
                            Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </StackPanel>
             </Border>
@@ -159,13 +159,13 @@
                         Only show if no sub directories exist because then the sub directory header (including its 
                         back navigation button) are collapsed.
                      -->
-                    <Button ToolTip="Back" Command="{Binding GoBackCommand}"
+                    <Button ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}"
                             Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
                     </Button>
                     
                     <!-- Heading -->
-                    <Label Content="Music files"
+                    <Label Content="{DynamicResource Str_MusicFiles}"
                            Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </StackPanel>
             </Border>
@@ -208,15 +208,41 @@
                 </DataGrid.RowStyle>
                 
                 <!-- Show data as columns -->
+                <!-- For localization the header needs to be bound to a DynamicResource.
+                     The dynamic resource cannot be used as usual inside the DataGridTextColumn markup but needs
+                     to be addressed inside the DataGridTextColumn.Header element to work -->
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Title" Width="2*"
-                                        Binding="{Binding Title}" />
-                    <DataGridTextColumn Header="Artists" Width="*"
-                                        Binding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}" />
-                    <DataGridTextColumn Header="Duration" Width="Auto"
-                                        Binding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
-                    <DataGridTextColumn Header="Album" Width="Auto"
-                                        Binding="{Binding Album}" />
+                    <!-- Title -->
+                    <DataGridTextColumn Width="450" 
+                                        Binding="{Binding Title}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Title}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Artists -->
+                    <DataGridTextColumn Width="300"
+                                        Binding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Artists}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Duration -->
+                    <DataGridTextColumn Width="75"
+                                        Binding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Duration}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Album -->
+                    <DataGridTextColumn Width="300"
+                                        Binding="{Binding Album}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Album}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </templates:PlaylistGrid>
         </Grid>

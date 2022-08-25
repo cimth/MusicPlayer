@@ -14,15 +14,21 @@
         <converter:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
         <converter:DoubleSecondsToTimerStringConverter x:Key="DoubleSecondsToTimerStringConverter" />
         <converter:InvertNullToBooleanConverter x:Key="InvertNullToBooleanConverter" />
+        <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <converter:InvertNullToVisibilityConverter x:Key="InvertNullToVisibilityConverter" />
     </UserControl.Resources>
     
     <DockPanel Margin="10">
-        <!-- song information -->
+        <!-- Song information -->
         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,10"
                     HorizontalAlignment="Stretch">
-            <!-- song title -->
-            <Label Content="{Binding SongPlayer.CurrentSong.Title, FallbackValue=No song loaded}"
-                   HorizontalAlignment="Center"/>
+            <!-- Song title -->
+            <Label Content="{Binding SongPlayer.CurrentSong.Title}" HorizontalAlignment="Center"
+                   Visibility="{Binding SongPlayer.CurrentSong, Converter={StaticResource NullToVisibilityConverter}}"/>
+            
+            <!-- No song loaded -->
+            <Label Content="{DynamicResource Str_NoSongLoaded}" HorizontalAlignment="Center"
+                   Visibility="{Binding SongPlayer.CurrentSong, Converter={StaticResource InvertNullToVisibilityConverter}}"/>
             
             <Grid Background="Transparent">
                 <!-- Grid layout -->
@@ -32,11 +38,11 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
             
-                <!-- current time -->
+                <!-- Current time -->
                 <Label Grid.Column="0"
                        Content="{Binding SongPlayer.TimerCurrent, Converter={StaticResource DoubleSecondsToTimerStringConverter}, FallbackValue=0:00}"/>
             
-                <!-- song progress -->
+                <!-- Song progress -->
                 <!-- 
                     Notes:
                      * Set IsMoveToPointEnabled to True to click anywhere in the slider to jump to this point 
@@ -61,15 +67,15 @@
                     </b:Interaction.Triggers>
                 </Slider>
             
-                <!-- song length -->
+                <!-- Song length -->
                 <Label Grid.Column="2" 
                        Content="{Binding SongPlayer.TimerMax, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
             </Grid>
         </StackPanel>
             
-        <!-- main controls -->
+        <!-- Main controls -->
         <Grid HorizontalAlignment="Center">
-            <!-- set margin on button sides -->
+            <!-- Set margin on button sides -->
             <Grid.Resources>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Margin" Value="2,0,2,0" />
@@ -85,21 +91,21 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             
-            <!-- previous button -->
+            <!-- Previous button -->
             <Button Grid.Column="0" Padding="15" 
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Command="{Binding PlayPreviousCommand}">
                 <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/play-skip-back.svg}" />
             </Button>
             
-            <!-- stop button -->
+            <!-- Stop button -->
             <Button Grid.Column="1" Padding="15" 
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Command="{Binding StopCommand}">
                 <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/stop.svg}" />
             </Button>
             
-            <!-- play button -->
+            <!-- Play button -->
             <Button Grid.Column="2" Padding="15" 
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Visibility="{Binding SongPlayer.IsPlaying, Converter={StaticResource InvertBooleanToVisibilityConverter}}"
@@ -107,7 +113,7 @@
                 <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/play.svg}" />
             </Button>
             
-            <!-- pause button -->
+            <!-- Pause button -->
             <Button Grid.Column="2" Padding="15" 
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Visibility="{Binding SongPlayer.IsPlaying, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -115,14 +121,14 @@
                 <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/pause.svg}"/>
             </Button>
             
-            <!-- next button -->
+            <!-- Next button -->
             <Button Grid.Column="3" Padding="15" 
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Command="{Binding PlayNextCommand}">
                 <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/play-skip-forward.svg}" />
             </Button>
             
-            <!-- repeat button -->
+            <!-- Repeat button -->
             <ToggleButton Grid.Column="4" Padding="15" 
                           Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                           Command="{Binding RepeatCommand}">

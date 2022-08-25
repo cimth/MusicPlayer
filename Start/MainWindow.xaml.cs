@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Common;
 using ViewModel;
 
 namespace Start
@@ -11,6 +12,9 @@ namespace Start
         public MainWindow()
         {
             InitializeComponent();
+            
+            // Add language resources
+            this.Resources.MergedDictionaries.Add(LanguageUtil.LocalizedResourceDictionary);
             
             // Create main view model for DataContext
             // => ATTENTION: The MainWindow is the only view where the view model is created like this.

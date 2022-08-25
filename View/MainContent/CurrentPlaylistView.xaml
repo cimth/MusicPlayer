@@ -37,7 +37,7 @@
         <!-- No playlist loaded -->
         <Label Grid.Row="0" FontWeight="Bold"
                Visibility="{Binding SongPlayer.CurrentPlaylist, Converter={StaticResource InvertNullToVisibilityConverter}}"
-               Content="No playlist loaded"
+               Content="{DynamicResource Str_NoPlaylistLoaded}"
                Background="{StaticResource AppTurquoiseDarkestBrush}" />
         
         <!-- Songs -->
@@ -53,7 +53,7 @@
                     BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
                 <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
                     <!-- Heading -->
-                    <Label Content="Songs" />
+                    <Label Content="{DynamicResource Str_Songs}" />
                 </StackPanel>
             </Border>
             
@@ -93,15 +93,41 @@
                 </DataGrid.RowStyle>
                 
                 <!-- Show data as columns -->
+                <!-- For localization the header needs to be bound to a DynamicResource.
+                     The dynamic resource cannot be used as usual inside the DataGridTextColumn markup but needs
+                     to be addressed inside the DataGridTextColumn.Header element to work -->
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Title" Width="2*"
-                                        Binding="{Binding Title}" />
-                    <DataGridTextColumn Header="Artists" Width="*"
-                                        Binding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}" />
-                    <DataGridTextColumn Header="Duration" Width="Auto"
-                                        Binding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
-                    <DataGridTextColumn Header="Album" Width="Auto"
-                                        Binding="{Binding Album}" />
+                    <!-- Title -->
+                    <DataGridTextColumn MinWidth="450"
+                                        Binding="{Binding Title}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Title}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Artists -->
+                    <DataGridTextColumn MinWidth="300"
+                                        Binding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Artists}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Duration -->
+                    <DataGridTextColumn MinWidth="75"
+                                        Binding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Duration}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Album -->
+                    <DataGridTextColumn MinWidth="300"
+                                        Binding="{Binding Album}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Album}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </templates:PlaylistGrid>
         </Grid>

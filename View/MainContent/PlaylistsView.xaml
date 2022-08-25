@@ -45,7 +45,7 @@
             <!-- No directory or playlist selected -->
             <Label FontWeight="Bold"
                    Visibility="{Binding CurrentDirectoryNameFromRoot, Converter={StaticResource InvertNullToVisibilityConverter}}"
-                   Content="No playlist directory and playlist selected"
+                   Content="{DynamicResource Str_NoDirectoryOrPlaylistSelected}"
                    Background="{StaticResource AppTurquoiseDarkestBrush}" />
         </Grid>
         
@@ -93,21 +93,21 @@
                     BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
                 <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
                     <!-- Go back to parent directory (if not in root directory) -->
-                    <Button ToolTip="Back" Command="{Binding GoBackCommand}"
+                    <Button ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}"
                             Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
                     </Button>
                     
                     <!-- Heading -->
-                    <Label Content="Sub Directories" />
+                    <Label Content="{DynamicResource Str_SubDirectories}" />
                     
                     <!-- Add playlist sub directory -->
-                    <Button ToolTip="Add" Command="{Binding AddSubDirectoryCommand}">
+                    <Button ToolTip="{DynamicResource Str_Add}" Command="{Binding AddSubDirectoryCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
                     </Button>
                 
                     <!-- Remove playlist sub directory -->
-                    <Button ToolTip="Remove" Command="{Binding RemoveSubDirectoryCommand}">
+                    <Button ToolTip="{DynamicResource Str_Remove}" Command="{Binding RemoveSubDirectoryCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
                     </Button>
                 </StackPanel>
@@ -148,15 +148,15 @@
                     BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
                 <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
                     <!-- Heading -->
-                    <Label Content="Playlists" />
+                    <Label Content="{DynamicResource Str_Playlists}" />
                     
                     <!-- Add playlist -->
-                    <Button ToolTip="Add" Command="{Binding AddPlaylistCommand}">
+                    <Button ToolTip="{DynamicResource Str_Add}" Command="{Binding AddPlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
                     </Button>
                 
                     <!-- Remove playlist -->
-                    <Button ToolTip="Remove" Command="{Binding RemovePlaylistCommand}">
+                    <Button ToolTip="{DynamicResource Str_Remove}" Command="{Binding RemovePlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
                     </Button>
                 </StackPanel>
@@ -185,12 +185,29 @@
                 
                 <!-- Show data as columns -->
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Width="2*"
-                                        Binding="{Binding Name}" />
-                    <DataGridTextColumn Header="Songs" Width="*"
-                                        Binding="{Binding Songs.Count}" />
-                    <DataGridTextColumn Header="Duration" Width="Auto"
-                                        Binding="{Binding TotalDuration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
+                    <!-- Name -->
+                    <DataGridTextColumn MinWidth="450"
+                                        Binding="{Binding Name}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Name}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Songs (count) -->
+                    <DataGridTextColumn MinWidth="300"
+                                        Binding="{Binding Songs.Count}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Songs}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Duration -->
+                    <DataGridTextColumn MinWidth="75"
+                                        Binding="{Binding TotalDuration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Duration}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </templates:PlaylistGrid>
         </Grid>
@@ -219,27 +236,27 @@
                     
                     <!-- Go back to parent directory or to root directory -->
                     <!-- Note that the button never should be hidden because you should always go back to a directory -->
-                    <Button Grid.Column="0" ToolTip="Back" Command="{Binding GoBackCommand}">
+                    <Button Grid.Column="0" ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
                     </Button>
                     
                     <!-- Heading -->
-                    <Label Grid.Column="1" Content="Songs" />
+                    <Label Grid.Column="1" Content="{DynamicResource Str_Songs}" />
                     
                     <!-- Add song -->
-                    <Button Grid.Column="2" ToolTip="Add" Command="{Binding AddSongToPlaylistCommand}">
+                    <Button Grid.Column="2" ToolTip="{DynamicResource Str_Add}" Command="{Binding AddSongToPlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
                     </Button>
                 
                     <!-- Remove song -->
-                    <Button Grid.Column="3" ToolTip="Remove" Command="{Binding RemoveSongFromPlaylistCommand}">
+                    <Button Grid.Column="3" ToolTip="{DynamicResource Str_Remove}" Command="{Binding RemoveSongFromPlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
                     </Button>
                     
                     <!-- Sort playlist -->
                     <StackPanel Grid.Column="4" HorizontalAlignment="Right" Margin="2,0">
-                        <Label Content="Sort playlist:" />
-                        <ComboBox Text="Please select"
+                        <Label Content="{DynamicResource Str_SortPlaylist}" />
+                        <ComboBox Text="{DynamicResource Str_PleaseSelect}"
                                   ItemsSource="{Binding PlaylistSortOrders}"
                                   SelectedValue="{Binding SelectedPlaylistSortOrder}"
                                   SelectedValuePath="Key"
@@ -320,14 +337,37 @@
                 
                 <!-- Show data as columns -->
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Title" MinWidth="450"
-                                        Binding="{Binding Title}" />
-                    <DataGridTextColumn Header="Artists" MinWidth="300"
-                                        Binding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}" />
-                    <DataGridTextColumn Header="Duration" MinWidth="75"
-                                        Binding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
-                    <DataGridTextColumn Header="Album" MinWidth="300"
-                                        Binding="{Binding Album}" />
+                    <!-- Title -->
+                    <DataGridTextColumn MinWidth="450"
+                                        Binding="{Binding Title}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Title}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Artists -->
+                    <DataGridTextColumn MinWidth="300"
+                                        Binding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Artists}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Duration -->
+                    <DataGridTextColumn MinWidth="75"
+                                        Binding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Duration}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Album -->
+                    <DataGridTextColumn MinWidth="300"
+                                        Binding="{Binding Album}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Album}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </templates:PlaylistGrid>
         </Grid>

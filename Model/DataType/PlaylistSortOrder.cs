@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Common;
 
 namespace Model.DataType;
 
@@ -20,11 +21,11 @@ public static class PlaylistSortOrderToString
         switch (sortOrder)
         {
             case PlaylistSortOrder.Alphabetical:
-                return "Alphabetical";
+                return LanguageUtil.GiveLocalizedString("Str_Alphabetical");
             case PlaylistSortOrder.Individual:
-                return "Individual";
+                return LanguageUtil.GiveLocalizedString("Str_Individual");
             case PlaylistSortOrder.TitleNumber:
-                return "Title number";
+                return LanguageUtil.GiveLocalizedString("Str_TitleNumber");
         }
         return sortOrder.ToString();
     }

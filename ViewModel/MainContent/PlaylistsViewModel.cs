@@ -273,7 +273,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     {
         // Open dialog to request the sub directory name
         DialogService dialogService = new DialogService();
-        InputDialogViewModel dialogViewModel = new InputDialogViewModel("Which name should the directory have?");
+        string request = LanguageUtil.GiveLocalizedString("Str_WhichNameForDirectory");
+        InputDialogViewModel dialogViewModel = new InputDialogViewModel(request);
         bool? result = dialogService.ShowInputDialog(dialogViewModel);
         
         // Add the directory if the dialog was successful
@@ -340,7 +341,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     {
         // Open dialog to request the sub directory name
         DialogService dialogService = new DialogService();
-        InputDialogViewModel dialogViewModel = new InputDialogViewModel("Which name should the playlist have?");
+        string request = LanguageUtil.GiveLocalizedString("Str_WhichNameForPlaylist");
+        InputDialogViewModel dialogViewModel = new InputDialogViewModel(request);
         bool? result = dialogService.ShowInputDialog(dialogViewModel);
         
         // Add the playlist if the dialog was successful

@@ -23,19 +23,19 @@
             </Grid.RowDefinitions>
             
             <!-- Current playlist -->
-            <RadioButton Content="Current Playlist" Grid.Row="0"
+            <RadioButton Content="{DynamicResource Str_CurrentPlaylist}" Grid.Row="0"
                          Command="{Binding ShowCurrentPlaylistCommand}" />
 
             <!-- Favorites -->
-            <RadioButton Content="Favorites" Grid.Row="1"
+            <RadioButton Content="{DynamicResource Str_Favorites}" Grid.Row="1"
                          Command="{Binding ShowFavoritesCommand}" />
             
             <!-- Directories -->
-            <RadioButton Content="Directories" Grid.Row="2" IsChecked="True"
+            <RadioButton Content="{DynamicResource Str_Directories}" Grid.Row="2" IsChecked="True"
                          Command="{Binding ShowDirectoriesCommand}" />
             
             <!-- Playlists -->
-            <RadioButton Content="Playlists" Grid.Row="3"
+            <RadioButton Content="{DynamicResource Str_Playlists}" Grid.Row="3"
                          Command="{Binding ShowPlaylistsCommand}" />
         </Grid>
     </StackPanel>
