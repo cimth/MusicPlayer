@@ -159,4 +159,53 @@ public partial class PlaylistGrid : DataGrid
             GridElem.Focus();
         }
     }
+    
+    // ==============
+    // NAVIGATE WITH KEYBOARD
+    // ==============
+
+    private void PlaylistGrid_OnPreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        // Handle key event
+        switch (e.Key)
+        {
+            case Key.Down:
+                this.NavigateToNextItem();
+                e.Handled = true;
+                break;
+            case Key.Up:
+                this.NavigateToPreviousItem();
+                e.Handled = true;
+                break;
+        }
+        
+        // Gain focus on grid to use further keyboard actions
+        GridElem.Focus();
+    }
+
+    private void NavigateToNextItem()
+    {
+        if (this.SelectedIndex < this.GridElem.Items.Count - 1)
+        {
+            // Select next
+            this.SelectedIndex++;
+        } else if (this.SelectedIndex == this.GridElem.Items.Count - 1)
+        {
+            // Current is the last item, thus select the first item
+            this.SelectedIndex = 0;
+        }
+    }
+
+    private void NavigateToPreviousItem()
+    {
+        if (this.SelectedIndex > 0)
+        {
+            // Select previous
+            this.SelectedIndex--;
+        } else if (this.SelectedIndex == 0)
+        {
+            // Current is the first item, thus select the last item
+            this.SelectedIndex = this.GridElem.Items.Count - 1;
+        }
+    }
 }

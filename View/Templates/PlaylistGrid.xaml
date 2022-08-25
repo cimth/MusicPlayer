@@ -33,4 +33,6 @@
           PreviewMouseLeftButtonUp="PlaylistGrid_OnPreviewMouseLeftButtonUp"
           PreviewMouseMove="PlaylistGrid_OnPreviewMouseMove"
           
+          PreviewKeyDown="PlaylistGrid_OnPreviewKeyDown"
+          
           SelectionChanged="PlaylistGrid_OnSelectionChanged"/>
