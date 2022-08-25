@@ -200,7 +200,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             
-            <!-- Header for playlist directories -->
+            <!-- Header for songs -->
             <Border Grid.Row="0" 
                     BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
                 <Grid Style="{DynamicResource HeaderToolbarGridStyle}">
