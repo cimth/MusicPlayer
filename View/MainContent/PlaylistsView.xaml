@@ -314,13 +314,13 @@
                 
                 <!-- Show data as columns -->
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Title" Width="2*"
+                    <DataGridTextColumn Header="Title" MinWidth="450"
                                         Binding="{Binding Title}" />
-                    <DataGridTextColumn Header="Artists" Width="*"
+                    <DataGridTextColumn Header="Artists" MinWidth="300"
                                         Binding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}" />
-                    <DataGridTextColumn Header="Duration" Width="Auto"
+                    <DataGridTextColumn Header="Duration" MinWidth="75"
                                         Binding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
-                    <DataGridTextColumn Header="Album" Width="*"
+                    <DataGridTextColumn Header="Album" MinWidth="300"
                                         Binding="{Binding Album}" />
                 </DataGrid.Columns>
             </templates:PlaylistGrid>
