@@ -320,7 +320,7 @@
                                         Binding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}" />
                     <DataGridTextColumn Header="Duration" Width="Auto"
                                         Binding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
-                    <DataGridTextColumn Header="Album" Width="Auto"
+                    <DataGridTextColumn Header="Album" Width="*"
                                         Binding="{Binding Album}" />
                 </DataGrid.Columns>
             </templates:PlaylistGrid>
