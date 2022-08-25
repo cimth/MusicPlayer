@@ -133,6 +133,8 @@
                 <!-- KeyBindings -->
                 <templates:PlaylistGrid.InputBindings>
                     <KeyBinding Key="Delete" Command="{Binding RemoveSubDirectoryCommand}" />
+                    <KeyBinding Key="Enter" Command="{Binding OpenSubDirectoryCommand}" />
+                    <KeyBinding Key="Back" Command="{Binding GoBackCommand}" />
                 </templates:PlaylistGrid.InputBindings>
                 
                 <!-- Show data as columns -->
@@ -177,6 +179,8 @@
                 <!-- KeyBindings -->
                 <templates:PlaylistGrid.InputBindings>
                     <KeyBinding Key="Delete" Command="{Binding RemovePlaylistCommand}" />
+                    <KeyBinding Key="Enter" Command="{Binding OpenPlaylistCommand}" />
+                    <KeyBinding Key="Back" Command="{Binding GoBackCommand}" />
                 </templates:PlaylistGrid.InputBindings>
                 
                 <!-- Show data as columns -->
@@ -288,6 +292,8 @@
                 <!-- KeyBindings -->
                 <templates:PlaylistGrid.InputBindings>
                     <KeyBinding Key="Delete" Command="{Binding RemoveSongFromPlaylistCommand}" />
+                    <KeyBinding Key="Enter" Command="{Binding StartPlaylistBeginningWithTheSelectedSongCommand}" />
+                    <KeyBinding Key="Back" Command="{Binding GoBackCommand}" />
                 </templates:PlaylistGrid.InputBindings>
                 
                 <!-- Mark the current song -->
