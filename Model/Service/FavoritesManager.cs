@@ -90,7 +90,11 @@ public class FavoritesManager : NotifyPropertyChangedImpl
 
     public void AddDirectoryToFavorites(string directoryPath)
     {
+        Debug.Assert(directoryPath != null);
+        
         this.FavoriteDirectoryPaths.Add(directoryPath);
+        SortUtil.SortWithoutNewCollection(this.FavoriteDirectoryPaths, path => path);
+        
         this.SaveChanges();
     }
     
@@ -109,6 +113,8 @@ public class FavoritesManager : NotifyPropertyChangedImpl
         Debug.Assert(playlist.RelativePath != null);
         
         this.FavoritePlaylistRelativePaths.Add(playlist.RelativePath);
+        SortUtil.SortWithoutNewCollection(this.FavoritePlaylistRelativePaths, path => path);
+        
         this.SaveChanges();
     }
     
