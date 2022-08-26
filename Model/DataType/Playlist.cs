@@ -109,38 +109,17 @@ public class Playlist : NotifyPropertyChangedImpl
     
     public void Sort()
     {
-        List<Song> ordered;
         switch (this.SortOrder)
         {
             case PlaylistSortOrder.Alphabetical:
-                ordered = this.Songs.OrderBy(song => song.Title).ToList();
-                this.ReAddToSongs(ordered);
+                SortUtil.SortWithoutNewCollection(this.Songs, song => song.Title);
                 break;
             case PlaylistSortOrder.Individual:
                 // No further ordering, only display it for the sake of completeness
                 break;
             case PlaylistSortOrder.TitleNumber:
-                ordered = this.Songs.OrderBy(song => song.TrackNumber).ToList();
-                this.ReAddToSongs(ordered);
+                SortUtil.SortWithoutNewCollection(this.Songs, song => song.TrackNumber);
                 break;
-        }
-    }
-
-    /// <summary>
-    /// Clear the current collection and re-add the given songs (which should already be ordered).
-    /// Do not simply assign the new sorted collection because then the registered Observers of the
-    /// CollectionChanged event of the current collection would not be notified anymore on changes.
-    /// </summary>
-    /// <param name="ordered"></param>
-    private void ReAddToSongs(List<Song> ordered)
-    {
-        // Clear the current collection and re-add the songs (which are now ordered).
-        // Do not simply assign the new sorted collection because then the registered Observers of the
-        // CollectionChanged event of the current collection would not be notified anymore on changes.
-        this.Songs.Clear();
-        foreach (var song in ordered)
-        {
-            this.Songs.Add(song);
         }
     }
 }
