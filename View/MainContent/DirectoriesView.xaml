@@ -114,6 +114,11 @@
                     BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1"
                     Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- Back to music root directories -->
+                    <Button Command="{Binding GoBackToRootCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/home-outline.svg}" />
+                    </Button>
+                    
                     <!-- Go back to parent directory -->
                     <Button ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
@@ -167,14 +172,21 @@
                     Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
                     <!-- 
-                        Go back to parent directory.
+                        Go back.
                         Only show if no sub directories exist because then the sub directory header (including its 
                         back navigation button) is collapsed.
                      -->
-                    <Button ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}"
-                            Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
-                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
-                    </Button>
+                    <WrapPanel Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                        <!-- Back to music root directories -->
+                        <Button Command="{Binding GoBackToRootCommand}">
+                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/home-outline.svg}" />
+                        </Button>
+                        
+                        <!-- Back to parent -->
+                        <Button ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}">
+                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
+                        </Button>
+                    </WrapPanel>
                     
                     <!-- Heading -->
                     <Label Content="{DynamicResource Str_MusicFiles}"

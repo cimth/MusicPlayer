@@ -49,6 +49,10 @@
       <Resource Include="Resources\Icons\star-outline.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <None Remove="Resources\Icons\home-outline.svg" />
+      <Resource Include="Resources\Icons\home-outline.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
 </Project>

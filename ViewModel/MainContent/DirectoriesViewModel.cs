@@ -125,6 +125,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     
     public ICommand GoBackCommand { get; }
     
+    public ICommand GoBackToRootCommand { get; }
+    
     public ICommand AddToFavoritesCommand { get; }
     
     public ICommand RemoveFromFavoritesCommand { get; }
@@ -153,6 +155,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         this.PlayMusicFileCommand = new DelegateCommand(PlaySelectedSong);
         this.PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand = new DelegateCommand(PlayAllSongsInDirectoryStartingWithTheSelectedSong);
         this.GoBackCommand = new DelegateCommand(GoBack);
+        this.GoBackToRootCommand = new DelegateCommand(GoBackToRoot);
         this.AddToFavoritesCommand = new DelegateCommand(this.AddToFavorites);
         this.RemoveFromFavoritesCommand = new DelegateCommand(this.RemoveFromFavorites);
     }
@@ -279,6 +282,12 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
                 this.LoadAsCurrentDirectory(parentPath);
             }
         }
+    }
+    
+    private void GoBackToRoot()
+    {
+        // Set the current directory to null for showing the root directories
+        this.CurrentDirectoryPath = null;
     }
     
     private void AddToFavorites()

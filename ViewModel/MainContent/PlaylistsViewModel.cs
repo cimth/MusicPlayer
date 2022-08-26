@@ -149,6 +149,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand GoBackCommand { get; }
     
+    public ICommand GoBackToRootCommand { get; }
+    
     public ICommand AddSubDirectoryCommand { get; }
     
     public ICommand RemoveSubDirectoryCommand { get; }
@@ -192,6 +194,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
         // Init commands
         this.GoBackCommand = new DelegateCommand(this.GoBack);
+        this.GoBackToRootCommand = new DelegateCommand(this.GoBackToRoot);
         this.AddSubDirectoryCommand = new DelegateCommand(this.AddSubDirectory);
         this.RemoveSubDirectoryCommand = new DelegateCommand(this.RemoveSubDirectory);
         this.OpenSubDirectoryCommand = new DelegateCommand(this.OpenSubDirectory);
@@ -320,6 +323,16 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             // Reload GUI
             this.LoadContents(this.CurrentDirectoryPath);
         }
+    }
+    
+    private void GoBackToRoot()
+    {
+        // Set the current directory to null for showing the root directory
+        this.CurrentDirectoryPath = null;
+            
+        // Reload GUI
+        this.IsPlaylistShown = false;
+        this.LoadContents(this.CurrentDirectoryPath);
     }
 
     private void AddSubDirectory()

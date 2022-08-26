@@ -92,11 +92,19 @@
             <Border Grid.Row="0" 
                     BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
                 <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
-                    <!-- Go back to parent directory (if not in root directory) -->
-                    <Button ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}"
-                            Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
-                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
-                    </Button>
+                    
+                    <!-- Go back. Only show if not in playlist root directory -->
+                    <WrapPanel Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
+                        <!-- Back to playlist root directory  -->
+                        <Button Command="{Binding GoBackToRootCommand}">
+                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/home-outline.svg}" />
+                        </Button>
+                    
+                        <!-- Go back to parent directory -->
+                        <Button ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}">
+                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
+                        </Button>
+                    </WrapPanel>
                     
                     <!-- Heading -->
                     <Label Content="{DynamicResource Str_SubDirectories}" />
@@ -232,42 +240,49 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     
+                    <!-- Back to playlist root directory -->
+                    <Button Grid.Column="0" Command="{Binding GoBackToRootCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/home-outline.svg}" />
+                    </Button>
+                    
                     <!-- Go back to parent directory or to root directory -->
                     <!-- Note that the button never should be hidden because you should always go back to a directory -->
-                    <Button Grid.Column="0" ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}">
+                    <Button Grid.Column="1" ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
                     </Button>
                     
                     <!-- Heading -->
-                    <Label Grid.Column="1" Content="{DynamicResource Str_Songs}" />
+                    <Label Grid.Column="2" Content="{DynamicResource Str_Songs}" />
                     
                     <!-- Add song -->
-                    <Button Grid.Column="2" ToolTip="{DynamicResource Str_Add}" Command="{Binding AddSongToPlaylistCommand}">
+                    <Button Grid.Column="3" ToolTip="{DynamicResource Str_Add}" Command="{Binding AddSongToPlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
                     </Button>
                 
                     <!-- Remove song -->
-                    <Button Grid.Column="3" ToolTip="{DynamicResource Str_Remove}" Command="{Binding RemoveSongFromPlaylistCommand}">
+                    <Button Grid.Column="4" ToolTip="{DynamicResource Str_Remove}" Command="{Binding RemoveSongFromPlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
                     </Button>
                     
                     <!-- Add to favorites -->
-                    <Button Grid.Column="4" ToolTip="{DynamicResource Str_AddToFavorites}" Command="{Binding AddToFavoritesCommand}"
+                    <Button Grid.Column="5" ToolTip="{DynamicResource Str_AddToFavorites}" Command="{Binding AddToFavoritesCommand}"
                             Visibility="{Binding IsFavorite, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star-outline.svg}" />
                     </Button>
                     
                     <!-- Remove from favorites -->
-                    <Button Grid.Column="4" ToolTip="{DynamicResource Str_RemoveFromFavorites}" Command="{Binding RemoveFromFavoritesCommand}"
+                    <Button Grid.Column="6" ToolTip="{DynamicResource Str_RemoveFromFavorites}" Command="{Binding RemoveFromFavoritesCommand}"
                             Visibility="{Binding IsFavorite, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star.svg}" />
                     </Button>
                     
                     <!-- Sort playlist -->
-                    <StackPanel Grid.Column="5" HorizontalAlignment="Right" Margin="2,0">
+                    <StackPanel Grid.Column="7" HorizontalAlignment="Right" Margin="2,0">
                         <Label Content="{DynamicResource Str_SortPlaylist}" />
                         <ComboBox Text="{DynamicResource Str_PleaseSelect}"
                                   ItemsSource="{Binding PlaylistSortOrders}"
