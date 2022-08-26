@@ -166,7 +166,6 @@ public partial class PlaylistGrid : DataGrid
 
     private void PlaylistGrid_OnPreviewKeyDown(object sender, KeyEventArgs e)
     {
-        // Handle key event
         switch (e.Key)
         {
             case Key.Down:
@@ -178,9 +177,6 @@ public partial class PlaylistGrid : DataGrid
                 e.Handled = true;
                 break;
         }
-        
-        // Gain focus on grid to use further keyboard actions
-        GridElem.Focus();
     }
 
     private void NavigateToNextItem()
