@@ -134,7 +134,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     // Creates pairs of <enum value, string representation of enum value>
     // Access inside XAML:
     // * Enum value: `SelectedValue='Key'`
-    // * String representation: `DisplayMemberPath='value'`
+    // * String representation: `DisplayMemberPath='Value'`
     // Also use `SelectedValue` instead of `SelectedItem` in XAML for the correct binding below.
     public Dictionary<PlaylistSortOrder, string> PlaylistSortOrders 
         => Enum.GetValues<PlaylistSortOrder>().ToDictionary(sortOrder => sortOrder, PlaylistSortOrderToString.ToString);

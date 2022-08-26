@@ -49,11 +49,14 @@
             </Border>
             
             <!-- Directories -->
+            <!-- The Directories are <root directory, sub path> pairs which get grouped by the root directories
+                 inside the grid. The selected value is a pair which then needs to be combined to a full path.
+                 See: https://www.wpftutorial.net/datagrid.html#grouping -->
             <templates:PlaylistGrid Grid.Row="1"
-                      ItemsSource="{Binding DirectoryPaths}"
-                      SelectedItem="{Binding SelectedDirectoryPath}"
-                      HeadersVisibility="None"
-                      BorderThickness="0">
+                                    ItemsSource="{Binding GroupedDirectoryPairs}"
+                                    SelectedValue="{Binding SelectedDirectoryPair}"
+                                    HeadersVisibility="None"
+                                    BorderThickness="0">
                 <!-- 
                     Use Interaction.Triggers to bind the mouse events to commands.
                     With the elements XML properties, only Code-Behind methods can be called.
@@ -69,9 +72,26 @@
                     <KeyBinding Key="Enter" Command="{Binding OpenDirectoryCommand}" />
                 </templates:PlaylistGrid.InputBindings>
                 
+                <!-- Header of the group, which here is path of the root directory -->
+                <templates:PlaylistGrid.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <!-- The group name is always called by binding to 'Name' no matter what the
+                                     real name of the Property grouped by is.
+                                     See: https://www.wpftutorial.net/datagrid.html#grouping -->
+                                <Label FontWeight="Bold" 
+                                       Background="WhiteSmoke" 
+                                       Content="{Binding Name}"/>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </templates:PlaylistGrid.GroupStyle>
+                
                 <!-- Show data as columns -->
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="*" Binding="{Binding Converter={StaticResource FullPathToLastPathPartConverter}}" />
+                    <!-- The Value contains the sub path for the directory -->
+                    <DataGridTextColumn Width="*" Binding="{Binding Value}" />
                 </DataGrid.Columns>
             </templates:PlaylistGrid>
             
