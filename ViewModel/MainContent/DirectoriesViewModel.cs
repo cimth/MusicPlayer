@@ -226,6 +226,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     {
         if (this.SelectedSubDirectoryPath != null)
         {
+            this._favoritesManager.RemoveDirectoryFromFavorites(this.SelectedSubDirectoryPath);
             this._appConfigurator.RemoveDirectory(this.SelectedSubDirectoryPath);
         }
     }

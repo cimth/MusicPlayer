@@ -426,6 +426,9 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             // Remove file
             this._playlistManager.RemovePlaylistFile(this.SelectedPlaylist);
             
+            // Remove from Favorites
+            this._favoritesManager.RemovePlaylistFromFavorites(this.SelectedPlaylist);
+            
             // Update GUI
             this.PlaylistsInDirectory.RemoveAt(this.SelectedPlaylistIndex);
             
