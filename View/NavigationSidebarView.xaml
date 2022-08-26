@@ -24,18 +24,22 @@
             
             <!-- Current playlist -->
             <RadioButton Content="{DynamicResource Str_CurrentPlaylist}" Grid.Row="0"
+                         IsChecked="{Binding MainWindowViewModel.IsCurrentPlaylistViewShown, Mode=OneWay}"
                          Command="{Binding ShowCurrentPlaylistCommand}" />
 
             <!-- Favorites -->
             <RadioButton Content="{DynamicResource Str_Favorites}" Grid.Row="1"
+                         IsChecked="{Binding MainWindowViewModel.IsFavoritesViewShown, Mode=OneWay}"
                          Command="{Binding ShowFavoritesCommand}" />
             
             <!-- Directories -->
-            <RadioButton Content="{DynamicResource Str_Directories}" Grid.Row="2" IsChecked="True"
+            <RadioButton Content="{DynamicResource Str_Directories}" Grid.Row="2" 
+                         IsChecked="{Binding MainWindowViewModel.IsDirectoriesViewShown, Mode=OneWay}"
                          Command="{Binding ShowDirectoriesCommand}" />
             
             <!-- Playlists -->
             <RadioButton Content="{DynamicResource Str_Playlists}" Grid.Row="3"
+                         IsChecked="{Binding MainWindowViewModel.IsPlaylistsViewShown, Mode=OneWay}"
                          Command="{Binding ShowPlaylistsCommand}" />
         </Grid>
     </StackPanel>

@@ -77,7 +77,7 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
 
         // Init view models
         this.CurrentPlaylistViewModel = new CurrentPlaylistViewModel(songPlayer);
-        this.FavoritesViewModel = new FavoritesViewModel();
+        this.FavoritesViewModel = new FavoritesViewModel(this, favoritesManager);
         this.DirectoriesViewModel = new DirectoriesViewModel(playlistImporter, songPlayer, appConfigurator, favoritesManager);
         this.PlaylistsViewModel = new PlaylistsViewModel(songImporter, playlistImporter, playlistManager, songPlayer, favoritesManager);
         
@@ -122,5 +122,17 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         OnPropertyChanged(nameof(IsFavoritesViewShown));
         OnPropertyChanged(nameof(IsDirectoriesViewShown));
         OnPropertyChanged(nameof(IsPlaylistsViewShown));
+    }
+    
+    public void OpenDirectory(string directoryPath)
+    {
+        this.ChangeMainContent(MainContent.Directories);
+        this.DirectoriesViewModel.OpenDirectoryFromExternal(directoryPath);
+    }
+
+    public void OpenPlaylist(string playlistRelativePath)
+    {
+        this.ChangeMainContent(MainContent.Playlists);
+        this.PlaylistsViewModel.OpenPlaylistFromExternal(playlistRelativePath);
     }
 }

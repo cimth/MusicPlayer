@@ -115,7 +115,7 @@ public class PlaylistManager
         return Path.Combine(AppConfig.PlaylistsRootPath, fileOrDirectoryName);
     }
     
-    private string GetFullPath(string relativePath)
+    public string GetFullPath(string relativePath)
     {
         return Path.Combine(AppConfig.PlaylistsRootPath, relativePath);
     }

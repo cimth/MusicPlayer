@@ -158,6 +158,23 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     }
     
     // ==============
+    // OPEN FROM EXTERN (NEEDED FOR FAVORITES)
+    // ==============
+    
+    public void OpenDirectoryFromExternal(string directoryPath)
+    {
+        // Reset selected values
+        this.SelectedSubDirectoryPath = null;
+        this.SelectedSubDirectoryIndex = -1;
+
+        this.SelectedSong = null;
+        this.SelectedPlaylistIndex = -1;
+        
+        // Load directory
+        this.LoadAsCurrentDirectory(directoryPath);
+    }
+    
+    // ==============
     // CHANGE DIRECTORY
     // ==============
     

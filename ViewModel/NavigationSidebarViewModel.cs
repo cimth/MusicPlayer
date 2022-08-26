@@ -6,10 +6,10 @@ namespace ViewModel;
 public class NavigationSidebarViewModel
 {
     // ==============
-    // FIELDS
+    // PROPERTIES
     // ==============
 
-    private MainWindowViewModel _mainWindowViewModel;
+    public MainWindowViewModel MainWindowViewModel { get; }
     
     // Commands
     
@@ -27,7 +27,7 @@ public class NavigationSidebarViewModel
 
     public NavigationSidebarViewModel(MainWindowViewModel mainWindowViewModel)
     {
-        this._mainWindowViewModel = mainWindowViewModel;
+        this.MainWindowViewModel = mainWindowViewModel;
         
         // init commands
         this.ShowCurrentPlaylistCommand = new DelegateCommand(ShowCurrentPlaylist);
@@ -42,21 +42,21 @@ public class NavigationSidebarViewModel
 
     private void ShowCurrentPlaylist()
     {
-        this._mainWindowViewModel.ChangeMainContent(MainWindowViewModel.MainContent.CurrentPlaylist);
+        this.MainWindowViewModel.ChangeMainContent(MainWindowViewModel.MainContent.CurrentPlaylist);
     }
     
     private void ShowFavorites()
     {
-        this._mainWindowViewModel.ChangeMainContent(MainWindowViewModel.MainContent.Favorites);
+        this.MainWindowViewModel.ChangeMainContent(MainWindowViewModel.MainContent.Favorites);
     }
     
     private void ShowDirectories()
     {
-        this._mainWindowViewModel.ChangeMainContent(MainWindowViewModel.MainContent.Directories);
+        this.MainWindowViewModel.ChangeMainContent(MainWindowViewModel.MainContent.Directories);
     }
     
     private void ShowPlaylists()
     {
-        this._mainWindowViewModel.ChangeMainContent(MainWindowViewModel.MainContent.Playlists);
+        this.MainWindowViewModel.ChangeMainContent(MainWindowViewModel.MainContent.Playlists);
     }
 }

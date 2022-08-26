@@ -4,12 +4,110 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:View"
+             xmlns:converter="clr-namespace:View.Converter"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:templates="clr-namespace:View.Templates"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              BorderBrush="{StaticResource AppTurquoiseBorderBrush}" BorderThickness="0 1 0 0">
+    <UserControl.Resources>
+        <converter:FullPathToLastPathPartConverter x:Key="FullPathToLastPathPartConverter" />
+        <converter:PlaylistRelativePathForFavoritesGridConverter x:Key="PlaylistRelativePathForFavoritesGridConverter" />
+    </UserControl.Resources>
+    
     <Grid>
-        <Grid>
-            <Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="{DynamicResource Str_Favorites}" />
+        <!-- Grid layout -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Header -->
+        <Grid Grid.Row="0">
+            <Label FontWeight="Bold" Content="{DynamicResource Str_Favorites}"
+                   Background="{StaticResource AppTurquoiseDarkestBrush}" />
+        </Grid>
+        
+        <!-- Show favorite directories on top and favorite playlists on bottom -->
+        <Grid Grid.Row="1">
+            <!-- Grid layout -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <!-- Header for directories -->
+            <Border Grid.Row="0" 
+                    BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
+                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- Heading -->
+                    <Label Content="{DynamicResource Str_Directories}" />
+                </StackPanel>
+            </Border>
+            
+            <!-- Directories -->
+            <templates:PlaylistGrid Grid.Row="1"
+                      ItemsSource="{Binding DirectoryPaths}"
+                      SelectedItem="{Binding SelectedDirectoryPath}"
+                      HeadersVisibility="None"
+                      BorderThickness="0">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the elements XML properties, only Code-Behind methods can be called.
+                -->
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding OpenDirectoryCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+                
+                <!-- KeyBindings -->
+                <templates:PlaylistGrid.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding OpenDirectoryCommand}" />
+                </templates:PlaylistGrid.InputBindings>
+                
+                <!-- Show data as columns -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding Converter={StaticResource FullPathToLastPathPartConverter}}" />
+                </DataGrid.Columns>
+            </templates:PlaylistGrid>
+            
+            <!-- Header for playlists -->
+            <Border Grid.Row="2" 
+                    BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
+                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- Heading -->
+                    <Label Content="{DynamicResource Str_Playlists}" />
+                </StackPanel>
+            </Border>
+            
+            <templates:PlaylistGrid Grid.Row="3" 
+                                ItemsSource="{Binding PlaylistPaths}"
+                                SelectedItem="{Binding  SelectedPlaylistPath}"
+                                HeadersVisibility="None">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the elements XML properties, only Code-Behind methods can be called.
+                -->
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding OpenPlaylistCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+                
+                <!-- KeyBindings -->
+                <templates:PlaylistGrid.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding OpenPlaylistCommand}" />
+                </templates:PlaylistGrid.InputBindings>
+                
+                <!-- Show data as columns -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding Converter={StaticResource PlaylistRelativePathForFavoritesGridConverter}}" />
+                </DataGrid.Columns>
+            </templates:PlaylistGrid>
         </Grid>
     </Grid>
 </UserControl>
