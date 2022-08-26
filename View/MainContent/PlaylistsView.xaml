@@ -231,6 +231,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     
@@ -253,8 +254,20 @@
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
                     </Button>
                     
+                    <!-- Add to favorites -->
+                    <Button Grid.Column="4" ToolTip="{DynamicResource Str_AddToFavorites}" Command="{Binding AddToFavoritesCommand}"
+                            Visibility="{Binding IsFavorite, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star-outline.svg}" />
+                    </Button>
+                    
+                    <!-- Remove from favorites -->
+                    <Button Grid.Column="4" ToolTip="{DynamicResource Str_RemoveFromFavorites}" Command="{Binding RemoveFromFavoritesCommand}"
+                            Visibility="{Binding IsFavorite, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star.svg}" />
+                    </Button>
+                    
                     <!-- Sort playlist -->
-                    <StackPanel Grid.Column="4" HorizontalAlignment="Right" Margin="2,0">
+                    <StackPanel Grid.Column="5" HorizontalAlignment="Right" Margin="2,0">
                         <Label Content="{DynamicResource Str_SortPlaylist}" />
                         <ComboBox Text="{DynamicResource Str_PleaseSelect}"
                                   ItemsSource="{Binding PlaylistSortOrders}"

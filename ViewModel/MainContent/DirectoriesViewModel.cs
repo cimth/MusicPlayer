@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows.Input;
 using Common;
 using Model.DataType;
@@ -15,6 +16,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
 
     private readonly PlaylistImporter _playlistImporter;
     private readonly AppConfigurator _appConfigurator;
+    private readonly FavoritesManager _favoritesManager;
 
     private string? _currentDirectoryPath;
     private List<string> _subDirectoryPaths;
@@ -27,6 +29,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
 
     private bool _hasSubDirectories;
     private bool _hasMusicFiles;
+    
+    private bool _isFavorite = false;
 
     // ==============
     // PROPERTIES 
@@ -100,6 +104,12 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     }
 
     public bool HasSubDirectoriesAndMusicFiles => this.HasSubDirectories && this.HasMusicFiles;
+    
+    public bool IsFavorite
+    {
+        get => _isFavorite;
+        set => SetField(ref _isFavorite, value);
+    }
 
     // commands
 
@@ -114,17 +124,23 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     public ICommand PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand { get; set; }
     
     public ICommand GoBackCommand { get; }
+    
+    public ICommand AddToFavoritesCommand { get; }
+    
+    public ICommand RemoveFromFavoritesCommand { get; }
 
     // ==============
     // INITIALIZATION
     // ==============
 
-    public DirectoriesViewModel(PlaylistImporter playlistImporter, SongPlayer songPlayer, AppConfigurator appConfigurator)
+    public DirectoriesViewModel(PlaylistImporter playlistImporter, SongPlayer songPlayer, AppConfigurator appConfigurator, FavoritesManager favoritesManager)
     {
         this.SongPlayer = songPlayer;
         
         this._playlistImporter = playlistImporter;
         this._appConfigurator = appConfigurator;
+        this._favoritesManager = favoritesManager;
+        
         this._subDirectoryPaths = new List<string>();
         
         // Set current directory to null to show the root directories first
@@ -137,6 +153,8 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         this.PlayMusicFileCommand = new DelegateCommand(PlaySelectedSong);
         this.PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand = new DelegateCommand(PlayAllSongsInDirectoryStartingWithTheSelectedSong);
         this.GoBackCommand = new DelegateCommand(GoBack);
+        this.AddToFavoritesCommand = new DelegateCommand(this.AddToFavorites);
+        this.RemoveFromFavoritesCommand = new DelegateCommand(this.RemoveFromFavorites);
     }
     
     // ==============
@@ -147,6 +165,9 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     {
         // Update current directory
         this.CurrentDirectoryPath = directoryPath;
+        
+        // Update favorite flag
+        this.IsFavorite = this._favoritesManager.FavoriteDirectoryPaths.Contains(this.CurrentDirectoryPath);
 
         // Get only the directory name without the parent directories
         // => You have to use Path.GetFilename() because Path.GetDirectoryName() would return the path to the
@@ -239,6 +260,24 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
                 // The current directory is no root directory, thus load the contents of the parent directory
                 this.LoadAsCurrentDirectory(parentPath);
             }
+        }
+    }
+    
+    private void AddToFavorites()
+    {
+        if (this.CurrentDirectoryPath != null)
+        {
+            this._favoritesManager.AddDirectoryToFavorites(this.CurrentDirectoryPath);
+            this.IsFavorite = true;
+        }
+    }
+    
+    private void RemoveFromFavorites()
+    {
+        if (this.CurrentDirectoryPath != null)
+        {
+            this._favoritesManager.RemoveDirectoryFromFavorites(this.CurrentDirectoryPath);
+            this.IsFavorite = false;
         }
     }
 }

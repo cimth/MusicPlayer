@@ -14,6 +14,8 @@ public class AppConfig
     public static readonly string AppConfigFilePath = Path.GetFullPath(Path.Combine(AppBaseDirectoryPath, "config.json"));
     
     public static readonly string PlaylistsRootPath = Path.GetFullPath(Path.Combine(AppBaseDirectoryPath, "Playlists"));
+
+    public static readonly string FavoritesFilePath = Path.GetFullPath(Path.Combine(AppBaseDirectoryPath, "favorites.json"));
     
     // ==============
     // PROPERTIES

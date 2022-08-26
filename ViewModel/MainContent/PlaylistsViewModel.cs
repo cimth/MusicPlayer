@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Windows.Input;
 using Common;
 using Dialog;
@@ -21,6 +22,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     private readonly PlaylistImporter _playlistImporter;
     private readonly PlaylistManager _playlistManager;
     private readonly SongPlayer _songPlayer;
+    private readonly FavoritesManager _favoritesManager;
 
     private string? _currentDirectoryPath;
     private string? _currentDirectoryNameFromRoot;
@@ -34,6 +36,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     private int _selectedSongIndex = -1;
 
     private bool _isPlaylistShown;
+
+    private bool _isFavorite = false;
 
     private PlaylistSortOrder _selectedPlaylistSortOrder;
 
@@ -118,6 +122,12 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         get => _isPlaylistShown;
         set => SetField(ref _isPlaylistShown, value);
     }
+
+    public bool IsFavorite
+    {
+        get => _isFavorite;
+        set => SetField(ref _isFavorite, value);
+    }
     
     // Sort playlist
 
@@ -161,16 +171,21 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand UpdateOnRowMovedCommand { get; }
     
+    public ICommand AddToFavoritesCommand { get; }
+    
+    public ICommand RemoveFromFavoritesCommand { get; }
+    
     // ==============
     // INITIALIZATION 
     // ==============
 
-    public PlaylistsViewModel(SongImporter songImporter, PlaylistImporter playlistImporter, PlaylistManager playlistManager, SongPlayer songPlayer)
+    public PlaylistsViewModel(SongImporter songImporter, PlaylistImporter playlistImporter, PlaylistManager playlistManager, SongPlayer songPlayer, FavoritesManager favoritesManager)
     {
         this._songImporter = songImporter;
         this._playlistImporter = playlistImporter;
         this._playlistManager = playlistManager;
         this._songPlayer = songPlayer;
+        this._favoritesManager = favoritesManager;
 
         this._subDirectoryPaths = new ObservableCollection<string>();
         this._playlistsInDirectory = new ObservableCollection<Playlist>();
@@ -188,6 +203,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.RemoveSongFromPlaylistCommand = new DelegateCommand(this.RemoveSongFromPlaylist);
         this.ChangePlaylistSortOrderCommand = new DelegateCommand(this.ChangePlaylistSortOrder);
         this.UpdateOnRowMovedCommand = new DelegateCommand(this.UpdateOnRowMoved);
+        this.AddToFavoritesCommand = new DelegateCommand(this.AddToFavorites);
+        this.RemoveFromFavoritesCommand = new DelegateCommand(this.RemoveFromFavorites);
 
         // Set elements that are shown first
         this._isPlaylistShown = false;
@@ -320,10 +337,11 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
     private void OpenPlaylist()
     {
-        if (this.SelectedPlaylist != null)
+        if (this.SelectedPlaylist != null && this.SelectedPlaylist.RelativePath != null)
         {
             this.SelectedPlaylistSortOrder = this.SelectedPlaylist.SortOrder;
             this.IsPlaylistShown = true;
+            this.IsFavorite = this._favoritesManager.FavoritePlaylistRelativePaths.Contains(this.SelectedPlaylist.RelativePath);
         }
     }
     
@@ -438,6 +456,24 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
             // Save changes
             this._playlistManager.SaveInPlaylistFile(this.SelectedPlaylist);
+        }
+    }
+
+    private void AddToFavorites()
+    {
+        if (this.SelectedPlaylist != null && this.SelectedPlaylist.RelativePath != null) 
+        {
+            this._favoritesManager.AddPlaylistToFavorites(this.SelectedPlaylist);
+            this.IsFavorite = true;
+        }
+    }
+    
+    private void RemoveFromFavorites()
+    {
+        if (this.SelectedPlaylist != null && this.SelectedPlaylist.RelativePath != null)
+        {
+            this._favoritesManager.RemovePlaylistFromFavorites(this.SelectedPlaylist);
+            this.IsFavorite = false;
         }
     }
 

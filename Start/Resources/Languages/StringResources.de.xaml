@@ -20,6 +20,8 @@
     <system:String x:Key="Str_Back">Zurück</system:String>
     <system:String x:Key="Str_SortPlaylist">Playlist sortieren:</system:String>
     <system:String x:Key="Str_PleaseSelect">Bitte auswählen ...</system:String>
+    <system:String x:Key="Str_AddToFavorites">Zu Favoriten hinzufügen</system:String>
+    <system:String x:Key="Str_RemoveFromFavorites">Aus Favoriten entfernen</system:String>
     
     <system:String x:Key="Str_Songs">Songs</system:String>
     <system:String x:Key="Str_RootMusicDirectories">Hauptordner mit Musik</system:String>

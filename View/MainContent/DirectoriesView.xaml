@@ -122,6 +122,18 @@
                     <!-- Heading -->
                     <Label Content="{DynamicResource Str_SubDirectories}" 
                            Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    
+                    <!-- Add to favorites -->
+                    <Button ToolTip="{DynamicResource Str_AddToFavorites}" Command="{Binding AddToFavoritesCommand}"
+                            Visibility="{Binding IsFavorite, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star-outline.svg}" />
+                    </Button>
+                    
+                    <!-- Remove from favorites -->
+                    <Button ToolTip="{DynamicResource Str_RemoveFromFavorites}" Command="{Binding RemoveFromFavoritesCommand}"
+                            Visibility="{Binding IsFavorite, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star.svg}" />
+                    </Button>
                 </StackPanel>
             </Border>
             
@@ -157,7 +169,7 @@
                     <!-- 
                         Go back to parent directory.
                         Only show if no sub directories exist because then the sub directory header (including its 
-                        back navigation button) are collapsed.
+                        back navigation button) is collapsed.
                      -->
                     <Button ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}"
                             Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
@@ -167,6 +179,25 @@
                     <!-- Heading -->
                     <Label Content="{DynamicResource Str_MusicFiles}"
                            Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    
+                    <!-- 
+                        Favorite buttons.
+                        Only show if no sub directories exist because then the sub directory header (including its 
+                        back navigation button) is collapsed.
+                     -->
+                    <WrapPanel Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                        <!-- Add to favorites -->
+                        <Button ToolTip="{DynamicResource Str_AddToFavorites}" Command="{Binding AddToFavoritesCommand}"
+                                Visibility="{Binding IsFavorite, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star-outline.svg}" />
+                        </Button>
+                    
+                        <!-- Remove from favorites -->
+                        <Button ToolTip="{DynamicResource Str_RemoveFromFavorites}" Command="{Binding RemoveFromFavoritesCommand}"
+                                Visibility="{Binding IsFavorite, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star.svg}" />
+                        </Button>
+                    </WrapPanel>
                 </StackPanel>
             </Border>
             
