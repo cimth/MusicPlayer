@@ -15,7 +15,7 @@ public static class SortUtil
     /// <param name="keySelector">The function for extracting a key used for sorting.</param>
     /// <typeparam name="TSource">The type of the collection's items.</typeparam>
     /// <typeparam name="TKey">The type of the key used for sorting.</typeparam>
-    public static void SortWithoutNewCollection<TSource, TKey>(ObservableCollection<TSource> collection, Func<TSource, TKey> keySelector)
+    public static void SortWithoutNewCollection<TSource, TKey>(ICollection<TSource> collection, Func<TSource, TKey> keySelector)
     {
         // Get a sorted copy of the list
         ObservableCollection<TSource> sorted = new ObservableCollection<TSource>(collection.OrderBy(keySelector));
