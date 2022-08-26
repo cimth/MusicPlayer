@@ -8,6 +8,8 @@
     <Color x:Key="AppTurquoiseSelected">#b7efef</Color>
     <Color x:Key="AppTurquoiseHighlighted">#d7f6f6</Color>
     
+    <Color x:Key="GroupHeader">#f7f7f7</Color>
+    
     <!-- Brushes (You have to use Brushes when setting a Background color or similar) -->
     <SolidColorBrush x:Key="AppTurquoiseDarkestBrush" Color="{StaticResource AppTurquoiseDarkest}" />
     <SolidColorBrush x:Key="AppTurquoiseMediumBrush" Color="{StaticResource AppTurquoiseMedium}" />
@@ -15,4 +17,6 @@
     <SolidColorBrush x:Key="AppTurquoiseBorderBrush" Color="{StaticResource AppTurquoiseBorder}" />
     <SolidColorBrush x:Key="AppTurquoiseSelectedBrush" Color="{StaticResource AppTurquoiseSelected}" />
     <SolidColorBrush x:Key="AppTurquoiseHighlightedBrush" Color="{StaticResource AppTurquoiseHighlighted}" />
+    
+    <SolidColorBrush x:Key="GroupHeaderBrush" Color="{StaticResource GroupHeader}" />
 </ResourceDictionary>

@@ -81,7 +81,7 @@
                                      real name of the Property grouped by is.
                                      See: https://www.wpftutorial.net/datagrid.html#grouping -->
                                 <Label FontWeight="Bold" 
-                                       Background="WhiteSmoke" 
+                                       Background="{DynamicResource GroupHeaderBrush}" 
                                        Content="{Binding Name}"/>
                             </DataTemplate>
                         </GroupStyle.HeaderTemplate>
