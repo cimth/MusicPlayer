@@ -42,15 +42,15 @@ public class PlaylistManager
     }
     
     /// <summary>
-    /// Returns the full path for a playlist with the given name which might include a specific
-    /// parent directory path.
+    /// Returns the relative path for a playlist file seen from the playlist root path.
     /// </summary>
-    /// <param name="parentDirectoryPath"></param>
+    /// <param name="parentDirectoryPath">The optional parent directory of the playlist</param>
     /// <param name="playlistName"></param>
     /// <returns></returns>
-    public string GetFilePathForNewPlaylist(string? parentDirectoryPath, string playlistName)
+    public string GetRelativePathForNewPlaylist(string? parentDirectoryPath, string playlistName)
     {
-        return this.GetFullPath(parentDirectoryPath, $"{playlistName}.json");
+        string fullPath = this.GetFullPath(parentDirectoryPath, $"{playlistName}.json");
+        return Path.GetRelativePath(AppConfig.PlaylistsRootPath, fullPath);
     }
 
     /// <summary>
@@ -60,7 +60,7 @@ public class PlaylistManager
     public void SaveInPlaylistFile(Playlist playlist)
     {
         // Only continue if the playlist has set a file path
-        if (playlist.FilePath == null)
+        if (playlist.RelativePath == null)
         {
             Console.WriteLine($"No file path set for playlist '{playlist.Name}'");
             return;
@@ -76,13 +76,14 @@ public class PlaylistManager
         PlaylistFileData fileData = new PlaylistFileData(playlist.Name, songPaths, playlist.SortOrder.ToString());
         
         // Save playlist as JSON
+        string fullPath = this.GetFullPath(playlist.RelativePath);
         JsonSerializerOptions options = new JsonSerializerOptions
         {
             // pretty print
             WriteIndented = true
         };
         string dataJson = JsonSerializer.Serialize(fileData, options);
-        File.WriteAllText(playlist.FilePath, dataJson, Encoding.UTF8);
+        File.WriteAllText(fullPath, dataJson, Encoding.UTF8);
     }
     
     /// <summary>
@@ -91,9 +92,10 @@ public class PlaylistManager
     /// <param name="playlist"></param>
     public void RemovePlaylistFile(Playlist playlist)
     {
-        if (playlist.FilePath != null)
+        if (playlist.RelativePath != null)
         {
-            File.Delete(playlist.FilePath);
+            string fullPath = this.GetFullPath(playlist.RelativePath);
+            File.Delete(fullPath);
         }
     }
     
@@ -111,5 +113,10 @@ public class PlaylistManager
         
         // Return '<playlists root directory>/<file or directory name>' if no parent directory is given
         return Path.Combine(AppConfig.PlaylistsRootPath, fileOrDirectoryName);
+    }
+    
+    private string GetFullPath(string relativePath)
+    {
+        return Path.Combine(AppConfig.PlaylistsRootPath, relativePath);
     }
 }

@@ -64,7 +64,10 @@ public class PlaylistImporter
         // Get sort order
         Enum.TryParse(fileData.SortOrder, out PlaylistSortOrder sortOrder);
         
+        // Get relative path seen from the playlist root
+        string relativePath = Path.GetRelativePath(AppConfig.PlaylistsRootPath, filePath);
+        
         // return resolved Playlist
-        return new Playlist(fileData.Name, songs, sortOrder, filePath);
+        return new Playlist(fileData.Name, songs, sortOrder, relativePath);
     }
 }

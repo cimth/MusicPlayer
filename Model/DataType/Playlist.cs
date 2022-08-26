@@ -14,7 +14,7 @@ public class Playlist : NotifyPropertyChangedImpl
     private ObservableCollection<Song> _songs;
     private TimeSpan _totalDuration;
     private PlaylistSortOrder _sortOrder = PlaylistSortOrder.Individual;
-    private string? _filePath;
+    private string? _relativePath;
 
     // ==============
     // PROPERTIES
@@ -40,22 +40,22 @@ public class Playlist : NotifyPropertyChangedImpl
         set => SetField(ref _sortOrder, value);
     }
 
-    public string? FilePath
+    public string? RelativePath
     {
-        get => _filePath;
-        set => SetField(ref _filePath, value);
+        get => _relativePath;
+        set => SetField(ref _relativePath, value);
     }
     
     // ==============
     // INITIALIZATION
     // ==============
     
-    public Playlist(string name, ObservableCollection<Song> songs, PlaylistSortOrder sortOrder, string filePath)
+    public Playlist(string name, ObservableCollection<Song> songs, PlaylistSortOrder sortOrder, string relativePath)
     {
         this._name = name;
         this._songs = songs;
         this._sortOrder = sortOrder;
-        this._filePath = filePath;
+        this._relativePath = relativePath;
         
         this._songs.CollectionChanged += UpdateTotalDuration;
         this.UpdateTotalDuration(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
@@ -79,11 +79,11 @@ public class Playlist : NotifyPropertyChangedImpl
         this.UpdateTotalDuration(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
 
-    public Playlist(string name, string filePath)
+    public Playlist(string name, string relativePath)
     {
         this._name = name;
         this._songs = new ObservableCollection<Song>();
-        this._filePath = filePath;
+        this._relativePath = relativePath;
         
         this._songs.CollectionChanged += UpdateTotalDuration;
         this.UpdateTotalDuration(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));

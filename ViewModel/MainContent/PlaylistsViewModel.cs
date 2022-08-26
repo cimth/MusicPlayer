@@ -350,8 +350,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         {
             // Create playlist
             string playlistName = dialogViewModel.InputValue;
-            string filePath = this._playlistManager.GetFilePathForNewPlaylist(this.CurrentDirectoryPath, playlistName);
-            Playlist playlist = new Playlist(playlistName, filePath);
+            string relativePath = this._playlistManager.GetRelativePathForNewPlaylist(this.CurrentDirectoryPath, playlistName);
+            Playlist playlist = new Playlist(playlistName, relativePath);
             this._playlistManager.SaveInPlaylistFile(playlist);
             
             // Update GUI
