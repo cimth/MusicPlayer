@@ -13,7 +13,7 @@ public class Playlist : NotifyPropertyChangedImpl
     private string _name;
     private ObservableCollection<Song> _songs;
     private TimeSpan _totalDuration;
-    private PlaylistSortOrder _sortOrder = PlaylistSortOrder.Individual;
+    private PlaylistSortOrder _sortOrder = PlaylistSortOrder.Alphabetical;
     private string? _relativePath;
 
     // ==============

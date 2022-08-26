@@ -208,7 +208,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
         // Set elements that are shown first
         this._isPlaylistShown = false;
-        this._selectedPlaylistSortOrder = PlaylistSortOrder.Individual;
+        this._selectedPlaylistSortOrder = PlaylistSortOrder.Alphabetical;
         this.LoadContents(null);
     }
     
