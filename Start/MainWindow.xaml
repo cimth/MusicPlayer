@@ -6,9 +6,22 @@
         xmlns:local="clr-namespace:Start"
         xmlns:view="clr-namespace:View;assembly=View"
         xmlns:mainContent="clr-namespace:View.MainContent;assembly=View"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="{DynamicResource Str_WindowTitle}" 
-        Height="600" Width="950" MinHeight="600" MinWidth="950">
+        Height="600" Width="950" MinHeight="600" MinWidth="950"
+        >
+    <!-- Unhook from keyboard when closing. -->
+    <!-- 
+        Use Interaction.Triggers to bind the Window events to commands.
+        With the elements XML properties, only Code-Behind methods can be called.
+    -->
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Close">
+            <b:InvokeCommandAction Command="{Binding OnCloseCommand}"/>
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
+    
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>

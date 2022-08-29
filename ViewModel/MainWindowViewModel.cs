@@ -1,8 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using Common;
 using Dialog;
 using Model.Service;
+using ViewModel.Command;
 using ViewModel.MainContent;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using KeyEventHandler = System.Windows.Input.KeyEventHandler;
@@ -34,6 +37,9 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
     private bool _isFavoritesViewShown;
     private bool _isDirectoriesViewShown;
     private bool _isPlaylistsViewShown;
+    
+    // Variable for hooking on keyboard input events even if the application is not focused
+    private LowLevelKeyboardHook _hook;
     
     // ==============
     // PROPERTIES
@@ -67,6 +73,12 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
     public bool IsDirectoriesViewShown => _isDirectoriesViewShown;
 
     public bool IsPlaylistsViewShown => _isPlaylistsViewShown;
+    
+    // ==============
+    // COMMANDS
+    // ==============
+
+    public ICommand OnCloseCommand;
 
     // ==============
     // INITIALIZATION
@@ -97,10 +109,37 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         // Use PreviewKeyDownEvent because only KeyDown is recognized when pressing a button on a bluetooth headset.
         EventManager.RegisterClassHandler(typeof(Window), Keyboard.PreviewKeyDownEvent, new KeyEventHandler(OnWindowWideKeyEvent), true);
 
+        // Register for global key events to react on the media keys pressed.
+        // Therefor, the application needs to hook the keyboard events of Windows and unhook when closing
+        // the application.
+        this.HookKeyboard();
+        this.OnCloseCommand = new DelegateCommand(OnClose);
+        
         // Init first shown main content view
         this.ChangeMainContent(MainContent.Directories);
     }
-    
+
+    [MemberNotNull(nameof(_hook))]
+    private void HookKeyboard()
+    {
+        // The keys which should be hooked even if the application has no focus
+        Key[] registeredKeys = {
+            Key.MediaPlayPause,
+            Key.MediaNextTrack,
+            Key.MediaPreviousTrack
+        };
+        
+        // Initialize the hooking
+        this._hook = new LowLevelKeyboardHook(registeredKeys);
+        this._hook.OnKeyPressed += OnGlobalKeyDown;
+        this._hook.HookKeyboard();
+    }
+
+    private void OnClose()
+    {
+        this._hook.UnHookKeyboard();
+    }
+
     // ==============
     // CHANGE MAIN VIEW
     // ==============
@@ -145,8 +184,18 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
 
     private void OnWindowWideKeyEvent(object sender, KeyEventArgs e)
     {
+        this.HandleKeyDown(e.Key);
+    }
+    
+    private void OnGlobalKeyDown(object? sender, Key key)
+    {
+        this.HandleKeyDown(key);
+    }
+
+    private void HandleKeyDown(Key key)
+    {
         // Pause / Resume the current song on 'Space' or on 'MediaPlayPause'
-        if (e.Key == Key.Space || e.Key == Key.MediaPlayPause)
+        if (key == Key.Space || key == Key.MediaPlayPause)
         {
             if (this._songPlayer.IsPlaying)
             {
@@ -159,13 +208,13 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         }
         
         // Next song
-        if (e.Key == Key.MediaNextTrack)
+        if (key == Key.MediaNextTrack)
         {
             this._songPlayer.PlayNext();
         }
         
         // Previous song
-        if (e.Key == Key.MediaPreviousTrack)
+        if (key == Key.MediaPreviousTrack)
         {
             this._songPlayer.PlayPrevious();
         }
