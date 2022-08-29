@@ -1,7 +1,11 @@
+using System.Windows;
+using System.Windows.Input;
 using Common;
 using Dialog;
 using Model.Service;
 using ViewModel.MainContent;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using KeyEventHandler = System.Windows.Input.KeyEventHandler;
 
 namespace ViewModel;
 
@@ -22,6 +26,8 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
     // ==============
     // FIELDS
     // ==============
+
+    private SongPlayer _songPlayer;
 
     // Variables to hide/show the correct main content view
     private bool _isCurrentPlaylistViewShown;
@@ -72,20 +78,24 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         SongImporter songImporter = new SongImporter();
         PlaylistImporter playlistImporter = new PlaylistImporter(songImporter);
         AppConfigurator appConfigurator = new AppConfigurator();
-        SongPlayer songPlayer = new SongPlayer(appConfigurator);
         PlaylistManager playlistManager = new PlaylistManager();
         FavoritesManager favoritesManager = new FavoritesManager();
         DialogService dialogService = new DialogService();
+        
+        this._songPlayer = new SongPlayer(appConfigurator);
 
         // Init view models
-        this.CurrentPlaylistViewModel = new CurrentPlaylistViewModel(songPlayer);
+        this.CurrentPlaylistViewModel = new CurrentPlaylistViewModel(this._songPlayer);
         this.FavoritesViewModel = new FavoritesViewModel(appConfigurator, favoritesManager, this);
-        this.DirectoriesViewModel = new DirectoriesViewModel(playlistImporter, songPlayer, appConfigurator, favoritesManager);
-        this.PlaylistsViewModel = new PlaylistsViewModel(songImporter, playlistImporter, playlistManager, songPlayer, favoritesManager, dialogService);
+        this.DirectoriesViewModel = new DirectoriesViewModel(playlistImporter, this._songPlayer, appConfigurator, favoritesManager);
+        this.PlaylistsViewModel = new PlaylistsViewModel(songImporter, playlistImporter, playlistManager, this._songPlayer, favoritesManager, dialogService);
         
-        this.CurrentSongViewModel = new CurrentSongViewModel(songPlayer);
+        this.CurrentSongViewModel = new CurrentSongViewModel(this._songPlayer);
         this.NavigationSidebarViewModel = new NavigationSidebarViewModel(this);
         
+        // Register for window-wide key up events to pause / resume the current song
+        EventManager.RegisterClassHandler(typeof(Window), Keyboard.KeyUpEvent, new KeyEventHandler(OnWindowWideKeyUp), true);
+
         // Init first shown main content view
         this.ChangeMainContent(MainContent.Directories);
     }
@@ -126,5 +136,25 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         OnPropertyChanged(nameof(IsFavoritesViewShown));
         OnPropertyChanged(nameof(IsDirectoriesViewShown));
         OnPropertyChanged(nameof(IsPlaylistsViewShown));
+    }
+    
+    // ==============
+    // WINDOW-GLOBAL KEY FUNCTIONS
+    // ==============
+
+    private void OnWindowWideKeyUp(object sender, KeyEventArgs e)
+    {
+        // Pause / Resume the current song on 'Space'
+        if (e.Key == Key.Space && this._songPlayer.CurrentSong != null)
+        {
+            if (this._songPlayer.IsPlaying)
+            {
+                this._songPlayer.Pause();
+            }
+            else
+            {
+                this._songPlayer.Resume();
+            }
+        }
     }
 }
