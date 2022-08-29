@@ -93,8 +93,9 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         this.CurrentSongViewModel = new CurrentSongViewModel(this._songPlayer);
         this.NavigationSidebarViewModel = new NavigationSidebarViewModel(this);
         
-        // Register for window-wide key up events to pause / resume the current song
-        EventManager.RegisterClassHandler(typeof(Window), Keyboard.KeyUpEvent, new KeyEventHandler(OnWindowWideKeyUp), true);
+        // Register for window-wide key events to pause / resume the current song.
+        // Use PreviewKeyDownEvent because only KeyDown is recognized when pressing a button on a bluetooth headset.
+        EventManager.RegisterClassHandler(typeof(Window), Keyboard.PreviewKeyDownEvent, new KeyEventHandler(OnWindowWideKeyEvent), true);
 
         // Init first shown main content view
         this.ChangeMainContent(MainContent.Directories);
@@ -142,10 +143,10 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
     // WINDOW-GLOBAL KEY FUNCTIONS
     // ==============
 
-    private void OnWindowWideKeyUp(object sender, KeyEventArgs e)
+    private void OnWindowWideKeyEvent(object sender, KeyEventArgs e)
     {
-        // Pause / Resume the current song on 'Space'
-        if (e.Key == Key.Space && this._songPlayer.CurrentSong != null)
+        // Pause / Resume the current song on 'Space' or on 'MediaPlayPause'
+        if (e.Key == Key.Space || e.Key == Key.MediaPlayPause)
         {
             if (this._songPlayer.IsPlaying)
             {
@@ -155,6 +156,18 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
             {
                 this._songPlayer.Resume();
             }
+        }
+        
+        // Next song
+        if (e.Key == Key.MediaNextTrack)
+        {
+            this._songPlayer.PlayNext();
+        }
+        
+        // Previous song
+        if (e.Key == Key.MediaPreviousTrack)
+        {
+            this._songPlayer.PlayPrevious();
         }
     }
 }
