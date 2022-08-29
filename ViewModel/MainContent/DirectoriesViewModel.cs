@@ -164,7 +164,7 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     // OPEN FROM EXTERN (NEEDED FOR FAVORITES)
     // ==============
     
-    public void OpenDirectoryFromExternal(string directoryPath)
+    public void OpenDirectoryFromExternal(string? directoryPath)
     {
         // Reset selected values
         this.SelectedSubDirectoryPath = null;
@@ -174,7 +174,11 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         this.SelectedPlaylistIndex = -1;
         
         // Load directory
-        this.LoadAsCurrentDirectory(directoryPath);
+        this.CurrentDirectoryPath = directoryPath;
+        if (directoryPath != null)
+        {
+            this.LoadAsCurrentDirectory(directoryPath);
+        }
     }
     
     // ==============

@@ -165,7 +165,7 @@ public class FavoritesViewModel : NotifyPropertyChangedImpl
             string fullPath = Path.GetFullPath(Path.Combine(pair.Key, pair.Value));
             
             // Open the directory
-            this._mainWindowViewModel.OpenDirectory(fullPath);
+            this._mainWindowViewModel.ChangeMainContent(MainWindowViewModel.MainContent.Directories, directoryPath: fullPath);
         }
     }
 
@@ -178,7 +178,7 @@ public class FavoritesViewModel : NotifyPropertyChangedImpl
             string relativePath = Path.Combine(pair.Key, pair.Value) + ".json";
             
             // Open the playlist
-            this._mainWindowViewModel.OpenPlaylist(relativePath);
+            this._mainWindowViewModel.ChangeMainContent(MainWindowViewModel.MainContent.Playlists, playlistPath: relativePath);
         }
     }
 }

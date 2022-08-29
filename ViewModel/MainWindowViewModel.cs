@@ -92,7 +92,7 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
     // CHANGE MAIN VIEW
     // ==============
 
-    public void ChangeMainContent(MainContent mainContent)
+    public void ChangeMainContent(MainContent mainContent, string? directoryPath = null, string? playlistPath = null)
     {
         // Hide all main content views
         this._isCurrentPlaylistViewShown = false;
@@ -111,9 +111,11 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
                 break;
             case MainContent.Directories:
                 this._isDirectoriesViewShown = true;
+                this.DirectoriesViewModel.OpenDirectoryFromExternal(directoryPath);
                 break;
             case MainContent.Playlists:
                 this._isPlaylistsViewShown = true;
+                this.PlaylistsViewModel.OpenPlaylistFromExternal(playlistPath);
                 break;
         }
         
@@ -122,17 +124,5 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         OnPropertyChanged(nameof(IsFavoritesViewShown));
         OnPropertyChanged(nameof(IsDirectoriesViewShown));
         OnPropertyChanged(nameof(IsPlaylistsViewShown));
-    }
-    
-    public void OpenDirectory(string directoryPath)
-    {
-        this.ChangeMainContent(MainContent.Directories);
-        this.DirectoriesViewModel.OpenDirectoryFromExternal(directoryPath);
-    }
-
-    public void OpenPlaylist(string playlistRelativePath)
-    {
-        this.ChangeMainContent(MainContent.Playlists);
-        this.PlaylistsViewModel.OpenPlaylistFromExternal(playlistRelativePath);
     }
 }

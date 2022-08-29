@@ -219,7 +219,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     // OPEN FROM EXTERN (NEEDED FOR FAVORITES)
     // ==============
 
-    public void OpenPlaylistFromExternal(string playlistRelativePath)
+    public void OpenPlaylistFromExternal(string? playlistRelativePath)
     {
         // Reset selected values
         this.SelectedSubDirectoryPath = null;
@@ -227,28 +227,36 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         
         this.SelectedPlaylist = null;
         this.SelectedPlaylistIndex = -1;
-        
-        // Get the full path of the directory in which the playlist is located
-        // => This path might be the playlist root directory or a sub directory of it
-        string fullPath = this._playlistManager.GetFullPath(playlistRelativePath);
-        int lastDirectorySeparatorIndex = fullPath.LastIndexOf(Path.DirectorySeparatorChar);
-        this.CurrentDirectoryPath = fullPath.Substring(0, lastDirectorySeparatorIndex);
-        
-        // Set the directory path to null if it is the playlist root directory
-        if (this.CurrentDirectoryPath.Equals(AppConfig.PlaylistsRootPath))
-        {
-            this.CurrentDirectoryPath = null;
-        }
-        
-        // Load the directory (when it is null, the playlist root directory is loaded)
-        this.LoadContents(this.CurrentDirectoryPath);
-        
-        // Get the actual playlist object
-        Playlist playlist = this.PlaylistsInDirectory.First(playlist => playlist.RelativePath == playlistRelativePath);
 
-        // Open the playlist as selected playlist
-        this.SelectedPlaylist = playlist;
-        this.OpenPlaylist();
+        if (playlistRelativePath == null)
+        {
+            this.IsPlaylistShown = false;
+            this.LoadContents(null); 
+        }
+        else
+        {
+            // Get the full path of the directory in which the playlist is located
+            // => This path might be the playlist root directory or a sub directory of it
+            string fullPath = this._playlistManager.GetFullPath(playlistRelativePath);
+            int lastDirectorySeparatorIndex = fullPath.LastIndexOf(Path.DirectorySeparatorChar);
+            this.CurrentDirectoryPath = fullPath.Substring(0, lastDirectorySeparatorIndex);
+
+            // Set the directory path to null if it is the playlist root directory
+            if (this.CurrentDirectoryPath.Equals(AppConfig.PlaylistsRootPath))
+            {
+                this.CurrentDirectoryPath = null;
+            }
+
+            // Load the directory (when it is null, the playlist root directory is loaded)
+            this.LoadContents(this.CurrentDirectoryPath);
+
+            // Get the actual playlist object
+            Playlist playlist = this.PlaylistsInDirectory.First(playlist => playlist.RelativePath == playlistRelativePath);
+
+            // Open the playlist as selected playlist
+            this.SelectedPlaylist = playlist;
+            this.OpenPlaylist();
+        }
     }
     
     // ==============
