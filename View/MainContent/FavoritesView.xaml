@@ -11,11 +11,6 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              BorderBrush="{StaticResource AppTurquoiseBorderBrush}" BorderThickness="0 1 0 0">
-    <UserControl.Resources>
-        <converter:FullPathToLastPathPartConverter x:Key="FullPathToLastPathPartConverter" />
-        <converter:PlaylistRelativePathForFavoritesGridConverter x:Key="PlaylistRelativePathForFavoritesGridConverter" />
-    </UserControl.Resources>
-    
     <Grid>
         <!-- Grid layout -->
         <Grid.RowDefinitions>
@@ -74,18 +69,7 @@
                 
                 <!-- Header of the group, which here is path of the root directory -->
                 <templates:PlaylistGrid.GroupStyle>
-                    <GroupStyle>
-                        <GroupStyle.HeaderTemplate>
-                            <DataTemplate>
-                                <!-- The group name is always called by binding to 'Name' no matter what the
-                                     real name of the Property grouped by is.
-                                     See: https://www.wpftutorial.net/datagrid.html#grouping -->
-                                <Label FontWeight="Bold" 
-                                       Background="{DynamicResource GroupHeaderBrush}" 
-                                       Content="{Binding Name}"/>
-                            </DataTemplate>
-                        </GroupStyle.HeaderTemplate>
-                    </GroupStyle>
+                    <GroupStyle ContainerStyle="{StaticResource DirectoryGroupStyle}" />
                 </templates:PlaylistGrid.GroupStyle>
                 
                 <!-- Show data as columns -->
@@ -105,8 +89,8 @@
             </Border>
             
             <templates:PlaylistGrid Grid.Row="3" 
-                                ItemsSource="{Binding PlaylistPaths}"
-                                SelectedItem="{Binding  SelectedPlaylistPath}"
+                                ItemsSource="{Binding GroupedPlaylistPairs}"
+                                SelectedItem="{Binding  SelectedPlaylistPair}"
                                 HeadersVisibility="None">
                 <!-- 
                     Use Interaction.Triggers to bind the mouse events to commands.
@@ -123,9 +107,14 @@
                     <KeyBinding Key="Enter" Command="{Binding OpenPlaylistCommand}" />
                 </templates:PlaylistGrid.InputBindings>
                 
+                <!-- Header of the group, which here is path of the root directory -->
+                <templates:PlaylistGrid.GroupStyle>
+                    <GroupStyle ContainerStyle="{StaticResource DirectoryGroupStyle}" />
+                </templates:PlaylistGrid.GroupStyle>
+                
                 <!-- Show data as columns -->
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="*" Binding="{Binding Converter={StaticResource PlaylistRelativePathForFavoritesGridConverter}}" />
+                    <DataGridTextColumn Width="*" Binding="{Binding Value}" />
                 </DataGrid.Columns>
             </templates:PlaylistGrid>
         </Grid>

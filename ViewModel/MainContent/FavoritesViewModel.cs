@@ -19,6 +19,7 @@ public class FavoritesViewModel : NotifyPropertyChangedImpl
     private readonly MainWindowViewModel _mainWindowViewModel;
 
     private ListCollectionView _groupedDirectoryPairs;
+    private ListCollectionView _groupedPlaylistPairs;
 
     // ==============
     // PROPERTIES
@@ -30,13 +31,18 @@ public class FavoritesViewModel : NotifyPropertyChangedImpl
         get => _groupedDirectoryPairs; 
         set => SetField(ref _groupedDirectoryPairs, value);
     }
-
-    public ObservableCollection<string> PlaylistPaths => _favoritesManager.FavoritePlaylistRelativePaths;
+    
+    // Use pairs of <playlist directory, playlist name> to group the playlists
+    public ListCollectionView GroupedPlaylistPairs
+    {
+        get => _groupedPlaylistPairs;
+        set => SetField(ref _groupedPlaylistPairs, value);
+    }
 
     // A pair <root path, sub path> of the selected directory. The paths have to be combined to get a full path.
     public KeyValuePair<string, string>? SelectedDirectoryPair { get; set; }
 
-    public string? SelectedPlaylistPath { get; set; }
+    public KeyValuePair<string, string>? SelectedPlaylistPair { get; set; }
     
     // Commands
     
@@ -58,9 +64,12 @@ public class FavoritesViewModel : NotifyPropertyChangedImpl
         this.OpenDirectoryCommand = new DelegateCommand(this.OpenDirectory);
         this.OpenPlaylistCommand = new DelegateCommand(this.OpenPlaylist);
         
-        // Init the Dictionary with <full path, relative path> entries where the relative paths are seen from the
-        // music root directories
+        // Init the directory dictionary with <full path, relative path> entries where the relative paths are
+        // seen from the music root directories
         this._groupedDirectoryPairs = this.InitGroupedDirectoryPairs();
+        
+        // Init the playlist dictionary with <playlist directory, playlist name> entries
+        this._groupedPlaylistPairs = this.InitGroupedPlaylistPairs();
         
         // Update the relative paths when the music directories or the favorite directories are changed
         this._appConfigurator.AppConfig.MusicDirectories.CollectionChanged += UpdateRelativePaths;
@@ -98,6 +107,42 @@ public class FavoritesViewModel : NotifyPropertyChangedImpl
         return groupedDirectoryPairs;
     }
     
+    private ListCollectionView InitGroupedPlaylistPairs()
+    {
+        // Create pairs <playlist directory, playlist name>
+        List<KeyValuePair<string, string>> pathGroups = new();
+        
+        ObservableCollection<string> playlistRelativePaths = this._favoritesManager.FavoritePlaylistRelativePaths;
+        foreach (var relativePath in playlistRelativePaths)
+        {
+            // Init result variables for the case that there is only the playlist name without a directory
+            string directory = "";
+            string playlistName = Path.GetFileNameWithoutExtension(relativePath);
+            
+            // Get the directory name if the path contains a directory
+            int lastDirectorySeparatorIndex = relativePath.LastIndexOf(Path.DirectorySeparatorChar);
+            if (lastDirectorySeparatorIndex != -1)
+            {
+                directory = relativePath.Substring(0, lastDirectorySeparatorIndex);
+            }
+            
+            // Create the pair and add it to the result list
+            KeyValuePair<string, string> pair = new(directory, playlistName);
+            pathGroups.Add(pair);
+        }
+        
+        // Sort by directory paths
+        SortUtil.SortWithoutNewCollection(pathGroups, pair => pair.Key);
+        
+        // Group the pairs by their key, i.e. group them by the playlist directory.
+        // See: https://www.wpftutorial.net/datagrid.html#grouping
+        ListCollectionView groupedPlaylistPairs = new ListCollectionView(pathGroups);
+        PropertyGroupDescription groupDescription = new PropertyGroupDescription("Key");
+        groupedPlaylistPairs.GroupDescriptions?.Add(groupDescription);
+
+        return groupedPlaylistPairs;
+    }
+    
     // ==============
     // UPDATE DIRECTORY PATHS
     // ==============
@@ -126,9 +171,14 @@ public class FavoritesViewModel : NotifyPropertyChangedImpl
 
     private void OpenPlaylist()
     {
-        if (this.SelectedPlaylistPath != null)
+        if (this.SelectedPlaylistPair != null)
         {
-            this._mainWindowViewModel.OpenPlaylist(this.SelectedPlaylistPath);
+            // Get the relative path from of the playlist from the <playlist directory, playlist name> pair
+            KeyValuePair<string, string> pair = this.SelectedPlaylistPair.Value;
+            string relativePath = Path.Combine(pair.Key, pair.Value) + ".json";
+            
+            // Open the playlist
+            this._mainWindowViewModel.OpenPlaylist(relativePath);
         }
     }
 }
