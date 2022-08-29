@@ -58,10 +58,18 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             
             // Update the directory name from the playlist root path
             // => The directory '<Full path to root>/<dir1>/<dir2>' will result in '<dir1>/<dir2>'
-            this.CurrentDirectoryNameFromRoot = _currentDirectoryPath != null ? Path.GetRelativePath(AppConfig.PlaylistsRootPath, _currentDirectoryPath) : null;
+            if (_currentDirectoryPath != null)
+            {
+                // Set the relative path seen from the playlist root path.
+                // If the current directory is the root directory, set the name to null to avoid showing "." as name
+                this.CurrentDirectoryNameFromRoot = !_currentDirectoryPath.Equals(AppConfig.PlaylistsRootPath)
+                    ? Path.GetRelativePath(AppConfig.PlaylistsRootPath, _currentDirectoryPath)
+                    : null;
+            }
         } 
     }
 
+    // Is set when the current directory path changes
     public string? CurrentDirectoryNameFromRoot
     {
         get => _currentDirectoryNameFromRoot;
@@ -191,6 +199,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
         this._subDirectoryPaths = new ObservableCollection<string>();
         this._playlistsInDirectory = new ObservableCollection<Playlist>();
+        
+        this._selectedPlaylistSortOrder = PlaylistSortOrder.Alphabetical;
 
         // Init commands
         this.GoBackCommand = new DelegateCommand(this.GoBack);
@@ -210,9 +220,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.RemoveFromFavoritesCommand = new DelegateCommand(this.RemoveFromFavorites);
 
         // Set elements that are shown first
-        this._isPlaylistShown = false;
-        this._selectedPlaylistSortOrder = PlaylistSortOrder.Alphabetical;
-        this.LoadContents(null);
+        this.LoadAsCurrentDirectory(null);
     }
     
     // ==============
@@ -221,39 +229,36 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
 
     public void OpenPlaylistFromExternal(string? playlistRelativePath)
     {
-        // Reset selected values
+        // Reset selected values.
         this.SelectedSubDirectoryPath = null;
         this.SelectedSubDirectoryIndex = -1;
         
         this.SelectedPlaylist = null;
         this.SelectedPlaylistIndex = -1;
-
-        if (playlistRelativePath == null)
+        
+        // Get the full directory path. If it is null, the root directory should be opened.
+        string? fullDirectoryPath = null;
+        if (playlistRelativePath != null)
         {
-            this.IsPlaylistShown = false;
-            this.LoadContents(null); 
-        }
-        else
-        {
-            // Get the full path of the directory in which the playlist is located
-            // => This path might be the playlist root directory or a sub directory of it
+            // Get the full path of the directory in which the playlist is located.
+            // => This path will be the playlist root directory or a sub directory of it.
             string fullPath = this._playlistManager.GetFullPath(playlistRelativePath);
             int lastDirectorySeparatorIndex = fullPath.LastIndexOf(Path.DirectorySeparatorChar);
-            this.CurrentDirectoryPath = fullPath.Substring(0, lastDirectorySeparatorIndex);
+            fullDirectoryPath = fullPath.Substring(0, lastDirectorySeparatorIndex);
+        }
 
-            // Set the directory path to null if it is the playlist root directory
-            if (this.CurrentDirectoryPath.Equals(AppConfig.PlaylistsRootPath))
-            {
-                this.CurrentDirectoryPath = null;
-            }
+        // Load the directory. When it is null, the playlist root directory is loaded.
+        this.LoadAsCurrentDirectory(fullDirectoryPath);
 
-            // Load the directory (when it is null, the playlist root directory is loaded)
-            this.LoadContents(this.CurrentDirectoryPath);
-
-            // Get the actual playlist object
+        // If the given path is not null, a playlist should be opened.
+        if (playlistRelativePath != null)
+        {
+            // Get the correct playlist object.
+            // This method needs to be called after loading the current directory because the collection with the
+            // playlists in the directory will only be initialized in this case.
             Playlist playlist = this.PlaylistsInDirectory.First(playlist => playlist.RelativePath == playlistRelativePath);
 
-            // Open the playlist as selected playlist
+            // Open the playlist as selected playlist.
             this.SelectedPlaylist = playlist;
             this.OpenPlaylist();
         }
@@ -285,17 +290,20 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     // CHANGE DIRECTORY
     // ==============
     
-    private void LoadContents(string? directoryPath)
+    private void LoadAsCurrentDirectory(string? directoryPath)
     {
         // Use playlist root directory if no directory path is specified
-        directoryPath ??= AppConfig.PlaylistsRootPath;
+        this.CurrentDirectoryPath = directoryPath ?? AppConfig.PlaylistsRootPath;
+        
+        // Set playlist flag to false because a directory is shown
+        this.IsPlaylistShown = false;
 
         // Load sub directories
-        string[] subDirectories = Directory.GetDirectories(directoryPath);
+        string[] subDirectories = Directory.GetDirectories(this.CurrentDirectoryPath);
         this.SubDirectoryPaths = new ObservableCollection<string>(subDirectories);
 
         // Load playlists
-        string[] playlistFiles = Directory.GetFiles(directoryPath, "*.json");
+        string[] playlistFiles = Directory.GetFiles(this.CurrentDirectoryPath, "*.json");
         
         ObservableCollection<Playlist> importedPlaylists = new ObservableCollection<Playlist>();
         foreach (var filePath in playlistFiles)
@@ -329,7 +337,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             this.CurrentDirectoryPath = AppConfig.PlaylistsRootPath.Equals(parentPath) ? null : parentPath;
             
             // Reload GUI
-            this.LoadContents(this.CurrentDirectoryPath);
+            this.LoadAsCurrentDirectory(this.CurrentDirectoryPath);
         }
     }
     
@@ -339,8 +347,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.CurrentDirectoryPath = null;
             
         // Reload GUI
-        this.IsPlaylistShown = false;
-        this.LoadContents(this.CurrentDirectoryPath);
+        this.LoadAsCurrentDirectory(this.CurrentDirectoryPath);
     }
 
     private void AddSubDirectory()
@@ -388,7 +395,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         if (Directory.Exists(this.SelectedSubDirectoryPath))
         {
             this.CurrentDirectoryPath = this.SelectedSubDirectoryPath;
-            this.LoadContents(this.SelectedSubDirectoryPath);
+            this.LoadAsCurrentDirectory(this.SelectedSubDirectoryPath);
         }
     }
 

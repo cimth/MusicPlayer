@@ -94,7 +94,7 @@
                 <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
                     
                     <!-- Go back. Only show if not in playlist root directory -->
-                    <WrapPanel Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
+                    <WrapPanel Visibility="{Binding CurrentDirectoryNameFromRoot, Converter={StaticResource NullToVisibilityConverter}}">
                         <!-- Back to playlist root directory  -->
                         <Button Command="{Binding GoBackToRootCommand}">
                             <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/home-outline.svg}" />
