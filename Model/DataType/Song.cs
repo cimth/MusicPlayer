@@ -1,6 +1,6 @@
 namespace Model.DataType;
 
-public class Song 
+public class Song : ICloneable
 {
     // ==============
     // PROPERTIES
@@ -26,5 +26,14 @@ public class Song
         this.Artists = artists;
         this.TrackNumber = trackNumber;
         this.Duration = duration;
+    }
+    
+    // ==============
+    // CLONE
+    // ==============
+
+    public object Clone()
+    {
+        return this.MemberwiseClone();
     }
 }

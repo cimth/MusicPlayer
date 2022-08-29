@@ -167,6 +167,11 @@
                     <Button ToolTip="{DynamicResource Str_Remove}" Command="{Binding RemovePlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
                     </Button>
+                    
+                    <!-- Duplicate playlist -->
+                    <Button ToolTip="{DynamicResource Str_Duplicate}" Command="{Binding DuplicatePlaylistCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/duplicate-outline.svg}" />
+                    </Button>
                 </StackPanel>
             </Border>
             

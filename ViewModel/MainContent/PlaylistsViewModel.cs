@@ -173,6 +173,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand RemovePlaylistCommand { get; }
     
+    public ICommand DuplicatePlaylistCommand { get; }
+    
     public ICommand AddSongToPlaylistCommand { get; }
     
     public ICommand RemoveSongFromPlaylistCommand { get; }
@@ -212,6 +214,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.StartPlaylistBeginningWithTheSelectedSongCommand = new DelegateCommand(this.StartPlaylistBeginningWithTheSelectedSong);
         this.AddPlaylistCommand = new DelegateCommand(this.AddPlaylist);
         this.RemovePlaylistCommand = new DelegateCommand(this.RemovePlaylist);
+        this.DuplicatePlaylistCommand = new DelegateCommand(this.DuplicatePlaylist);
         this.AddSongToPlaylistCommand = new DelegateCommand(this.AddSongToPlaylist);
         this.RemoveSongFromPlaylistCommand = new DelegateCommand(this.RemoveSongFromPlaylist);
         this.ChangePlaylistSortOrderCommand = new DelegateCommand(this.ChangePlaylistSortOrder);
@@ -462,6 +465,45 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             
             // Re-assign the index to select the next item (or the last one if the removed item was the last one)
             this.SelectedPlaylistIndex = origSelectedIndex < this.PlaylistsInDirectory.Count ? origSelectedIndex : this.PlaylistsInDirectory.Count - 1;
+        }
+    }
+    
+    private void DuplicatePlaylist()
+    {
+        // Stop if no playlist is selected
+        if (this.SelectedPlaylist == null)
+        {
+            return;
+        }
+        
+        // Open dialog to request the duplicate playlist name
+        DialogService dialogService = new DialogService();
+        string request = LanguageUtil.GiveLocalizedString("Str_WhichNameForPlaylist");
+        InputDialogViewModel dialogViewModel = new InputDialogViewModel(request);
+        bool? result = dialogService.ShowInputDialog(dialogViewModel);
+        
+        // Add the playlist if the dialog was successful
+        if (result != null && result.Value)
+        {
+            // Copy the Song objects so that the playlist is not referring to the same song objects.
+            // When using the same song objects, the current played song will be shown in both the original and the
+            // copied playlist.
+            ObservableCollection<Song> copiedSongs = new ObservableCollection<Song>();
+            foreach (var song in this.SelectedPlaylist.Songs)
+            {
+                copiedSongs.Add((Song) song.Clone());
+            }
+
+            // Create playlist
+            string playlistName = dialogViewModel.InputValue;
+            string relativePath = this._playlistManager.GetRelativePathForNewPlaylist(this.CurrentDirectoryPath, playlistName);
+            Playlist playlist = new Playlist(playlistName, copiedSongs, this.SelectedPlaylist.SortOrder, relativePath);
+
+            this._playlistManager.SaveInPlaylistFile(playlist);
+            
+            // Update GUI
+            this.PlaylistsInDirectory.Add(playlist);
+            this.PlaylistsInDirectory = new ObservableCollection<Playlist>(this.PlaylistsInDirectory.OrderBy(p => p.Name));
         }
     }
     

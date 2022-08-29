@@ -53,6 +53,10 @@
       <Resource Include="Resources\Icons\home-outline.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <None Remove="Resources\Icons\duplicate-outline.svg" />
+      <Resource Include="Resources\Icons\duplicate-outline.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
 </Project>

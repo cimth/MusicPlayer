@@ -17,6 +17,7 @@
     <system:String x:Key="Str_Cancel">Cancel</system:String>
     <system:String x:Key="Str_Add">Add</system:String>
     <system:String x:Key="Str_Remove">Remove</system:String>
+    <system:String x:Key="Str_Duplicate">Duplicate</system:String>
     <system:String x:Key="Str_Back">Back</system:String>
     <system:String x:Key="Str_SortPlaylist">Sort playlist:</system:String>
     <system:String x:Key="Str_PleaseSelect">Please select ...</system:String>
