@@ -368,8 +368,18 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         // Add the directory if the dialog was successful
         if (result != null && result.Value)
         {
-            // Create directory
+            // Show error dialog if the directory name already exists in the current directory.
             string directoryName = dialogViewModel.InputValue;
+            string targetPathEnding = Path.DirectorySeparatorChar + directoryName;
+            if (this.SubDirectoryPaths.Any(path => path.ToLower().EndsWith(targetPathEnding.ToLower())))
+            {
+                string errorMessage = LanguageUtil.GiveLocalizedString("Str_DirectoryAlreadyExists");
+                ErrorDialogViewModel errorViewModel = new ErrorDialogViewModel(errorMessage);
+                this._dialogService.ShowErrorDialog(errorViewModel);
+                return;
+            }
+            
+            // Create directory
             string fullPath = this._playlistManager.CreatePlaylistDirectory(this.CurrentDirectoryPath, directoryName);
             
             // Update GUI
@@ -436,8 +446,17 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         // Add the playlist if the dialog was successful
         if (result != null && result.Value)
         {
-            // Create playlist
+            // Show error dialog if the playlist name already exists in the current directory.
             string playlistName = dialogViewModel.InputValue;
+            if (this.PlaylistsInDirectory.Any(playlist => playlist.Name.ToLower().Equals(playlistName.ToLower())))
+            {
+                string errorMessage = LanguageUtil.GiveLocalizedString("Str_PlaylistNameAlreadyUsed");
+                ErrorDialogViewModel errorViewModel = new ErrorDialogViewModel(errorMessage);
+                this._dialogService.ShowErrorDialog(errorViewModel);
+                return;
+            }
+            
+            // Create playlist
             string relativePath = this._playlistManager.GetRelativePathForNewPlaylist(this.CurrentDirectoryPath, playlistName);
             Playlist playlist = new Playlist(playlistName, relativePath);
             this._playlistManager.SaveInPlaylistFile(playlist);
@@ -487,6 +506,16 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         // Add the playlist if the dialog was successful
         if (result != null && result.Value)
         {
+            // Show error dialog if the playlist name already exists in the current directory.
+            string playlistName = dialogViewModel.InputValue;
+            if (this.PlaylistsInDirectory.Any(playlist => playlist.Name.ToLower().Equals(playlistName.ToLower())))
+            {
+                string errorMessage = LanguageUtil.GiveLocalizedString("Str_PlaylistNameAlreadyUsed");
+                ErrorDialogViewModel errorViewModel = new ErrorDialogViewModel(errorMessage);
+                this._dialogService.ShowErrorDialog(errorViewModel);
+                return;
+            }
+            
             // Copy the Song objects so that the playlist is not referring to the same song objects.
             // When using the same song objects, the current played song will be shown in both the original and the
             // copied playlist.
@@ -497,7 +526,6 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             }
 
             // Create playlist
-            string playlistName = dialogViewModel.InputValue;
             string relativePath = this._playlistManager.GetRelativePathForNewPlaylist(this.CurrentDirectoryPath, playlistName);
             Playlist playlist = new Playlist(playlistName, copiedSongs, this.SelectedPlaylist.SortOrder, relativePath);
 
@@ -526,8 +554,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             // Show error dialog if the directory is not empty.
             if (Directory.GetDirectories(dialog.SelectedPath).Length > 0 || Directory.GetFiles(dialog.SelectedPath).Length > 0)
             {
-                string request = LanguageUtil.GiveLocalizedString("Str_TargetDirectoryIsNotEmpty");
-                ErrorDialogViewModel dialogViewModel = new ErrorDialogViewModel(request);
+                string errorMessage = LanguageUtil.GiveLocalizedString("Str_TargetDirectoryIsNotEmpty");
+                ErrorDialogViewModel dialogViewModel = new ErrorDialogViewModel(errorMessage);
                 this._dialogService.ShowErrorDialog(dialogViewModel);
                 return;
             }

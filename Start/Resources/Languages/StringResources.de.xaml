@@ -6,6 +6,8 @@
     
     <system:String x:Key="Str_Error">Fehler!</system:String>
     <system:String x:Key="Str_TargetDirectoryIsNotEmpty">Das Ziel-Verzeichnis muss leer sein.</system:String>
+    <system:String x:Key="Str_PlaylistAlreadyExists">Es existiert bereits eine Playlist mit dem angegebenen Namen in dem aktuellen Verzeichnis.</system:String>
+    <system:String x:Key="Str_DirectoryAlreadyExists">Es existiert bereits ein Unterverzeichnis mit den angegebenen Namen in dem aktuellen Verzeichnis.</system:String>
     
     <system:String x:Key="Str_Alphabetical">Alphabetisch</system:String>
     <system:String x:Key="Str_Individual">Individuell</system:String>
