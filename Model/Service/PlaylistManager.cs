@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -96,6 +96,25 @@ public class PlaylistManager
         {
             string fullPath = this.GetFullPath(playlist.RelativePath);
             File.Delete(fullPath);
+        }
+    }
+    
+    // ==============
+    // EXPORT
+    // ==============
+
+    public void Export(string targetDirectoryPath, Playlist selectedPlaylist)
+    {
+        Debug.Assert(Directory.Exists(targetDirectoryPath));
+
+        foreach (var song in selectedPlaylist.Songs)
+        {
+            if (File.Exists(song.FilePath))
+            {
+                string songFileNameWithExtension = Path.GetFileName(song.FilePath);
+                string targetSongPath = Path.GetFullPath(Path.Combine(targetDirectoryPath, songFileNameWithExtension));
+                File.Copy(song.FilePath, targetSongPath);
+            }
         }
     }
     

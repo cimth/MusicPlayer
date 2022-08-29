@@ -1,4 +1,5 @@
 using Common;
+using Dialog;
 using Model.Service;
 using ViewModel.MainContent;
 
@@ -74,12 +75,13 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         SongPlayer songPlayer = new SongPlayer(appConfigurator);
         PlaylistManager playlistManager = new PlaylistManager();
         FavoritesManager favoritesManager = new FavoritesManager();
+        DialogService dialogService = new DialogService();
 
         // Init view models
         this.CurrentPlaylistViewModel = new CurrentPlaylistViewModel(songPlayer);
         this.FavoritesViewModel = new FavoritesViewModel(appConfigurator, favoritesManager, this);
         this.DirectoriesViewModel = new DirectoriesViewModel(playlistImporter, songPlayer, appConfigurator, favoritesManager);
-        this.PlaylistsViewModel = new PlaylistsViewModel(songImporter, playlistImporter, playlistManager, songPlayer, favoritesManager);
+        this.PlaylistsViewModel = new PlaylistsViewModel(songImporter, playlistImporter, playlistManager, songPlayer, favoritesManager, dialogService);
         
         this.CurrentSongViewModel = new CurrentSongViewModel(songPlayer);
         this.NavigationSidebarViewModel = new NavigationSidebarViewModel(this);

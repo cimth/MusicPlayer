@@ -4,6 +4,9 @@
     <system:String x:Key="Str_WindowTitle">MusicPlayer</system:String>
     <system:String x:Key="Str_InputDialog">Input Dialog</system:String>
     
+    <system:String x:Key="Str_Error">Error!</system:String>
+    <system:String x:Key="Str_TargetDirectoryIsNotEmpty">The target directory has to be empty.</system:String>
+    
     <system:String x:Key="Str_Alphabetical">Alphabetical</system:String>
     <system:String x:Key="Str_Individual">Individual</system:String>
     <system:String x:Key="Str_TitleNumber">Title number</system:String>

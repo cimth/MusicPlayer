@@ -172,6 +172,11 @@
                     <Button ToolTip="{DynamicResource Str_Duplicate}" Command="{Binding DuplicatePlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/duplicate-outline.svg}" />
                     </Button>
+                    
+                    <!-- Export playlist -->
+                    <Button ToolTip="{DynamicResource Str_Export}" Command="{Binding ExportPlaylistCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/share-outline.svg}" />
+                    </Button>
                 </StackPanel>
             </Border>
             

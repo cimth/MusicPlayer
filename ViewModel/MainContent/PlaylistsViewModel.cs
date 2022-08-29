@@ -23,6 +23,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     private readonly PlaylistManager _playlistManager;
     private readonly SongPlayer _songPlayer;
     private readonly FavoritesManager _favoritesManager;
+    private readonly DialogService _dialogService;
 
     private string? _currentDirectoryPath;
     private string? _currentDirectoryNameFromRoot;
@@ -175,6 +176,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand DuplicatePlaylistCommand { get; }
     
+    public ICommand ExportPlaylistCommand { get; }
+    
     public ICommand AddSongToPlaylistCommand { get; }
     
     public ICommand RemoveSongFromPlaylistCommand { get; }
@@ -191,13 +194,14 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     // INITIALIZATION 
     // ==============
 
-    public PlaylistsViewModel(SongImporter songImporter, PlaylistImporter playlistImporter, PlaylistManager playlistManager, SongPlayer songPlayer, FavoritesManager favoritesManager)
+    public PlaylistsViewModel(SongImporter songImporter, PlaylistImporter playlistImporter, PlaylistManager playlistManager, SongPlayer songPlayer, FavoritesManager favoritesManager, DialogService dialogService)
     {
         this._songImporter = songImporter;
         this._playlistImporter = playlistImporter;
         this._playlistManager = playlistManager;
         this._songPlayer = songPlayer;
         this._favoritesManager = favoritesManager;
+        this._dialogService = dialogService;
 
         this._subDirectoryPaths = new ObservableCollection<string>();
         this._playlistsInDirectory = new ObservableCollection<Playlist>();
@@ -215,6 +219,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.AddPlaylistCommand = new DelegateCommand(this.AddPlaylist);
         this.RemovePlaylistCommand = new DelegateCommand(this.RemovePlaylist);
         this.DuplicatePlaylistCommand = new DelegateCommand(this.DuplicatePlaylist);
+        this.ExportPlaylistCommand = new DelegateCommand(this.ExportPlaylist);
         this.AddSongToPlaylistCommand = new DelegateCommand(this.AddSongToPlaylist);
         this.RemoveSongFromPlaylistCommand = new DelegateCommand(this.RemoveSongFromPlaylist);
         this.ChangePlaylistSortOrderCommand = new DelegateCommand(this.ChangePlaylistSortOrder);
@@ -356,10 +361,9 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     private void AddSubDirectory()
     {
         // Open dialog to request the sub directory name
-        DialogService dialogService = new DialogService();
         string request = LanguageUtil.GiveLocalizedString("Str_WhichNameForDirectory");
         InputDialogViewModel dialogViewModel = new InputDialogViewModel(request);
-        bool? result = dialogService.ShowInputDialog(dialogViewModel);
+        bool? result = this._dialogService.ShowInputDialog(dialogViewModel);
         
         // Add the directory if the dialog was successful
         if (result != null && result.Value)
@@ -425,10 +429,9 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     private void AddPlaylist()
     {
         // Open dialog to request the sub directory name
-        DialogService dialogService = new DialogService();
         string request = LanguageUtil.GiveLocalizedString("Str_WhichNameForPlaylist");
         InputDialogViewModel dialogViewModel = new InputDialogViewModel(request);
-        bool? result = dialogService.ShowInputDialog(dialogViewModel);
+        bool? result = this._dialogService.ShowInputDialog(dialogViewModel);
         
         // Add the playlist if the dialog was successful
         if (result != null && result.Value)
@@ -477,10 +480,9 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         }
         
         // Open dialog to request the duplicate playlist name
-        DialogService dialogService = new DialogService();
         string request = LanguageUtil.GiveLocalizedString("Str_WhichNameForPlaylist");
         InputDialogViewModel dialogViewModel = new InputDialogViewModel(request);
-        bool? result = dialogService.ShowInputDialog(dialogViewModel);
+        bool? result = this._dialogService.ShowInputDialog(dialogViewModel);
         
         // Add the playlist if the dialog was successful
         if (result != null && result.Value)
@@ -504,6 +506,34 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             // Update GUI
             this.PlaylistsInDirectory.Add(playlist);
             this.PlaylistsInDirectory = new ObservableCollection<Playlist>(this.PlaylistsInDirectory.OrderBy(p => p.Name));
+        }
+    }
+    
+    private void ExportPlaylist()
+    {
+        // Stop if no playlist is selected
+        if (this.SelectedPlaylist == null)
+        {
+            return;
+        }
+        
+        // Open dialog to select the target directory for the export
+        FolderBrowserDialog dialog = new FolderBrowserDialog();
+        DialogResult dialogResult = dialog.ShowDialog();
+
+        if (dialogResult == DialogResult.OK && Directory.Exists(dialog.SelectedPath))
+        {
+            // Show error dialog if the directory is not empty.
+            if (Directory.GetDirectories(dialog.SelectedPath).Length > 0 || Directory.GetFiles(dialog.SelectedPath).Length > 0)
+            {
+                string request = LanguageUtil.GiveLocalizedString("Str_TargetDirectoryIsNotEmpty");
+                ErrorDialogViewModel dialogViewModel = new ErrorDialogViewModel(request);
+                this._dialogService.ShowErrorDialog(dialogViewModel);
+                return;
+            }
+            
+            // Copy the playlist's songs to the target directory.
+            this._playlistManager.Export(dialog.SelectedPath, this.SelectedPlaylist);
         }
     }
     
