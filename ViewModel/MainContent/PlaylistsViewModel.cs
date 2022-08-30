@@ -602,9 +602,16 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             // Save index to re-assign it after the GUI update
             int origSelectedIndex = this.SelectedSongIndex;
             
+            // If the Song which should be removed is the current song, play the next song because else the
+            // song would still continue playing even if it is removed.
+            if (this.SelectedPlaylist.Songs[this.SelectedSongIndex] == this._songPlayer.CurrentSong)
+            {
+                this._songPlayer.PlayNext();
+            }
+            
             // Update playlist
             this.SelectedPlaylist.Songs.RemoveAt(this.SelectedSongIndex);
-            
+
             // Save changes
             this._playlistManager.SaveInPlaylistFile(this.SelectedPlaylist);
             
