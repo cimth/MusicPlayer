@@ -6,6 +6,7 @@
       <Nullable>enable</Nullable>
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <UseWPF>true</UseWPF>
+      <ApplicationIcon>Resources\AppIcon\MusicPlayer.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
