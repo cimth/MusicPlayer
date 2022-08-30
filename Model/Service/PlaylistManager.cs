@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -121,13 +122,44 @@ public class PlaylistManager
     {
         Debug.Assert(Directory.Exists(targetDirectoryPath));
 
+        // Get the formatter for the index string. For example, 'D3' means each number is filled with leading zeros
+        // like 001, 002 and so on.
+        int digitCount = selectedPlaylist.Songs.Count.ToString().Length;
+        String digitFormat = $"D{digitCount}";
+        
+        int songIndexOneBased = 1;
         foreach (var song in selectedPlaylist.Songs)
         {
             if (File.Exists(song.FilePath))
             {
-                string songFileNameWithExtension = Path.GetFileName(song.FilePath);
-                string targetSongPath = Path.GetFullPath(Path.Combine(targetDirectoryPath, songFileNameWithExtension));
+                // Get the file name including the extension according to the sort order of the playlist.
+                // If not considering the sort order, the files in the target directory might be in another order
+                // as in the playlist.
+                string songFileExtension = Path.GetExtension(song.FilePath);
+                
+                string targetSongFile;
+                switch (selectedPlaylist.SortOrder)
+                {
+                    case PlaylistSortOrder.Alphabetical:
+                        // Just use the title because directories are sorted alphabetical by default
+                        targetSongFile = $"{song.Title}{songFileExtension}";
+                        break;
+                    case PlaylistSortOrder.Individual:
+                    case PlaylistSortOrder.TitleNumber:
+                        // Set index as prefix
+                        string prefix = songIndexOneBased.ToString(digitFormat);
+                        targetSongFile = $"{prefix} {song.Title}{songFileExtension}";
+                        break;
+                    default:
+                        throw new InvalidEnumArgumentException();
+                }
+                
+                // Copy the song to the computed target path.
+                string targetSongPath = Path.GetFullPath(Path.Combine(targetDirectoryPath, targetSongFile));
                 File.Copy(song.FilePath, targetSongPath);
+                
+                // Increase the index
+                songIndexOneBased++;
             }
         }
     }
