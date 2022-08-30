@@ -170,7 +170,7 @@
                     
                     <!-- Duplicate playlist -->
                     <Button ToolTip="{DynamicResource Str_Duplicate}" Command="{Binding DuplicatePlaylistCommand}">
-                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/duplicate-outline.svg}" />
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/documents-outline.svg}" />
                     </Button>
                     
                     <!-- Export playlist -->

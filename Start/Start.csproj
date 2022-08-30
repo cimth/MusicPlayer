@@ -53,12 +53,12 @@
       <Resource Include="Resources\Icons\home-outline.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <None Remove="Resources\Icons\duplicate-outline.svg" />
-      <Resource Include="Resources\Icons\duplicate-outline.svg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
       <None Remove="Resources\Icons\share-outline.svg" />
       <Resource Include="Resources\Icons\share-outline.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Resources\Icons\documents-outline.svg" />
+      <Resource Include="Resources\Icons\documents-outline.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
     </ItemGroup>
