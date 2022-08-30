@@ -71,9 +71,11 @@ public class FavoritesViewModel : NotifyPropertyChangedImpl
         // Init the playlist dictionary with <playlist directory, playlist name> entries
         this._groupedPlaylistPairs = this.InitGroupedPlaylistPairs();
         
-        // Update the relative paths when the music directories or the favorite directories are changed
+        // Update the collections when the music directories, the favorite directories or the favorite playlists
+        // are changed
         this._appConfigurator.AppConfig.MusicDirectories.CollectionChanged += UpdateRelativePaths;
         this._favoritesManager.FavoriteDirectoryPaths.CollectionChanged += UpdateRelativePaths;
+        this._favoritesManager.FavoritePlaylistRelativePaths.CollectionChanged += UpdateRelativePaths;
     }
     
     private ListCollectionView InitGroupedDirectoryPairs()
@@ -144,12 +146,13 @@ public class FavoritesViewModel : NotifyPropertyChangedImpl
     }
     
     // ==============
-    // UPDATE DIRECTORY PATHS
+    // UPDATE PATHS
     // ==============
 
     private void UpdateRelativePaths(object? sender, NotifyCollectionChangedEventArgs e)
     {
         this.GroupedDirectoryPairs = this.InitGroupedDirectoryPairs();
+        this.GroupedPlaylistPairs = this.InitGroupedPlaylistPairs();
     }
     
     // ==============
