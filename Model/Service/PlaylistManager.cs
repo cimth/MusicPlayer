@@ -9,6 +9,20 @@ namespace Model.Service;
 public class PlaylistManager
 {
     // ==============
+    // INITIALIZATION
+    // ==============
+
+    public PlaylistManager()
+    {
+        // Create the playlist root directory if it does not exist.
+        // The root directory has to exist for the PlaylistViewModel to be correctly initialized.
+        if (!Directory.Exists(AppConfig.PlaylistsRootPath))
+        {
+            Directory.CreateDirectory(AppConfig.PlaylistsRootPath);
+        }
+    }
+    
+    // ==============
     // PUBLIC METHODS 
     // ==============
     
