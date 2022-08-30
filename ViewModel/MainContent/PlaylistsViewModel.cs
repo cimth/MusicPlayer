@@ -373,9 +373,10 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             string targetPathEnding = Path.DirectorySeparatorChar + directoryName;
             if (this.SubDirectoryPaths.Any(path => path.ToLower().EndsWith(targetPathEnding.ToLower())))
             {
+                string dialogTitle = LanguageUtil.GiveLocalizedString("Str_Error");
                 string errorMessage = LanguageUtil.GiveLocalizedString("Str_DirectoryAlreadyExists");
-                ErrorDialogViewModel errorViewModel = new ErrorDialogViewModel(errorMessage);
-                this._dialogService.ShowErrorDialog(errorViewModel);
+                MessageDialogViewModel messageViewModel = new MessageDialogViewModel(dialogTitle, errorMessage);
+                this._dialogService.ShowMessageDialog(messageViewModel);
                 return;
             }
             
@@ -450,9 +451,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             string playlistName = dialogViewModel.InputValue;
             if (this.PlaylistsInDirectory.Any(playlist => playlist.Name.ToLower().Equals(playlistName.ToLower())))
             {
-                string errorMessage = LanguageUtil.GiveLocalizedString("Str_PlaylistNameAlreadyUsed");
-                ErrorDialogViewModel errorViewModel = new ErrorDialogViewModel(errorMessage);
-                this._dialogService.ShowErrorDialog(errorViewModel);
+                MessageDialogViewModel messageViewModel = new MessageDialogViewModel("Str_Error", "Str_PlaylistNameAlreadyUsed");
+                this._dialogService.ShowMessageDialog(messageViewModel);
                 return;
             }
             
@@ -510,9 +510,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             string playlistName = dialogViewModel.InputValue;
             if (this.PlaylistsInDirectory.Any(playlist => playlist.Name.ToLower().Equals(playlistName.ToLower())))
             {
-                string errorMessage = LanguageUtil.GiveLocalizedString("Str_PlaylistNameAlreadyUsed");
-                ErrorDialogViewModel errorViewModel = new ErrorDialogViewModel(errorMessage);
-                this._dialogService.ShowErrorDialog(errorViewModel);
+                MessageDialogViewModel messageViewModel = new MessageDialogViewModel("Str_Error", "Str_PlaylistNameAlreadyUsed");
+                this._dialogService.ShowMessageDialog(messageViewModel);
                 return;
             }
             
@@ -554,9 +553,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             // Show error dialog if the directory is not empty.
             if (Directory.GetDirectories(dialog.SelectedPath).Length > 0 || Directory.GetFiles(dialog.SelectedPath).Length > 0)
             {
-                string errorMessage = LanguageUtil.GiveLocalizedString("Str_TargetDirectoryIsNotEmpty");
-                ErrorDialogViewModel dialogViewModel = new ErrorDialogViewModel(errorMessage);
-                this._dialogService.ShowErrorDialog(dialogViewModel);
+                MessageDialogViewModel errorDialogViewModel = new MessageDialogViewModel("Str_Error", "Str_TargetDirectoryIsNotEmpty");
+                this._dialogService.ShowMessageDialog(errorDialogViewModel);
                 return;
             }
             

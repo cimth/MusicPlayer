@@ -1,11 +1,11 @@
-<Window x:Class="View.Dialog.ErrorDialog"
+<Window x:Class="View.Dialog.MessageDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:converter="clr-namespace:View.Converter"
         mc:Ignorable="d"
-        Title="{DynamicResource Str_Error}" d:DesignHeight="120" d:DesignWidth="300"
+        Title="{Binding DialogTitle}" d:DesignHeight="120" d:DesignWidth="300"
         WindowStartupLocation="CenterScreen"
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize">
@@ -19,7 +19,7 @@
         <!-- Error message -->
         <Label Grid.Row="0" Padding="5"
                HorizontalAlignment="Center" VerticalAlignment="Center"
-               Content="{Binding ErrorMessage, FallbackValue=Error Message}" />
+               Content="{Binding DialogMessage, FallbackValue=Dialog Message}" />
         
         <!-- Buttons -->
         <UniformGrid Grid.Row="1">

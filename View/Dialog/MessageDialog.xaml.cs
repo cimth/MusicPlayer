@@ -1,15 +1,14 @@
-using System;
 using System.Windows;
 
 namespace View.Dialog;
 
-public partial class ErrorDialog : Window
+public partial class MessageDialog : Window
 {
     // ==============
     // INITIALIZATION
     // ==============
     
-    public ErrorDialog()
+    public MessageDialog()
     {
         InitializeComponent();
     }

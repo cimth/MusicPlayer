@@ -18,10 +18,10 @@ public class DialogService
         return dialog.ShowDialog();
     }
 
-    public void ShowErrorDialog(object viewModel)
+    public void ShowMessageDialog(object viewModel)
     {
         // Init dialog. Explicitly add resources to make the localized strings accessible.
-        ErrorDialog dialog = new()
+        MessageDialog dialog = new()
         {
             DataContext = viewModel
         };
