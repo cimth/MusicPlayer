@@ -5,9 +5,11 @@
     <system:String x:Key="Str_InputDialog">Input Dialog</system:String>
     
     <system:String x:Key="Str_Error">Error!</system:String>
+    <system:String x:Key="Str_Success">Success!</system:String>
     <system:String x:Key="Str_TargetDirectoryIsNotEmpty">The target directory has to be empty.</system:String>
     <system:String x:Key="Str_PlaylistAlreadyExists">There already exists a playlist with this name in the current directory.</system:String>
     <system:String x:Key="Str_DirectoryAlreadyExists">There already exists a sub directory with this name in the current directory.</system:String>
+    <system:String x:Key="Str_PlaylistSuccessfullyExported">The playlist was successfully exported.</system:String>
     
     <system:String x:Key="Str_Alphabetical">Alphabetical</system:String>
     <system:String x:Key="Str_Individual">Individual</system:String>

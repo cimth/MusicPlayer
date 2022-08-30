@@ -560,6 +560,10 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             
             // Copy the playlist's songs to the target directory.
             this._playlistManager.Export(dialog.SelectedPath, this.SelectedPlaylist);
+            
+            // Show success dialog
+            MessageDialogViewModel successDialogViewModel = new MessageDialogViewModel("Str_Success", "Str_PlaylistSuccessfullyExported");
+            this._dialogService.ShowMessageDialog(successDialogViewModel);
         }
     }
     
