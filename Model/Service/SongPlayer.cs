@@ -222,10 +222,19 @@ public class SongPlayer : NotifyPropertyChangedImpl
     
     public void Resume()
     {
+        // Play / resume the loaded song
         if (!this.IsPlaying && this.CurrentSong != null)
         {
             this.IsPlaying = true;
             _mediaPlayer.Play();
+            return;
+        }
+
+        // No song or playlist loaded. Play the first playlist from the Queue if existing.
+        if (this.CurrentSong == null && this.CurrentPlaylist == null && this.Queue.Count > 0)
+        {
+            this.Play(this.Queue[0], 0);
+            this.RemoveFromQueue(0);
         }
     }
     
