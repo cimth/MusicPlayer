@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Common;
@@ -306,6 +307,15 @@ public class SongPlayer : NotifyPropertyChangedImpl
     
     private void Play(Song song)
     {
+        // Skip the song if it is missing (i.e. the path does not exist).
+        bool skipped = this.SkipSongIfMissing(song);
+        if (skipped)
+        {
+            Console.WriteLine($"Song {song} was skipped because its file does not exist.");
+            return;
+        }
+        
+        // Play song
         Console.WriteLine($"Start song '{song.Title}'");
         
         this.CurrentSong = song;
@@ -316,5 +326,48 @@ public class SongPlayer : NotifyPropertyChangedImpl
 
         _mediaPlayer.Open(new Uri(song.FilePath));
         _mediaPlayer.Play();
+    }
+
+    /// <summary>
+    /// Skip the given song if its file is missing (i.e. the path does not exist).
+    /// Returns true if the song is skipped.
+    /// You do not have to do any further logic when the song is skipped like playing the next song etc.
+    /// It is already done by this method.
+    /// </summary>
+    /// <param name="song">The song which possibly should be skipped.</param>
+    /// <returns>True if the song is skipped, else false.</returns>
+    private bool SkipSongIfMissing(Song song)
+    {
+        // Check if the file is already marked as missing.
+        bool skipped = song.IsFileMissing;
+
+        // The file is not marked yet, so do it now.
+        if (!skipped && !File.Exists(song.FilePath))
+        {
+            // Substitute the song object with a dummy object so that the user can see the missing file path.
+            // Do not use the current playlist index because the collection will be changed what causes the index
+            // to be re-computed and the current playlist index will be wrong until resetting it manually after
+            // the collection changes.
+            int index = _currentPlaylistIndex;
+            this.CurrentPlaylist?.Songs.RemoveAt(index);
+            this.CurrentPlaylist?.Songs.Insert(index, new Song(song.FilePath));
+                
+            // Reset playlist index. If another song was played previously, the current index is now set to its
+            // index instead to the substituted song because of the collection update.
+            // With this manual change, the missing song is now the current index, again.
+            this._currentPlaylistIndex = index;
+
+            // Set the result flag.
+            skipped = true;
+        }
+
+        // If the song should be skipped, play the next song available.
+        if (skipped)
+        {
+            this.PlayNext();
+        }
+
+        // True if the song is skipped, else false.
+        return skipped;
     }
 }

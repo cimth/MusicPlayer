@@ -363,11 +363,11 @@
                     <KeyBinding Key="Back" Command="{Binding GoBackCommand}" />
                 </templates:PlaylistGrid.InputBindings>
                 
-                <!-- Mark the current song -->
                 <DataGrid.RowStyle>
                     <!-- Base the style on the original style of the PlaylistGrid -->
                     <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource DataGridRowStyle}">
                         <Style.Triggers>
+                            <!-- Mark the current song -->
                             <DataTrigger Value="True">
                                 <!-- Only apply the style if the song of the considered row is the currently played song -->
                                 <DataTrigger.Binding>
@@ -380,6 +380,11 @@
                                 
                                 <!-- The style to be applied -->
                                 <Setter Property="FontWeight" Value="Bold"/>
+                            </DataTrigger>
+                            
+                            <!-- Mark missing files red -->
+                            <DataTrigger Value="True" Binding="{Binding IsFileMissing}">
+                                <Setter Property="Foreground" Value="Red" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
