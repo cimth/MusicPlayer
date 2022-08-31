@@ -177,6 +177,11 @@
                     <Button ToolTip="{DynamicResource Str_Export}" Command="{Binding ExportPlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/share-outline.svg}" />
                     </Button>
+                    
+                    <!-- Add to queue -->
+                    <Button ToolTip="{DynamicResource Str_AddToQueue}" Command="{Binding AddToQueueCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/list-circle-outline.svg}" />
+                    </Button>
                 </StackPanel>
             </Border>
             
@@ -278,6 +283,11 @@
                         <!-- Export playlist -->
                         <Button ToolTip="{DynamicResource Str_Export}" Command="{Binding ExportPlaylistCommand}">
                             <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/share-outline.svg}" />
+                        </Button>
+                        
+                        <!-- Add to queue -->
+                        <Button ToolTip="{DynamicResource Str_AddToQueue}" Command="{Binding AddToQueueCommand}">
+                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/list-circle-outline.svg}" />
                         </Button>
                         
                         <!-- Add to favorites -->

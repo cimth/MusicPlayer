@@ -21,6 +21,7 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
     public enum MainContent
     {
         CurrentPlaylist,
+        Queue,
         Favorites,
         Directories,
         Playlists
@@ -34,10 +35,11 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
 
     // Variables to hide/show the correct main content view
     private bool _isCurrentPlaylistViewShown;
+    private bool _isQueueViewShown;
     private bool _isFavoritesViewShown;
     private bool _isDirectoriesViewShown;
     private bool _isPlaylistsViewShown;
-    
+
     // Variable for hooking on keyboard input events even if the application is not focused
     private LowLevelKeyboardHook _hook;
     
@@ -48,6 +50,8 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
     // View models
     
     public CurrentPlaylistViewModel CurrentPlaylistViewModel { get; }
+    
+    public QueueViewModel QueueViewModel { get; }
     
     public FavoritesViewModel FavoritesViewModel { get; }
     
@@ -67,6 +71,8 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
     //    at each time).
 
     public bool IsCurrentPlaylistViewShown => _isCurrentPlaylistViewShown;
+
+    public bool IsQueueViewShown => _isQueueViewShown;
 
     public bool IsFavoritesViewShown => _isFavoritesViewShown;
 
@@ -98,6 +104,7 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
 
         // Init view models
         this.CurrentPlaylistViewModel = new CurrentPlaylistViewModel(this._songPlayer);
+        this.QueueViewModel = new QueueViewModel(this._songPlayer);
         this.FavoritesViewModel = new FavoritesViewModel(appConfigurator, favoritesManager, this);
         this.DirectoriesViewModel = new DirectoriesViewModel(playlistImporter, this._songPlayer, appConfigurator, favoritesManager);
         this.PlaylistsViewModel = new PlaylistsViewModel(songImporter, playlistImporter, playlistManager, this._songPlayer, favoritesManager, dialogService);
@@ -148,6 +155,7 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
     {
         // Hide all main content views
         this._isCurrentPlaylistViewShown = false;
+        this._isQueueViewShown = false;
         this._isFavoritesViewShown = false;
         this._isDirectoriesViewShown = false;
         this._isPlaylistsViewShown = false;
@@ -157,6 +165,9 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         {
             case MainContent.CurrentPlaylist:
                 this._isCurrentPlaylistViewShown = true;
+                break;
+            case MainContent.Queue:
+                this._isQueueViewShown = true;
                 break;
             case MainContent.Favorites:
                 this._isFavoritesViewShown = true;
@@ -173,6 +184,7 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         
         // Raise property changed event for all variables
         OnPropertyChanged(nameof(IsCurrentPlaylistViewShown));
+        OnPropertyChanged(nameof(IsQueueViewShown));
         OnPropertyChanged(nameof(IsFavoritesViewShown));
         OnPropertyChanged(nameof(IsDirectoriesViewShown));
         OnPropertyChanged(nameof(IsPlaylistsViewShown));

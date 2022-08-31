@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -70,7 +71,9 @@ public class SongPlayer : NotifyPropertyChangedImpl
         get => _isPlaying;
         set => SetField(ref _isPlaying, value);
     }
-    
+
+    public ObservableCollection<Playlist> Queue { get; }
+
     // timer
 
     public double TimerMax
@@ -99,7 +102,9 @@ public class SongPlayer : NotifyPropertyChangedImpl
     {
         this._appConfigurator = appConfigurator;
         this._repeatPlaylist = this._appConfigurator.AppConfig.RepeatPlaylist;
-        
+
+        this.Queue = new ObservableCollection<Playlist>();
+
         this._mediaPlayer = new MediaPlayer();
         this._mediaPlayer.MediaEnded += this.mediaPlayer_Ended;
 
@@ -173,26 +178,21 @@ public class SongPlayer : NotifyPropertyChangedImpl
 
     private void mediaPlayer_Ended(object? sender, EventArgs eventArgs)
     {
-        if (this.CurrentPlaylist != null)
-        {
-            if (this._currentPlaylistIndex < this.CurrentPlaylist.Songs.Count - 1)
-            {
-                // play next song in playlist
-                this._currentPlaylistIndex += 1;
-                this.Play(this.CurrentPlaylist.Songs[_currentPlaylistIndex]);
-            }
-            else
-            {
-                Console.WriteLine($"End of playlist {CurrentPlaylist.Name} reached.");
-                
-                // repeat playlist if activated
-                if (this.RepeatPlaylist)
-                {
-                    this._currentPlaylistIndex = 0;
-                    this.Play(this.CurrentPlaylist.Songs[this._currentPlaylistIndex]);
-                }
-            }
-        }
+        this.PlayNext();
+    }
+    
+    // ==============
+    // QUEUE
+    // ==============
+
+    public void AddToQueue(Playlist playlist)
+    {
+        this.Queue.Add(playlist);
+    }
+    
+    public void RemoveFromQueue(int index)
+    {
+        this.Queue.RemoveAt(index);
     }
 
     // ==============
@@ -240,14 +240,14 @@ public class SongPlayer : NotifyPropertyChangedImpl
 
     public void PlayPrevious()
     {
-        // stop if no playlist is loaded
+        // Stop if no playlist is loaded
         if (this.CurrentPlaylist == null)
         {
             return;
         }
         
-        // get the new index
-        // => use modulo division to go to the last song of the playlist if the current song is the first song
+        // Get the new index
+        // => Use modulo division to go to the last song of the playlist if the current song is the first song
         this._currentPlaylistIndex = MathUtil.MathMod(this._currentPlaylistIndex - 1, this.CurrentPlaylist.Songs.Count);
 
         // Play previous song
@@ -256,18 +256,28 @@ public class SongPlayer : NotifyPropertyChangedImpl
 
     public void PlayNext()
     {
-        // stop if no playlist is loaded
+        // Stop if no playlist is loaded
         if (this.CurrentPlaylist == null)
         {
             return;
         }
         
-        // get the new index
-        // => use modulo division to go to the first song of the playlist if the current song is the last song
-        this._currentPlaylistIndex = MathUtil.MathMod(this._currentPlaylistIndex + 1, this.CurrentPlaylist.Songs.Count);
+        // Get helping booleans for easier understanding
+        bool isLastSong = this._currentPlaylistIndex == this.CurrentPlaylist.Songs.Count - 1;
         
-        // Play previous song
-        this.Play(this.CurrentPlaylist.Songs[this._currentPlaylistIndex]);
+        if (isLastSong && this.Queue.Count > 0)
+        {
+            // Start the next playlist from the Queue
+            this.Play(this.Queue[0], 0);
+            this.Queue.RemoveAt(0);
+        } else if ( !isLastSong || (isLastSong && this.RepeatPlaylist) ) {
+            // Get the new index for the next song
+            // => Use modulo division to go to the first song of the playlist if the current song is the last song
+            this._currentPlaylistIndex = MathUtil.MathMod(this._currentPlaylistIndex + 1, this.CurrentPlaylist.Songs.Count);
+        
+            // Play next song
+            this.Play(this.CurrentPlaylist.Songs[this._currentPlaylistIndex]);
+        }
     }
     
     public void ChangePlaylistIndex(int selectedPlaylistIndex)

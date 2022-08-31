@@ -15,6 +15,8 @@ public class NavigationSidebarViewModel
     
     public ICommand ShowCurrentPlaylistCommand { get; }
     
+    public ICommand ShowQueueCommand { get; }
+    
     public ICommand ShowFavoritesCommand { get; }
     
     public ICommand ShowDirectoriesCommand { get; }
@@ -31,6 +33,7 @@ public class NavigationSidebarViewModel
         
         // init commands
         this.ShowCurrentPlaylistCommand = new DelegateCommand(ShowCurrentPlaylist);
+        this.ShowQueueCommand = new DelegateCommand(ShowQueue);
         this.ShowFavoritesCommand = new DelegateCommand(ShowFavorites);
         this.ShowDirectoriesCommand = new DelegateCommand(ShowDirectories);
         this.ShowPlaylistsCommand = new DelegateCommand(ShowPlaylists);
@@ -43,6 +46,11 @@ public class NavigationSidebarViewModel
     private void ShowCurrentPlaylist()
     {
         this.MainWindowViewModel.ChangeMainContent(MainWindowViewModel.MainContent.CurrentPlaylist);
+    }
+    
+    private void ShowQueue()
+    {
+        this.MainWindowViewModel.ChangeMainContent(MainWindowViewModel.MainContent.Queue);
     }
     
     private void ShowFavorites()

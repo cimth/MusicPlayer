@@ -16,6 +16,7 @@
     <system:String x:Key="Str_TitleNumber">Title number</system:String>
     
     <system:String x:Key="Str_CurrentPlaylist">Current Playlist</system:String>
+    <system:String x:Key="Str_Queue">Queue</system:String>
     <system:String x:Key="Str_Favorites">Favorites</system:String>
     <system:String x:Key="Str_Directories">Directories</system:String>
     <system:String x:Key="Str_Playlists">Playlists</system:String>
@@ -31,11 +32,13 @@
     <system:String x:Key="Str_AddToFavorites">Add to Favorites</system:String>
     <system:String x:Key="Str_RemoveFromFavorites">Remove from Favorites</system:String>
     <system:String x:Key="Str_Export">Export</system:String>
+    <system:String x:Key="Str_AddToQueue">Add to Queue</system:String>
     
     <system:String x:Key="Str_Songs">Songs</system:String>
     <system:String x:Key="Str_RootMusicDirectories">Root music directories</system:String>
     <system:String x:Key="Str_SubDirectories">Sub directories</system:String>
     <system:String x:Key="Str_MusicFiles">Music files</system:String>
+    <system:String x:Key="Str_Content">Content</system:String>
     
     <system:String x:Key="Str_Title">Title</system:String>
     <system:String x:Key="Str_Artists">Artists</system:String>

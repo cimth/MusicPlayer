@@ -20,25 +20,31 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             
             <!-- Current playlist -->
             <RadioButton Content="{DynamicResource Str_CurrentPlaylist}" Grid.Row="0"
                          IsChecked="{Binding MainWindowViewModel.IsCurrentPlaylistViewShown, Mode=OneWay}"
                          Command="{Binding ShowCurrentPlaylistCommand}" />
+            
+            <!-- Queue -->
+            <RadioButton Content="{DynamicResource Str_Queue}" Grid.Row="1"
+                         IsChecked="{Binding MainWindowViewModel.IsQueueViewShown, Mode=OneWay}"
+                         Command="{Binding ShowQueueCommand}" />
 
             <!-- Favorites -->
-            <RadioButton Content="{DynamicResource Str_Favorites}" Grid.Row="1"
+            <RadioButton Content="{DynamicResource Str_Favorites}" Grid.Row="2"
                          IsChecked="{Binding MainWindowViewModel.IsFavoritesViewShown, Mode=OneWay}"
                          Command="{Binding ShowFavoritesCommand}" />
             
             <!-- Directories -->
-            <RadioButton Content="{DynamicResource Str_Directories}" Grid.Row="2" 
+            <RadioButton Content="{DynamicResource Str_Directories}" Grid.Row="3" 
                          IsChecked="{Binding MainWindowViewModel.IsDirectoriesViewShown, Mode=OneWay}"
                          Command="{Binding ShowDirectoriesCommand}" />
             
             <!-- Playlists -->
-            <RadioButton Content="{DynamicResource Str_Playlists}" Grid.Row="3"
+            <RadioButton Content="{DynamicResource Str_Playlists}" Grid.Row="4"
                          IsChecked="{Binding MainWindowViewModel.IsPlaylistsViewShown, Mode=OneWay}"
                          Command="{Binding ShowPlaylistsCommand}" />
         </Grid>

@@ -58,6 +58,10 @@
                 <mainContent:CurrentPlaylistView DataContext="{Binding CurrentPlaylistViewModel}" />
             </Grid>
             
+            <Grid Grid.Column="1" Visibility="{Binding IsQueueViewShown, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <mainContent:QueueView DataContext="{Binding QueueViewModel}" />
+            </Grid>
+            
             <Grid Grid.Column="1" Visibility="{Binding IsFavoritesViewShown, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <mainContent:FavoritesView DataContext="{Binding FavoritesViewModel}" />
             </Grid>

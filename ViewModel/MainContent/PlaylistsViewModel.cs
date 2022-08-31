@@ -178,6 +178,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand ExportPlaylistCommand { get; }
     
+    public ICommand AddToQueueCommand { get; }
+    
     public ICommand AddSongToPlaylistCommand { get; }
     
     public ICommand RemoveSongFromPlaylistCommand { get; }
@@ -220,6 +222,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.RemovePlaylistCommand = new DelegateCommand(this.RemovePlaylist);
         this.DuplicatePlaylistCommand = new DelegateCommand(this.DuplicatePlaylist);
         this.ExportPlaylistCommand = new DelegateCommand(this.ExportPlaylist);
+        this.AddToQueueCommand = new DelegateCommand(this.AddToQueue);
         this.AddSongToPlaylistCommand = new DelegateCommand(this.AddSongToPlaylist);
         this.RemoveSongFromPlaylistCommand = new DelegateCommand(this.RemoveSongFromPlaylist);
         this.ChangePlaylistSortOrderCommand = new DelegateCommand(this.ChangePlaylistSortOrder);
@@ -535,7 +538,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             this.PlaylistsInDirectory = new ObservableCollection<Playlist>(this.PlaylistsInDirectory.OrderBy(p => p.Name));
         }
     }
-    
+
     private void ExportPlaylist()
     {
         // Stop if no playlist is selected
@@ -564,6 +567,14 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             // Show success dialog
             MessageDialogViewModel successDialogViewModel = new MessageDialogViewModel("Str_Success", "Str_PlaylistSuccessfullyExported");
             this._dialogService.ShowMessageDialog(successDialogViewModel);
+        }
+    }
+
+    private void AddToQueue()
+    {
+        if (this.SelectedPlaylist != null)
+        {
+            this.SongPlayer.AddToQueue(this.SelectedPlaylist);
         }
     }
     

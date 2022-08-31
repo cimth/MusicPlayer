@@ -192,6 +192,11 @@
                     <Label Content="{DynamicResource Str_MusicFiles}"
                            Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     
+                    <!-- Add to queue -->
+                    <Button ToolTip="{DynamicResource Str_AddToQueue}" Command="{Binding AddToQueueCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/list-circle-outline.svg}" />
+                    </Button>
+                    
                     <!-- 
                         Favorite buttons.
                         Only show if no sub directories exist because then the sub directory header (including its 

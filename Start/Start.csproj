@@ -67,6 +67,10 @@
       <Resource Include="Resources\Icons\documents-outline.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <None Remove="Resources\Icons\list-circle-outline.svg" />
+      <Resource Include="Resources\Icons\list-circle-outline.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
 </Project>
