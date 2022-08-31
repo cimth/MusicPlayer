@@ -69,15 +69,6 @@ public class Playlist : NotifyPropertyChangedImpl
         this._songs.CollectionChanged += UpdateTotalDuration;
         this.UpdateTotalDuration(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
-    
-    public Playlist(Song song)
-    {
-        this._name = song.Title;
-        this._songs = new ObservableCollection<Song> {song};
-        
-        this._songs.CollectionChanged += UpdateTotalDuration;
-        this.UpdateTotalDuration(null, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-    }
 
     public Playlist(string name, string relativePath)
     {

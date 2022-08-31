@@ -117,8 +117,6 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
     
     public ICommand RemoveMusicDirectoryCommand { get; }
     
-    public ICommand PlayMusicFileCommand { get; set; }
-    
     public ICommand OpenSubDirectoryCommand { get; set; }
     
     public ICommand PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand { get; set; }
@@ -154,7 +152,6 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         this.AddMusicDirectoryCommand = new DelegateCommand(AddMusicDirectory);
         this.RemoveMusicDirectoryCommand = new DelegateCommand(RemoveMusicDirectory);
         this.OpenSubDirectoryCommand = new DelegateCommand(OpenSubDirectory);
-        this.PlayMusicFileCommand = new DelegateCommand(PlaySelectedSong);
         this.PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand = new DelegateCommand(PlayAllSongsInDirectoryStartingWithTheSelectedSong);
         this.GoBackCommand = new DelegateCommand(GoBack);
         this.GoBackToRootCommand = new DelegateCommand(GoBackToRoot);
@@ -246,18 +243,6 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         if (Directory.Exists(this.SelectedSubDirectoryPath))
         {
             this.LoadAsCurrentDirectory(this.SelectedSubDirectoryPath);
-        }
-    }
-
-    private void PlaySelectedSong()
-    {
-        if (this.SelectedSong != null)
-        {
-            // convert file to playlist
-            // => seems overcomplicated but it makes the logic easier to understand since internally only playlists are
-            //    played by SongPlayer and there is basically no different logic for single songs and playlists
-            Playlist playlist = new Playlist(this.SelectedSong);
-            this.SongPlayer.Play(playlist, 0);
         }
     }
 
