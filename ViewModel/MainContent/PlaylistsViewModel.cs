@@ -584,7 +584,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         OpenFileDialog dialog = new OpenFileDialog()
         {
             Multiselect = true,
-            Filter = "Music files (*.mp3)|*.mp3",
+            Filter = "*.mp3|*.mp3",
         };
         DialogResult dialogResult = dialog.ShowDialog();
         
