@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Title="{DynamicResource Str_WindowTitle}" 
         Height="600" Width="950" MinHeight="600" MinWidth="950"
-        >
+        WindowState="Maximized">
     <!-- Unhook from keyboard when closing. -->
     <!-- 
         Use Interaction.Triggers to bind the Window events to commands.
