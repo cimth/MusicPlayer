@@ -30,7 +30,10 @@
             </Style>
             
             <Style TargetType="{x:Type Separator}" 
-                   BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                   BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}">
+                <Setter Property="Margin" Value="5, 0" />
+                <Setter Property="Background" Value="{StaticResource AppTurquoiseBorderBrush}" />
+            </Style>
         </Style.Resources>
     </Style>
     

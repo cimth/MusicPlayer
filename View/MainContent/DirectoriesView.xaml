@@ -60,6 +60,9 @@
                     <!-- Heading -->
                     <Label Content="{DynamicResource Str_RootMusicDirectories}" />
                     
+                    <!-- Separator -->
+                    <Separator />
+                    
                     <!-- Add music directory -->
                     <Button ToolTip="{DynamicResource Str_Add}" Command="{Binding AddMusicDirectoryCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
@@ -126,6 +129,9 @@
                     <!-- Heading -->
                     <Label Content="{DynamicResource Str_SubDirectories}" 
                            Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    
+                    <!-- Separator -->
+                    <Separator />
                     
                     <!-- Add to favorites -->
                     <Button ToolTip="{DynamicResource Str_AddToFavorites}" Command="{Binding AddToFavoritesCommand}"
@@ -198,6 +204,9 @@
                         <!-- Heading -->
                         <Label Content="{DynamicResource Str_MusicFiles}"
                                Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        
+                        <!-- Separator -->
+                        <Separator />
                         
                         <!-- Add to queue -->
                         <Button ToolTip="{DynamicResource Str_AddToQueue}" Command="{Binding AddToQueueCommand}">

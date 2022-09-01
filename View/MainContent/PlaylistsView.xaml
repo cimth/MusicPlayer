@@ -109,6 +109,9 @@
                     <!-- Heading -->
                     <Label Content="{DynamicResource Str_SubDirectories}" />
                     
+                    <!-- Separator -->
+                    <Separator />
+                    
                     <!-- Add playlist sub directory -->
                     <Button ToolTip="{DynamicResource Str_Add}" Command="{Binding AddSubDirectoryCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
@@ -157,6 +160,9 @@
                     <!-- Heading -->
                     <Label Content="{DynamicResource Str_Playlists}" />
                     
+                    <!-- Separator -->
+                    <Separator />
+                    
                     <!-- Add playlist -->
                     <Button ToolTip="{DynamicResource Str_Add}" Command="{Binding AddPlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
@@ -172,10 +178,16 @@
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/documents-outline.svg}" />
                     </Button>
                     
+                    <!-- Separator -->
+                    <Separator />
+                    
                     <!-- Export playlist -->
                     <Button ToolTip="{DynamicResource Str_Export}" Command="{Binding ExportPlaylistCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/share-outline.svg}" />
                     </Button>
+                    
+                    <!-- Separator -->
+                    <Separator />
                     
                     <!-- Add to queue -->
                     <Button ToolTip="{DynamicResource Str_AddToQueue}" Command="{Binding AddToQueueCommand}">
@@ -268,6 +280,9 @@
                     
                         <!-- Heading -->
                         <Label Content="{DynamicResource Str_Songs}" />
+                        
+                        <!-- Separator -->
+                        <Separator />
                     
                         <!-- Add song -->
                         <Button ToolTip="{DynamicResource Str_Add}" Command="{Binding AddSongToPlaylistCommand}">
@@ -279,10 +294,16 @@
                             <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
                         </Button>
                         
+                        <!-- Separator -->
+                        <Separator />
+                        
                         <!-- Export playlist -->
                         <Button ToolTip="{DynamicResource Str_Export}" Command="{Binding ExportPlaylistCommand}">
                             <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/share-outline.svg}" />
                         </Button>
+                        
+                        <!-- Separator -->
+                        <Separator />
                         
                         <!-- Add to queue -->
                         <Button ToolTip="{DynamicResource Str_AddToQueue}" Command="{Binding AddToQueueCommand}">
@@ -308,6 +329,7 @@
                         <Label Content="{DynamicResource Str_DurationWithColon}" />
                         <Label Content="{Binding SelectedPlaylist.TotalDuration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
                         
+                        <!-- Separator -->
                         <Separator />
                         
                         <!-- Sort playlist -->
