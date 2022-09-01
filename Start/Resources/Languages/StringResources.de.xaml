@@ -39,6 +39,7 @@
     <system:String x:Key="Str_SubDirectories">Unterordner</system:String>
     <system:String x:Key="Str_MusicFiles">Musikdateien</system:String>
     <system:String x:Key="Str_Content">Inhalt</system:String>
+    <system:String x:Key="Str_FavoritesHeaderForPlaylistRootDirectory"># Hauptordner für Playlists #</system:String>
     
     <system:String x:Key="Str_Title">Titel</system:String>
     <system:String x:Key="Str_Artists">Künstler</system:String>

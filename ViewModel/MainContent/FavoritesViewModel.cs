@@ -118,7 +118,7 @@ public class FavoritesViewModel : NotifyPropertyChangedImpl
         foreach (var relativePath in playlistRelativePaths)
         {
             // Init result variables for the case that there is only the playlist name without a directory
-            string directory = "";
+            string directory = LanguageUtil.GiveLocalizedString("Str_FavoritesHeaderForPlaylistRootDirectory");
             string playlistName = Path.GetFileNameWithoutExtension(relativePath);
             
             // Get the directory name if the path contains a directory

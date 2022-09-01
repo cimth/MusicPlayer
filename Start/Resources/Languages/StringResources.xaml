@@ -39,6 +39,7 @@
     <system:String x:Key="Str_SubDirectories">Sub directories</system:String>
     <system:String x:Key="Str_MusicFiles">Music files</system:String>
     <system:String x:Key="Str_Content">Content</system:String>
+    <system:String x:Key="Str_FavoritesHeaderForPlaylistRootDirectory"># Root directory for playlist #</system:String>
     
     <system:String x:Key="Str_Title">Title</system:String>
     <system:String x:Key="Str_Artists">Artists</system:String>
