@@ -168,52 +168,69 @@
             <Border Grid.Row="2" 
                     BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1"
                     Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
-                    <!-- 
+                <Grid Style="{DynamicResource HeaderToolbarGridStyle}">
+                    <!-- Grid layout -->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Left side -->
+                    
+                    <StackPanel Grid.Column="0">
+                        <!-- 
                         Go back.
                         Only show if no sub directories exist because then the sub directory header (including its 
                         back navigation button) is collapsed.
-                     -->
-                    <WrapPanel Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
-                        <!-- Back to music root directories -->
-                        <Button Command="{Binding GoBackToRootCommand}">
-                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/home-outline.svg}" />
+                        -->
+                        <WrapPanel Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                            <!-- Back to music root directories -->
+                            <Button Command="{Binding GoBackToRootCommand}">
+                                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/home-outline.svg}" />
+                            </Button>
+                            
+                            <!-- Back to parent -->
+                            <Button ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}">
+                                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
+                            </Button>
+                        </WrapPanel>
+                        
+                        <!-- Heading -->
+                        <Label Content="{DynamicResource Str_MusicFiles}"
+                               Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        
+                        <!-- Add to queue -->
+                        <Button ToolTip="{DynamicResource Str_AddToQueue}" Command="{Binding AddToQueueCommand}">
+                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/list-circle-outline.svg}" />
                         </Button>
                         
-                        <!-- Back to parent -->
-                        <Button ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}">
-                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
-                        </Button>
-                    </WrapPanel>
+                        <!-- 
+                            Favorite buttons.
+                            Only show if no sub directories exist because then the sub directory header (including its 
+                            back navigation button) is collapsed.
+                         -->
+                        <WrapPanel Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                            <!-- Add to favorites -->
+                            <Button ToolTip="{DynamicResource Str_AddToFavorites}" Command="{Binding AddToFavoritesCommand}"
+                                    Visibility="{Binding IsFavorite, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star-outline.svg}" />
+                            </Button>
+                        
+                            <!-- Remove from favorites -->
+                            <Button ToolTip="{DynamicResource Str_RemoveFromFavorites}" Command="{Binding RemoveFromFavoritesCommand}"
+                                    Visibility="{Binding IsFavorite, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star.svg}" />
+                            </Button>
+                        </WrapPanel>
+                    </StackPanel>
                     
-                    <!-- Heading -->
-                    <Label Content="{DynamicResource Str_MusicFiles}"
-                           Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    
-                    <!-- Add to queue -->
-                    <Button ToolTip="{DynamicResource Str_AddToQueue}" Command="{Binding AddToQueueCommand}">
-                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/list-circle-outline.svg}" />
-                    </Button>
-                    
-                    <!-- 
-                        Favorite buttons.
-                        Only show if no sub directories exist because then the sub directory header (including its 
-                        back navigation button) is collapsed.
-                     -->
-                    <WrapPanel Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
-                        <!-- Add to favorites -->
-                        <Button ToolTip="{DynamicResource Str_AddToFavorites}" Command="{Binding AddToFavoritesCommand}"
-                                Visibility="{Binding IsFavorite, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
-                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star-outline.svg}" />
-                        </Button>
-                    
-                        <!-- Remove from favorites -->
-                        <Button ToolTip="{DynamicResource Str_RemoveFromFavorites}" Command="{Binding RemoveFromFavoritesCommand}"
-                                Visibility="{Binding IsFavorite, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star.svg}" />
-                        </Button>
-                    </WrapPanel>
-                </StackPanel>
+                    <!-- Right side -->
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="2,0">
+                        <!-- Playlist duration -->
+                        <Label Content="{DynamicResource Str_DurationWithColon}" />
+                        <Label Content="{Binding PlaylistFromDirectory.TotalDuration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
+                    </StackPanel>
+                </Grid>
             </Border>
             
             <templates:PlaylistGrid x:Name="MusicFiles" Grid.Row="3" 

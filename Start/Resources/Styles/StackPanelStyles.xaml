@@ -17,6 +17,9 @@
             <Style TargetType="{x:Type Label}">
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
+            
+            <Style TargetType="{x:Type Separator}" 
+                   BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
         </Style.Resources>
     </Style>
     

@@ -44,6 +44,7 @@
     <system:String x:Key="Str_Title">Titel</system:String>
     <system:String x:Key="Str_Artists">Künstler</system:String>
     <system:String x:Key="Str_Duration">Dauer</system:String>
+    <system:String x:Key="Str_DurationWithColon">Dauer:</system:String>
     <system:String x:Key="Str_Album">Album</system:String>
     <system:String x:Key="Str_Name">Name</system:String>
     

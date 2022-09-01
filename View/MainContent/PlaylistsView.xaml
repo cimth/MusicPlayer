@@ -253,7 +253,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     
-                    <!-- Left side. Navigation and favorites. -->
+                    <!-- Left side -->
                     <StackPanel Grid.Column="0">
                         <!-- Back to playlist root directory -->
                         <Button Command="{Binding GoBackToRootCommand}">
@@ -302,8 +302,15 @@
                         </Button>
                     </StackPanel>
                     
-                    <!-- Right side. Sort playlist -->
+                    <!-- Right side -->
                     <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="2,0">
+                        <!-- Playlist duration -->
+                        <Label Content="{DynamicResource Str_DurationWithColon}" />
+                        <Label Content="{Binding SelectedPlaylist.TotalDuration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
+                        
+                        <Separator />
+                        
+                        <!-- Sort playlist -->
                         <Label Content="{DynamicResource Str_SortPlaylist}" />
                         <ComboBox Text="{DynamicResource Str_PleaseSelect}"
                                   ItemsSource="{Binding PlaylistSortOrders}"
