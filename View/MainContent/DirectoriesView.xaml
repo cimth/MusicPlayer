@@ -259,7 +259,7 @@
                      to be addressed inside the DataGridTextColumn.Header element to work -->
                 <DataGrid.Columns>
                     <!-- Title -->
-                    <DataGridTextColumn Width="450" 
+                    <DataGridTextColumn MinWidth="450" 
                                         Binding="{Binding Title}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="{DynamicResource Str_Title}" />
@@ -267,7 +267,7 @@
                     </DataGridTextColumn>
                     
                     <!-- Artists -->
-                    <DataGridTextColumn Width="300"
+                    <DataGridTextColumn MinWidth="300"
                                         Binding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="{DynamicResource Str_Artists}" />
@@ -275,7 +275,7 @@
                     </DataGridTextColumn>
                     
                     <!-- Duration -->
-                    <DataGridTextColumn Width="75"
+                    <DataGridTextColumn MinWidth="75"
                                         Binding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="{DynamicResource Str_Duration}" />
@@ -283,7 +283,7 @@
                     </DataGridTextColumn>
                     
                     <!-- Album -->
-                    <DataGridTextColumn Width="300"
+                    <DataGridTextColumn MinWidth="300"
                                         Binding="{Binding Album}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="{DynamicResource Str_Album}" />
