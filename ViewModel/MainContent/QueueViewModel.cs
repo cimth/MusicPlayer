@@ -39,7 +39,14 @@ public class QueueViewModel : NotifyPropertyChangedImpl
     {
         if (this.SelectedQueueIndex != -1)
         {
+            // Save index to re-assign it after the GUI update
+            int origSelectedIndex = this.SelectedQueueIndex;
+            
+            // Remove the selected playlist
             this.SongPlayer.RemoveFromQueue(this.SelectedQueueIndex);
+            
+            // Re-assign the index to select the next item (or the last one if the removed item was the last one)
+            this.SelectedQueueIndex = origSelectedIndex < this.SongPlayer.Queue.Count ? origSelectedIndex : this.SongPlayer.Queue.Count - 1;
         }
     }
 }
