@@ -126,8 +126,7 @@
                       ItemsSource="{Binding SubDirectoryPaths}"
                       SelectedItem="{Binding SelectedSubDirectoryPath}"
                       SelectedIndex="{Binding SelectedSubDirectoryIndex}"
-                      HeadersVisibility="None"
-                      BorderThickness="0">
+                      HeadersVisibility="None">
                 <!-- 
                     Use Interaction.Triggers to bind the mouse events to commands.
                     With the elements XML properties, only Code-Behind methods can be called.
@@ -330,7 +329,6 @@
                       ItemsSource="{Binding SelectedPlaylist.Songs}"
                       SelectedItem="{Binding SelectedSong}"
                       SelectedIndex="{Binding SelectedSongIndex}"
-                      BorderThickness="0"
                       AllowDraggingRows="True"
                       AllowDrop="True">
                 <!-- 

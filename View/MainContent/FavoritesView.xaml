@@ -50,8 +50,7 @@
             <templates:PlaylistGrid Grid.Row="1"
                                     ItemsSource="{Binding GroupedDirectoryPairs}"
                                     SelectedValue="{Binding SelectedDirectoryPair}"
-                                    HeadersVisibility="None"
-                                    BorderThickness="0">
+                                    HeadersVisibility="None">
                 <!-- 
                     Use Interaction.Triggers to bind the mouse events to commands.
                     With the elements XML properties, only Code-Behind methods can be called.
