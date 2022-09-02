@@ -121,6 +121,14 @@
                     <Button ToolTip="{DynamicResource Str_Remove}" Command="{Binding RemoveSubDirectoryCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
                     </Button>
+                    
+                    <!-- Separator -->
+                    <Separator />
+                    
+                    <!-- Rename playlist -->
+                    <Button ToolTip="{DynamicResource Str_Rename}" Command="{Binding RenameSubDirectoryCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/pencil.svg}" />
+                    </Button>
                 </StackPanel>
             </Border>
             
@@ -180,6 +188,11 @@
                     
                     <!-- Separator -->
                     <Separator />
+                    
+                    <!-- Rename playlist -->
+                    <Button ToolTip="{DynamicResource Str_Rename}" Command="{Binding RenamePlaylistCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/pencil.svg}" />
+                    </Button>
                     
                     <!-- Export playlist -->
                     <Button ToolTip="{DynamicResource Str_Export}" Command="{Binding ExportPlaylistCommand}">

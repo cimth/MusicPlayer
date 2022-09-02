@@ -164,6 +164,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand RemoveSubDirectoryCommand { get; }
     
+    public ICommand RenameSubDirectoryCommand { get; }
+    
     public ICommand OpenSubDirectoryCommand { get; }
     
     public ICommand OpenPlaylistCommand { get; }
@@ -175,6 +177,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     public ICommand RemovePlaylistCommand { get; }
     
     public ICommand DuplicatePlaylistCommand { get; }
+    
+    public ICommand RenamePlaylistCommand { get; }
     
     public ICommand ExportPlaylistCommand { get; }
     
@@ -215,12 +219,14 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.GoBackToRootCommand = new DelegateCommand(this.GoBackToRoot);
         this.AddSubDirectoryCommand = new DelegateCommand(this.AddSubDirectory);
         this.RemoveSubDirectoryCommand = new DelegateCommand(this.RemoveSubDirectory);
+        this.RenameSubDirectoryCommand = new DelegateCommand(this.RenameSubDirectory);
         this.OpenSubDirectoryCommand = new DelegateCommand(this.OpenSubDirectory);
         this.OpenPlaylistCommand = new DelegateCommand(this.OpenPlaylist);
         this.StartPlaylistBeginningWithTheSelectedSongCommand = new DelegateCommand(this.StartPlaylistBeginningWithTheSelectedSong);
         this.AddPlaylistCommand = new DelegateCommand(this.AddPlaylist);
         this.RemovePlaylistCommand = new DelegateCommand(this.RemovePlaylist);
         this.DuplicatePlaylistCommand = new DelegateCommand(this.DuplicatePlaylist);
+        this.RenamePlaylistCommand = new DelegateCommand(this.RenamePlaylist);
         this.ExportPlaylistCommand = new DelegateCommand(this.ExportPlaylist);
         this.AddToQueueCommand = new DelegateCommand(this.AddToQueue);
         this.AddSongToPlaylistCommand = new DelegateCommand(this.AddSongToPlaylist);
@@ -364,8 +370,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     private void AddSubDirectory()
     {
         // Open dialog to request the sub directory name
-        string request = LanguageUtil.GiveLocalizedString("Str_WhichNameForDirectory");
-        InputDialogViewModel dialogViewModel = new InputDialogViewModel(request);
+        InputDialogViewModel dialogViewModel = new InputDialogViewModel("Str_WhichNameForDirectory");
         bool? result = this._dialogService.ShowInputDialog(dialogViewModel);
         
         // Add the directory if the dialog was successful
@@ -411,6 +416,29 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         }
     }
 
+    private void RenameSubDirectory()
+    {
+        if (this.SelectedSubDirectoryPath != null)
+        {
+            // Get only the last part of the directory which is selected
+            string onlyDirectoryName = Path.GetFileName(this.SelectedSubDirectoryPath);
+            
+            // Ask for new directory name
+            InputDialogViewModel dialogViewModel = new InputDialogViewModel("Str_WhichNameForDirectory", onlyDirectoryName);
+            bool? result = this._dialogService.ShowInputDialog(dialogViewModel);
+        
+            // Rename the playlist if the dialog was successful
+            if (result != null && result.Value)
+            {
+                // Rename
+                this._playlistManager.RenamePlaylistDirectory(onlyDirectoryName, dialogViewModel.InputValue, this.CurrentDirectoryPath);
+                
+                // Reload data for GUI
+                this.LoadAsCurrentDirectory(this.CurrentDirectoryPath);
+            }
+        }
+    }
+
     private void OpenSubDirectory()
     {
         if (Directory.Exists(this.SelectedSubDirectoryPath))
@@ -443,8 +471,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     private void AddPlaylist()
     {
         // Open dialog to request the sub directory name
-        string request = LanguageUtil.GiveLocalizedString("Str_WhichNameForPlaylist");
-        InputDialogViewModel dialogViewModel = new InputDialogViewModel(request);
+        InputDialogViewModel dialogViewModel = new InputDialogViewModel("Str_WhichNameForPlaylist");
         bool? result = this._dialogService.ShowInputDialog(dialogViewModel);
         
         // Add the playlist if the dialog was successful
@@ -492,7 +519,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             this.SelectedPlaylistIndex = origSelectedIndex < this.PlaylistsInDirectory.Count ? origSelectedIndex : this.PlaylistsInDirectory.Count - 1;
         }
     }
-    
+
     private void DuplicatePlaylist()
     {
         // Stop if no playlist is selected
@@ -502,8 +529,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         }
         
         // Open dialog to request the duplicate playlist name
-        string request = LanguageUtil.GiveLocalizedString("Str_WhichNameForPlaylist");
-        InputDialogViewModel dialogViewModel = new InputDialogViewModel(request);
+        InputDialogViewModel dialogViewModel = new InputDialogViewModel("Str_WhichNameForPlaylist");
         bool? result = this._dialogService.ShowInputDialog(dialogViewModel);
         
         // Add the playlist if the dialog was successful
@@ -536,6 +562,21 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             // Update GUI
             this.PlaylistsInDirectory.Add(playlist);
             this.PlaylistsInDirectory = new ObservableCollection<Playlist>(this.PlaylistsInDirectory.OrderBy(p => p.Name));
+        }
+    }
+    
+    private void RenamePlaylist()
+    {
+        if (this.SelectedPlaylist != null)
+        {
+            InputDialogViewModel dialogViewModel = new InputDialogViewModel("Str_WhichNameForPlaylist", this.SelectedPlaylist.Name);
+            bool? result = this._dialogService.ShowInputDialog(dialogViewModel);
+        
+            // Rename the playlist if the dialog was successful
+            if (result != null && result.Value)
+            {
+                this._playlistManager.RenamePlaylist(this.SelectedPlaylist, dialogViewModel.InputValue, this.CurrentDirectoryPath);
+            }
         }
     }
 

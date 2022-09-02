@@ -33,6 +33,7 @@
     <system:String x:Key="Str_RemoveFromFavorites">Aus Favoriten entfernen</system:String>
     <system:String x:Key="Str_Export">Exportieren</system:String>
     <system:String x:Key="Str_AddToQueue">Zur Warteschlange hinzufügen</system:String>
+    <system:String x:Key="Str_Rename">Umbenennen</system:String>
     
     <system:String x:Key="Str_Songs">Songs</system:String>
     <system:String x:Key="Str_RootMusicDirectories">Hauptordner mit Musik</system:String>

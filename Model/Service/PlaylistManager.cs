@@ -24,7 +24,7 @@ public class PlaylistManager
     }
     
     // ==============
-    // PUBLIC METHODS 
+    // PLAYLIST DIRECTORIES
     // ==============
     
     /// <summary>
@@ -55,6 +55,18 @@ public class PlaylistManager
         string fullPath = this.GetFullPath(parentDirectoryPath, directoryName);
         Directory.Delete(fullPath, true);
     }
+    
+    public void RenamePlaylistDirectory(string oldDirectoryName, string newDirectoryName, string? parentDirectoryPath)
+    {
+        string oldFullPath = this.GetFullPath(parentDirectoryPath, oldDirectoryName);
+        string newFullPath = this.GetFullPath(parentDirectoryPath, newDirectoryName);
+
+        Directory.Move(oldFullPath, newFullPath);
+    }
+    
+    // ==============
+    // PLAYLIST FILES
+    // ==============
     
     /// <summary>
     /// Returns the relative path for a playlist file seen from the playlist root path.
@@ -111,6 +123,23 @@ public class PlaylistManager
         {
             string fullPath = this.GetFullPath(playlist.RelativePath);
             File.Delete(fullPath);
+        }
+    }
+
+    public void RenamePlaylist(Playlist playlist, string newPlaylistName, string? parentDirectoryPath)
+    {
+        if (playlist.RelativePath != null)
+        {
+            // Remove the old file
+            this.RemovePlaylistFile(playlist);
+            
+            // Update data
+            string newRelativePath = this.GetRelativePathForNewPlaylist(parentDirectoryPath, newPlaylistName);
+            playlist.Name = newPlaylistName;
+            playlist.RelativePath = newRelativePath;
+            
+            // Save the new file
+            this.SaveInPlaylistFile(playlist);
         }
     }
     
