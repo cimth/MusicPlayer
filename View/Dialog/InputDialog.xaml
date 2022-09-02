@@ -8,12 +8,14 @@
         Title="{DynamicResource Str_InputDialog}" d:DesignHeight="120" d:DesignWidth="300"
         WindowStartupLocation="CenterScreen"
         SizeToContent="WidthAndHeight"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        MaxHeight="500" MaxWidth="500">
     <Window.Resources>
         <converter:IsNotEmptyStringConverter x:Key="IsNotEmptyStringConverter" />
     </Window.Resources>
     
-    <Grid Margin="10"
+    <Grid Margin="10, 10, 10, 0"
+          VerticalAlignment="Center"
           FocusManager.FocusedElement="{Binding ElementName=TxtInput}">
         <!-- Grid layout -->
         <Grid.RowDefinitions>
@@ -23,9 +25,10 @@
         </Grid.RowDefinitions>
         
         <!-- Request -->
-        <Label Grid.Row="0" Padding="5"
-               HorizontalAlignment="Center" VerticalAlignment="Center"
-               Content="{Binding Request, FallbackValue=Request}" />
+        <TextBlock Grid.Row="0" Padding="5"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   TextWrapping="Wrap"
+                   Text="{Binding Request, FallbackValue=Request}" />
         
         <!-- Input -->
         <!-- Use 'UpdateSourceTrigger=PropertyChanged' to update on each input 
@@ -36,14 +39,17 @@
                  Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
         
         <!-- Buttons -->
-        <UniformGrid Grid.Row="2">
-            <Button Content="{DynamicResource Str_Ok}" IsDefault="True" Margin="0,10,5,0"
+        <UniformGrid Grid.Row="2" Margin="0, 10, 0, 0">
+            <Button Content="{DynamicResource Str_Ok}" 
+                    IsDefault="True" 
+                    Margin="0,0,5,0"
                     MaxWidth="150"
                     IsEnabled="{Binding InputValue, Converter={StaticResource IsNotEmptyStringConverter}}"
                     Click="OK_OnClick" />
-            <Button IsCancel="True" Content="{DynamicResource Str_Cancel}" 
+            <Button Content="{DynamicResource Str_Cancel}" 
+                    IsCancel="True" 
+                    Margin="5,0,0,0"
                     MaxWidth="150"
-                    Margin="5,10,0,0"
                     Click="Cancel_OnClick" />
         </UniformGrid>
     </Grid>
