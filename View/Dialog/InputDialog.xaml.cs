@@ -1,5 +1,6 @@
 using System;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace View.Dialog;
 
@@ -12,6 +13,19 @@ public partial class InputDialog : Window
     public InputDialog()
     {
         InitializeComponent();
+    }
+    
+    // ==============
+    // FOCUS ACTION
+    // ==============
+
+    private void TxtInput_OnGotFocus(object sender, RoutedEventArgs e)
+    {
+        // Select complete input text when focused
+        if (sender is TextBox tb)
+        {
+            tb.Dispatcher.BeginInvoke(new Action(() => tb.SelectAll()));
+        }
     }
     
     // ==============

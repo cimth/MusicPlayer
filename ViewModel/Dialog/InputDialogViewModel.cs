@@ -28,9 +28,9 @@ public class InputDialogViewModel : NotifyPropertyChangedImpl
     // INITIALIZATION
     // ==============
     
-    public InputDialogViewModel(string request)
+    public InputDialogViewModel(string requestResourceName, string defaultInputValue = "")
     {
-        this.Request = request;
-        this._inputValue = "";
+        this.Request = LanguageUtil.GiveLocalizedString(requestResourceName);
+        this._inputValue = defaultInputValue;
     }
 }

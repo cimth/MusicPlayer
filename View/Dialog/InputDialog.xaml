@@ -32,6 +32,7 @@
              and not only after the focus is lost -->
         <TextBox x:Name="TxtInput" Grid.Row="1" 
                  Padding="5" Margin="0, 10"
+                 GotFocus="TxtInput_OnGotFocus"
                  Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
         
         <!-- Buttons -->
@@ -41,6 +42,7 @@
                     IsEnabled="{Binding InputValue, Converter={StaticResource IsNotEmptyStringConverter}}"
                     Click="OK_OnClick" />
             <Button IsCancel="True" Content="{DynamicResource Str_Cancel}" 
+                    MaxWidth="150"
                     Margin="5,10,0,0"
                     Click="Cancel_OnClick" />
         </UniformGrid>
