@@ -54,6 +54,6 @@
     <system:String x:Key="Str_NoPlaylistLoaded">Keine Playlist geladen</system:String>
     <system:String x:Key="Str_NoSongLoaded">Kein Song geladen</system:String>
     
-    <system:String x:Key="Str_WhichNameForDirectory">"Wie soll der Ordner heißen?"</system:String>
-    <system:String x:Key="Str_WhichNameForPlaylist">"Wie soll die Playlist heißen?"</system:String>
+    <system:String x:Key="Str_WhichNameForDirectory">Wie soll der Ordner heißen?</system:String>
+    <system:String x:Key="Str_WhichNameForPlaylist">Wie soll die Playlist heißen?</system:String>
 </ResourceDictionary>
