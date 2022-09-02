@@ -6,7 +6,7 @@
       <Nullable>enable</Nullable>
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <UseWPF>true</UseWPF>
-      <ApplicationIcon>Resources\AppIcon\MusicPlayer.ico</ApplicationIcon>
+      <ApplicationIcon>Resources\AppIcon\Icon.ico</ApplicationIcon>
       <PackageId>MusicPlayer</PackageId>
       <Authors>Cindy Maria Thewes</Authors>
       <Company>Cindy Maria Thewes</Company>
