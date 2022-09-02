@@ -381,9 +381,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             string targetPathEnding = Path.DirectorySeparatorChar + directoryName;
             if (this.SubDirectoryPaths.Any(path => path.ToLower().EndsWith(targetPathEnding.ToLower())))
             {
-                string dialogTitle = LanguageUtil.GiveLocalizedString("Str_Error");
-                string errorMessage = LanguageUtil.GiveLocalizedString("Str_DirectoryAlreadyExists");
-                MessageDialogViewModel messageViewModel = new MessageDialogViewModel(dialogTitle, errorMessage);
+                MessageDialogViewModel messageViewModel = new MessageDialogViewModel("Str_Error", "Str_DirectoryAlreadyExists");
                 this._dialogService.ShowMessageDialog(messageViewModel);
                 return;
             }
@@ -489,7 +487,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             string playlistName = dialogViewModel.InputValue;
             if (this.PlaylistsInDirectory.Any(playlist => playlist.Name.ToLower().Equals(playlistName.ToLower())))
             {
-                MessageDialogViewModel messageViewModel = new MessageDialogViewModel("Str_Error", "Str_PlaylistNameAlreadyUsed");
+                MessageDialogViewModel messageViewModel = new MessageDialogViewModel("Str_Error", "Str_PlaylistAlreadyExists");
                 this._dialogService.ShowMessageDialog(messageViewModel);
                 return;
             }
@@ -557,7 +555,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             string playlistName = dialogViewModel.InputValue;
             if (this.PlaylistsInDirectory.Any(playlist => playlist.Name.ToLower().Equals(playlistName.ToLower())))
             {
-                MessageDialogViewModel messageViewModel = new MessageDialogViewModel("Str_Error", "Str_PlaylistNameAlreadyUsed");
+                MessageDialogViewModel messageViewModel = new MessageDialogViewModel("Str_Error", "Str_PlaylistAlreadyExists");
                 this._dialogService.ShowMessageDialog(messageViewModel);
                 return;
             }
