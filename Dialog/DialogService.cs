@@ -30,4 +30,17 @@ public class DialogService
         // Show the dialog.
         dialog.ShowDialog();
     }
+    
+    public bool? ShowConfirmDialog(object viewModel)
+    {
+        // Init dialog. Explicitly add resources to make the localized strings accessible.
+        ConfirmDialog dialog = new()
+        {
+            DataContext = viewModel
+        };
+        dialog.Resources.MergedDictionaries.Add(LanguageUtil.LocalizedResourceDictionary);
+        
+        // Show the dialog.
+        return dialog.ShowDialog();
+    }
 }

@@ -3,6 +3,7 @@
                     xmlns:system="clr-namespace:System;assembly=System.Net.Primitives">
     <system:String x:Key="Str_WindowTitle">MusicPlayer</system:String>
     <system:String x:Key="Str_InputDialog">Input Dialog</system:String>
+    <system:String x:Key="Str_ConfirmDialog">Confirm</system:String>
     
     <system:String x:Key="Str_Error">Error!</system:String>
     <system:String x:Key="Str_Success">Success!</system:String>
@@ -23,6 +24,8 @@
     
     <system:String x:Key="Str_Ok">OK</system:String>
     <system:String x:Key="Str_Cancel">Cancel</system:String>
+    <system:String x:Key="Str_Yes">Yes</system:String>
+    <system:String x:Key="Str_No">No</system:String>
     <system:String x:Key="Str_Add">Add</system:String>
     <system:String x:Key="Str_Remove">Remove</system:String>
     <system:String x:Key="Str_Duplicate">Duplicate</system:String>
@@ -56,4 +59,7 @@
     
     <system:String x:Key="Str_WhichNameForDirectory">Which name should the directory have?</system:String>
     <system:String x:Key="Str_WhichNameForPlaylist">Which name should the playlist have?</system:String>
+    
+    <system:String x:Key="Str_ConfirmRemoveDirectory">Do you really want to remove the directory?</system:String>
+    <system:String x:Key="Str_ConfirmRemovePlaylist">Do you really want to remove the playlist?</system:String>
 </ResourceDictionary>

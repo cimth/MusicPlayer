@@ -401,18 +401,26 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     {
         if (this.SelectedSubDirectoryIndex >= 0 && this.SelectedSubDirectoryIndex < this.SubDirectoryPaths.Count)
         {
-            // Save index to re-assign it after the GUI update
-            int origSelectedIndex = this.SelectedSubDirectoryIndex;
+            // Ask the user for confirmation
+            ConfirmDialogViewModel confirmViewModel = new ConfirmDialogViewModel("Str_ConfirmRemoveDirectory");
+            bool? result = this._dialogService.ShowConfirmDialog(confirmViewModel);
+        
+            // Remove the directory if the user confirmed
+            if (result != null && result.Value)
+            {
+                // Save index to re-assign it after the GUI update
+                int origSelectedIndex = this.SelectedSubDirectoryIndex;
             
-            // Remove directory
-            string directoryName = this.SubDirectoryPaths[this.SelectedSubDirectoryIndex];
-            this._playlistManager.RemovePlaylistDirectory(this.CurrentDirectoryPath, directoryName);
+                // Remove directory
+                string directoryName = this.SubDirectoryPaths[this.SelectedSubDirectoryIndex];
+                this._playlistManager.RemovePlaylistDirectory(this.CurrentDirectoryPath, directoryName);
             
-            // Update GUI
-            this.SubDirectoryPaths.RemoveAt(this.SelectedSubDirectoryIndex);
+                // Update GUI
+                this.SubDirectoryPaths.RemoveAt(this.SelectedSubDirectoryIndex);
             
-            // Re-assign the index to select the next item (or the last one if the removed item was the last one)
-            this.SelectedSubDirectoryIndex = origSelectedIndex < this.SubDirectoryPaths.Count ? origSelectedIndex : this.SubDirectoryPaths.Count - 1;
+                // Re-assign the index to select the next item (or the last one if the removed item was the last one)
+                this.SelectedSubDirectoryIndex = origSelectedIndex < this.SubDirectoryPaths.Count ? origSelectedIndex : this.SubDirectoryPaths.Count - 1; 
+            }
         }
     }
 
@@ -503,20 +511,30 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             && this.SelectedPlaylistIndex >= 0 
             && this.SelectedPlaylistIndex < this.PlaylistsInDirectory.Count)
         {
-            // Save index to re-assign it after the GUI update
-            int origSelectedIndex = this.SelectedPlaylistIndex;
-            
-            // Remove file
-            this._playlistManager.RemovePlaylistFile(this.SelectedPlaylist);
-            
-            // Remove from Favorites
-            this._favoritesManager.RemovePlaylistFromFavorites(this.SelectedPlaylist);
-            
-            // Update GUI
-            this.PlaylistsInDirectory.RemoveAt(this.SelectedPlaylistIndex);
-            
-            // Re-assign the index to select the next item (or the last one if the removed item was the last one)
-            this.SelectedPlaylistIndex = origSelectedIndex < this.PlaylistsInDirectory.Count ? origSelectedIndex : this.PlaylistsInDirectory.Count - 1;
+            // Ask the user for confirmation
+            ConfirmDialogViewModel confirmViewModel = new ConfirmDialogViewModel("Str_ConfirmRemovePlaylist");
+            bool? result = this._dialogService.ShowConfirmDialog(confirmViewModel);
+        
+            // Remove the playlist if the user confirmed
+            if (result != null && result.Value)
+            {
+                // Save index to re-assign it after the GUI update
+                int origSelectedIndex = this.SelectedPlaylistIndex;
+
+                // Remove file
+                this._playlistManager.RemovePlaylistFile(this.SelectedPlaylist);
+
+                // Remove from Favorites
+                this._favoritesManager.RemovePlaylistFromFavorites(this.SelectedPlaylist);
+
+                // Update GUI
+                this.PlaylistsInDirectory.RemoveAt(this.SelectedPlaylistIndex);
+
+                // Re-assign the index to select the next item (or the last one if the removed item was the last one)
+                this.SelectedPlaylistIndex = origSelectedIndex < this.PlaylistsInDirectory.Count
+                    ? origSelectedIndex
+                    : this.PlaylistsInDirectory.Count - 1;
+            }
         }
     }
 
