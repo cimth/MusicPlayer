@@ -13,7 +13,6 @@ namespace ViewModel.MainContent;
 
 public class PlaylistsViewModel : NotifyPropertyChangedImpl
 {
-    
     // ==============
     // FIELDS 
     // ==============
@@ -47,7 +46,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     // ==============
 
     public SongPlayer SongPlayer => _songPlayer;
-    
+
     // Properties for choosing a directory and a playlist
 
     public string? CurrentDirectoryPath
@@ -153,6 +152,14 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         get => _selectedPlaylistSortOrder;
         set => SetField(ref _selectedPlaylistSortOrder, value);
     }
+    
+    // No duplicates
+    
+    public bool IsNoDuplicatesActive
+    {
+        get => this._playlistManager.NoDuplicates;
+        set => this._playlistManager.NoDuplicates = value;
+    }
 
     // Commands
     
@@ -187,6 +194,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     public ICommand AddSongToPlaylistCommand { get; }
     
     public ICommand RemoveSongFromPlaylistCommand { get; }
+    
+    public ICommand ChangeNoDuplicatesStateCommand { get; }
     
     public ICommand ChangePlaylistSortOrderCommand { get; }
     
@@ -231,6 +240,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.AddToQueueCommand = new DelegateCommand(this.AddToQueue);
         this.AddSongToPlaylistCommand = new DelegateCommand(this.AddSongToPlaylist);
         this.RemoveSongFromPlaylistCommand = new DelegateCommand(this.RemoveSongFromPlaylist);
+        this.ChangeNoDuplicatesStateCommand = new DelegateCommand(this.ChangeNoDuplicatesState);
         this.ChangePlaylistSortOrderCommand = new DelegateCommand(this.ChangePlaylistSortOrder);
         this.UpdateOnRowMovedCommand = new DelegateCommand(this.UpdateOnRowMoved);
         this.AddToFavoritesCommand = new DelegateCommand(this.AddToFavorites);
@@ -239,7 +249,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         // Set elements that are shown first
         this.LoadAsCurrentDirectory(null);
     }
-    
+
     // ==============
     // OPEN FROM EXTERN (NEEDED FOR FAVORITES)
     // ==============
@@ -651,8 +661,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             // Update playlist
             foreach (var filePath in dialog.FileNames)
             {
-                Song song = this._songImporter.Import(filePath);
-                this.SelectedPlaylist.Songs.Add(song);
+                this.AddSong(this.SelectedPlaylist, filePath);
             }
             
             // Sort playlist
@@ -690,6 +699,17 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         }
     }
 
+    private void ChangeNoDuplicatesState()
+    {
+        // 'No duplicates' enabled, thus remove current duplicates.
+        if (this.SelectedPlaylist != null && this.IsNoDuplicatesActive)
+        {
+            this.SelectedPlaylist.RemoveDuplicates();
+        }
+        
+        // When 'No duplicates' is disabled, no further action is required.
+    }
+    
     private void ChangePlaylistSortOrder()
     {
         if (this.SelectedPlaylist != null)
@@ -742,8 +762,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
                 // Update playlist
                 foreach (var filePath in filePaths)
                 {
-                    Song song = this._songImporter.Import(filePath);
-                    this.SelectedPlaylist.Songs.Add(song);
+                    this.AddSong(this.SelectedPlaylist, filePath);
                 }
 
                 // Sort playlist
@@ -752,6 +771,23 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
                 // Save changes
                 this._playlistManager.SaveInPlaylistFile(this.SelectedPlaylist);
             }
+        }
+    }
+    
+    // ==============
+    // HELPING FUNCTION FOR ADDING A NEW SONG
+    // ==============
+    
+    private void AddSong(Playlist playlist, string filePath)
+    {
+        // Create the song object.
+        Song song = this._songImporter.Import(filePath);
+                    
+        // Add the song object if it is no duplicate that should be filtered out.
+        bool isDuplicate = playlist.Songs.Any(existingSong => existingSong.FilePath == song.FilePath);
+        if (!this.IsNoDuplicatesActive || (this.IsNoDuplicatesActive && !isDuplicate))
+        {
+            playlist.Songs.Add(song);
         }
     }
 }

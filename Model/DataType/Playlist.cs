@@ -113,4 +113,23 @@ public class Playlist : NotifyPropertyChangedImpl
                 break;
         }
     }
+    
+    // ==============
+    // REMOVE DUPLICATES
+    // ==============
+
+    public void RemoveDuplicates()
+    {
+        // Remove duplicates.
+        // Use ToList() method because the simple IEnumerable will not work anymore after clearing the songs collection.
+        IList<Song> noDuplicates = this.Songs.DistinctBy(song => song.FilePath).ToList();
+        
+        // Clear and re-add the items to avoid assigning a new collection which would result in a loss of all
+        // observers of the current collection since they still observe to the first referenced collection.
+        this.Songs.Clear();
+        foreach (var song in noDuplicates)
+        {
+            this.Songs.Add(song);
+        }
+    }
 }

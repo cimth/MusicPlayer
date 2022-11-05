@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg6"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs10" />
+  <title
+     id="title2">ionicons-v5-q</title>
+  <circle
+     cx="256"
+     cy="256"
+     r="192"
+     style="fill:none;stroke:#000000;stroke-width:32px;stroke-linecap:round;stroke-linejoin:round"
+     id="circle4" />
+  <text
+     xml:space="preserve"
+     style="font-size:266.667px;fill:#55ddff;stroke-width:4"
+     x="167.32802"
+     y="353.26575"
+     id="text293"><tspan
+       id="tspan291"
+       x="167.32802"
+       y="353.26575"
+       style="font-size:266.667px;fill:#000000">1</tspan></text>
+  <metadata
+     id="metadata451">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>ionicons-v5-q</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

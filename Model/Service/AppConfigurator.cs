@@ -84,4 +84,14 @@ public class AppConfigurator : NotifyPropertyChangedImpl
         this.AppConfig.RepeatPlaylist = isRepeatActivated;
         this.SaveConfig();
     }
+    
+    // ==============
+    // ACTION FOR NO DUPLICATES
+    // ==============
+
+    public void SaveNoDuplicates(bool isNoDuplicatesActivated)
+    {
+        this.AppConfig.NoDuplicates = isNoDuplicatesActivated;
+        this.SaveConfig();
+    }
 }

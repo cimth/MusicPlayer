@@ -17,6 +17,12 @@
                 <Setter Property="BorderBrush" Value="Transparent" />
             </Style>
             
+            <Style TargetType="{x:Type ToggleButton}">
+                <Setter Property="Margin" Value="2, 5" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Style>
+            
             <Style TargetType="{x:Type Label}">
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>

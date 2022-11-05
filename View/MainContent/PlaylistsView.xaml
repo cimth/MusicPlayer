@@ -307,6 +307,12 @@
                             <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
                         </Button>
                         
+                        <!-- No duplicates -->
+                        <ToggleButton ToolTip="{DynamicResource Str_NoDuplicates}" Command="{Binding ChangeNoDuplicatesStateCommand}"
+                                      IsChecked="{Binding IsNoDuplicatesActive}">
+                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/one-circle-outline.svg}" />
+                        </ToggleButton>
+                        
                         <!-- Separator -->
                         <Separator />
                         

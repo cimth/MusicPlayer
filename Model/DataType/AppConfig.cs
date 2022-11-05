@@ -24,6 +24,8 @@ public class AppConfig
     public ObservableCollection<string> MusicDirectories { get; set; }
     
     public bool RepeatPlaylist { get; set; }
+    
+    public bool NoDuplicates { get; set; }
 
     // ==============
     // INITIALIZATION

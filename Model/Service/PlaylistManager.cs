@@ -3,18 +3,47 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using Common;
 using Model.DataType;
 
 namespace Model.Service;
 
-public class PlaylistManager
+public class PlaylistManager : NotifyPropertyChangedImpl
 {
+    // ==============
+    // FIELDS
+    // ==============
+    
+    private readonly AppConfigurator _appConfigurator;
+
+    private bool _noDuplicates;
+    
+    // ==============
+    // PROPERTIES
+    // ==============
+
+    public bool NoDuplicates
+    {
+        get => _noDuplicates;
+        set
+        {
+            SetField(ref _noDuplicates, value);
+            
+            // Save in config to restore on restart
+            this._appConfigurator.SaveNoDuplicates(this.NoDuplicates);
+        } 
+    }
+    
     // ==============
     // INITIALIZATION
     // ==============
 
-    public PlaylistManager()
+    public PlaylistManager(AppConfigurator appConfigurator)
     {
+        // Load app config
+        this._appConfigurator = appConfigurator;
+        this._noDuplicates = this._appConfigurator.AppConfig.NoDuplicates;
+        
         // Create the playlist root directory if it does not exist.
         // The root directory has to exist for the PlaylistViewModel to be correctly initialized.
         if (!Directory.Exists(AppConfig.PlaylistsRootPath))

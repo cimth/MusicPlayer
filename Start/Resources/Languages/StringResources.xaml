@@ -28,6 +28,7 @@
     <system:String x:Key="Str_No">No</system:String>
     <system:String x:Key="Str_Add">Add</system:String>
     <system:String x:Key="Str_Remove">Remove</system:String>
+    <system:String x:Key="Str_NoDuplicates">No duplicates</system:String>
     <system:String x:Key="Str_Duplicate">Duplicate</system:String>
     <system:String x:Key="Str_Back">Back</system:String>
     <system:String x:Key="Str_SortPlaylist">Sort playlist:</system:String>

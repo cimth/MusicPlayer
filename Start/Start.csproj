@@ -77,4 +77,10 @@
       </Resource>
     </ItemGroup>
 
+    <ItemGroup>
+      <Resource Include="Resources\Icons\one-circle-outline.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
 </Project>

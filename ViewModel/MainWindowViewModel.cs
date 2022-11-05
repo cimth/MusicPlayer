@@ -96,7 +96,7 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
         SongImporter songImporter = new SongImporter();
         PlaylistImporter playlistImporter = new PlaylistImporter(songImporter);
         AppConfigurator appConfigurator = new AppConfigurator();
-        PlaylistManager playlistManager = new PlaylistManager();
+        PlaylistManager playlistManager = new PlaylistManager(appConfigurator);
         FavoritesManager favoritesManager = new FavoritesManager();
         DialogService dialogService = new DialogService();
         
