@@ -74,39 +74,30 @@
         </StackPanel>
             
         <!-- Main controls -->
-        <Grid HorizontalAlignment="Center">
+        <UniformGrid Rows="1" HorizontalAlignment="Center">
             <!-- Set margin on button sides -->
-            <Grid.Resources>
+            <UniformGrid.Resources>
                 <Style TargetType="{x:Type Button}">
-                    <Setter Property="Margin" Value="2,0,2,0" />
+                    <Setter Property="Margin" Value="3,0" />
                 </Style>
-            </Grid.Resources>
-            
-            <!-- Grid layout -->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
+            </UniformGrid.Resources>
             
             <!-- Previous button -->
-            <Button Grid.Column="0" Padding="15" 
+            <Button Padding="15" 
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Command="{Binding PlayPreviousCommand}">
                 <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/play-skip-back.svg}" />
             </Button>
             
             <!-- Stop button -->
-            <Button Grid.Column="1" Padding="15" 
+            <Button Padding="15" 
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Command="{Binding StopCommand}">
                 <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/stop.svg}" />
             </Button>
             
             <!-- Play button -->
-            <Button Grid.Column="2" Padding="15" 
+            <Button Padding="15" 
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Visibility="{Binding SongPlayer.IsPlaying, Converter={StaticResource InvertBooleanToVisibilityConverter}}"
                     Command="{Binding ResumeCommand}">
@@ -114,7 +105,7 @@
             </Button>
             
             <!-- Pause button -->
-            <Button Grid.Column="2" Padding="15" 
+            <Button Padding="15" 
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Visibility="{Binding SongPlayer.IsPlaying, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding PauseCommand}">
@@ -122,18 +113,19 @@
             </Button>
             
             <!-- Next button -->
-            <Button Grid.Column="3" Padding="15" 
+            <Button Padding="15" 
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Command="{Binding PlayNextCommand}">
                 <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/play-skip-forward.svg}" />
             </Button>
             
             <!-- Repeat button -->
-            <ToggleButton Grid.Column="4" Padding="15" 
+            <ToggleButton Padding="15" 
                           IsChecked="{Binding SongPlayer.RepeatPlaylist}"
                           Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}">
                 <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/repeat.svg}" />
             </ToggleButton>
-        </Grid>
+            
+        </UniformGrid>
     </DockPanel>
 </UserControl>
