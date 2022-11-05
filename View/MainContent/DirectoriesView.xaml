@@ -1,0 +1,322 @@
+<UserControl x:Class="View.MainContent.DirectoriesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:View"
+             xmlns:converter="clr-namespace:View.Converter"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:templates="clr-namespace:View.Templates"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="400"
+             BorderBrush="{StaticResource AppTurquoiseBorderBrush}" BorderThickness="0 1 0 0">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
+        <converter:DoubleSecondsToTimerStringConverter x:Key="DoubleSecondsToTimerStringConverter" />
+        <converter:StringArrayToCommaSeparatedStringConverter x:Key="StringArrayToCommaSeparatedStringConverter" />
+        <converter:IsVisibleToRowHeightConverter x:Key="IsVisibleToRowHeightConverter" />
+        <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <converter:InvertNullToVisibilityConverter x:Key="InvertNullToVisibilityConverter" />
+        <converter:FullPathToLastPathPartConverter x:Key="FullPathToLastPathPartConverter" />
+        <converter:EqualsConverter x:Key="EqualsConverter" />
+    </UserControl.Resources>
+    
+    <Grid>
+        <!-- Grid layout -->
+        <Grid.RowDefinitions>
+            <!-- Label for current directory (or no directory selected information) -->
+            <RowDefinition Height="Auto" />
+            <!-- Grid with root directories or with the directory's content (only one of the Grids is shown at
+                 each time) -->
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Current directory -->
+        <Label Grid.Row="0" FontWeight="Bold"
+               Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}"
+               Content="{Binding CurrentDirectoryPath}"
+               Background="{StaticResource AppTurquoiseDarkestBrush}" />
+        
+        <!-- No directory selected -->
+        <Label Grid.Row="0" FontWeight="Bold"
+               Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource InvertNullToVisibilityConverter}}"
+               Content="{DynamicResource Str_NoDirectorySelected}"
+               Background="{StaticResource AppTurquoiseDarkestBrush}" />
+        
+        <!-- Root directories -->
+        <Grid Grid.Row="1" 
+              Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource InvertNullToVisibilityConverter}}">
+            <!-- Grid layout -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <!-- Header -->
+            <Border Grid.Row="0" BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
+                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- Heading -->
+                    <Label Content="{DynamicResource Str_RootMusicDirectories}" />
+                    
+                    <!-- Separator -->
+                    <Separator />
+                    
+                    <!-- Add music directory -->
+                    <Button ToolTip="{DynamicResource Str_Add}" Command="{Binding AddMusicDirectoryCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/add-circle-outline.svg}" />
+                    </Button>
+                
+                    <!-- Remove music directory -->
+                    <Button ToolTip="{DynamicResource Str_Remove}" Command="{Binding RemoveMusicDirectoryCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
+                    </Button>
+                </StackPanel>
+            </Border>
+                
+            <!-- Actual root directories -->
+            <templates:PlaylistGrid Grid.Row="1"
+                      ItemsSource="{Binding RootMusicDirectories}"
+                      SelectedItem="{Binding SelectedSubDirectoryPath}"
+                      SelectedIndex="{Binding SelectedSubDirectoryIndex}"
+                      HeadersVisibility="None">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the elements XML properties, only Code-Behind methods can be called.
+                -->
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding OpenSubDirectoryCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+                
+                <!-- Show data as columns -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding}" />
+                </DataGrid.Columns>
+            </templates:PlaylistGrid>
+        </Grid>
+        
+        <!-- The current directory's contents -->
+        <Grid Grid.Row="1" 
+              Visibility="{Binding CurrentDirectoryPath, Converter={StaticResource NullToVisibilityConverter}}">
+            <!-- Grid layout -->
+            <Grid.RowDefinitions>
+                <!-- Bind height to IsExpanded so that on True the expander gets half of the height 
+                     and when on False its set to Auto so that the Expander does not take the (empty) half space -->
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="{Binding IsVisible, ElementName=SubDirectories, Converter={StaticResource IsVisibleToRowHeightConverter}}" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="{Binding IsVisible, ElementName=MusicFiles, Converter={StaticResource IsVisibleToRowHeightConverter}}" />
+            </Grid.RowDefinitions>
+            
+            <!-- Header for sub directories -->
+            <Border Grid.Row="0" 
+                    BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1"
+                    Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- Back to music root directories -->
+                    <Button Command="{Binding GoBackToRootCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/home-outline.svg}" />
+                    </Button>
+                    
+                    <!-- Go back to parent directory -->
+                    <Button ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
+                    </Button>
+                    
+                    <!-- Heading -->
+                    <Label Content="{DynamicResource Str_SubDirectories}" 
+                           Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    
+                    <!-- Separator -->
+                    <Separator />
+                    
+                    <!-- Add to favorites -->
+                    <Button ToolTip="{DynamicResource Str_AddToFavorites}" Command="{Binding AddToFavoritesCommand}"
+                            Visibility="{Binding IsFavorite, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star-outline.svg}" />
+                    </Button>
+                    
+                    <!-- Remove from favorites -->
+                    <Button ToolTip="{DynamicResource Str_RemoveFromFavorites}" Command="{Binding RemoveFromFavoritesCommand}"
+                            Visibility="{Binding IsFavorite, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star.svg}" />
+                    </Button>
+                </StackPanel>
+            </Border>
+            
+            <!-- Sub directories -->
+            <templates:PlaylistGrid x:Name="SubDirectories" Grid.Row="1"
+                      Visibility="{Binding HasSubDirectories, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      ItemsSource="{Binding SubDirectoryPaths}"
+                      SelectedItem="{Binding SelectedSubDirectoryPath}"
+                      SelectedIndex="{Binding SelectedSubDirectoryIndex}"
+                      HeadersVisibility="None">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the elements XML properties, only Code-Behind methods can be called.
+                -->
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding OpenSubDirectoryCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+                
+                <!-- Show data as columns -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding Converter={StaticResource FullPathToLastPathPartConverter}}" />
+                </DataGrid.Columns>
+            </templates:PlaylistGrid>
+            
+            <!-- Header for music files -->
+            <Border Grid.Row="2" 
+                    BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1"
+                    Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid Style="{DynamicResource HeaderToolbarGridStyle}">
+                    <!-- Grid layout -->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Left side -->
+                    
+                    <StackPanel Grid.Column="0">
+                        <!-- 
+                        Go back.
+                        Only show if no sub directories exist because then the sub directory header (including its 
+                        back navigation button) is collapsed.
+                        -->
+                        <WrapPanel Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                            <!-- Back to music root directories -->
+                            <Button Command="{Binding GoBackToRootCommand}">
+                                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/home-outline.svg}" />
+                            </Button>
+                            
+                            <!-- Back to parent -->
+                            <Button ToolTip="{DynamicResource Str_Back}" Command="{Binding GoBackCommand}">
+                                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/arrow-back-circle-outline.svg}" />
+                            </Button>
+                        </WrapPanel>
+                        
+                        <!-- Heading -->
+                        <Label Content="{DynamicResource Str_MusicFiles}"
+                               Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        
+                        <!-- Separator -->
+                        <Separator />
+                        
+                        <!-- Add to queue -->
+                        <Button ToolTip="{DynamicResource Str_AddToQueue}" Command="{Binding AddToQueueCommand}">
+                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/list-circle-outline.svg}" />
+                        </Button>
+                        
+                        <!-- 
+                            Favorite buttons.
+                            Only show if no sub directories exist because then the sub directory header (including its 
+                            back navigation button) is collapsed.
+                         -->
+                        <WrapPanel Visibility="{Binding HasSubDirectories, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                            <!-- Add to favorites -->
+                            <Button ToolTip="{DynamicResource Str_AddToFavorites}" Command="{Binding AddToFavoritesCommand}"
+                                    Visibility="{Binding IsFavorite, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star-outline.svg}" />
+                            </Button>
+                        
+                            <!-- Remove from favorites -->
+                            <Button ToolTip="{DynamicResource Str_RemoveFromFavorites}" Command="{Binding RemoveFromFavoritesCommand}"
+                                    Visibility="{Binding IsFavorite, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/star.svg}" />
+                            </Button>
+                        </WrapPanel>
+                    </StackPanel>
+                    
+                    <!-- Right side -->
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="2,0">
+                        <!-- Playlist duration -->
+                        <Label Content="{DynamicResource Str_DurationWithColon}" />
+                        <Label Content="{Binding PlaylistFromDirectory.TotalDuration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+            
+            <templates:PlaylistGrid x:Name="MusicFiles" Grid.Row="3" 
+                                Visibility="{Binding HasMusicFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                ItemsSource="{Binding PlaylistFromDirectory.Songs}"
+                                SelectedItem="{Binding SelectedSong}"
+                                SelectedIndex="{Binding SelectedPlaylistIndex}">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the elements XML properties, only Code-Behind methods can be called.
+                -->
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding PlayAllSongsInDirectoryStartingWithTheSelectedSongCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+                
+                <!-- Mark the current song -->
+                <DataGrid.RowStyle>
+                    <!-- Base the style on the original style of the PlaylistGrid -->
+                    <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource DataGridRowStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Value="True">
+                                <!-- Only apply the style if the song of the considered row is the currently played song -->
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource EqualsConverter}">
+                                        <Binding Path="DataContext.SongPlayer.CurrentSong" 
+                                                 RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                                        <Binding Path="." />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                
+                                <!-- The style to be applied -->
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                
+                <!-- Show data as columns -->
+                <!-- For localization the header needs to be bound to a DynamicResource.
+                     The dynamic resource cannot be used as usual inside the DataGridTextColumn markup but needs
+                     to be addressed inside the DataGridTextColumn.Header element to work -->
+                <DataGrid.Columns>
+                    <!-- Title -->
+                    <DataGridTextColumn MinWidth="450" 
+                                        Binding="{Binding Title}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Title}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Artists -->
+                    <DataGridTextColumn MinWidth="300"
+                                        Binding="{Binding Artists, Converter={StaticResource StringArrayToCommaSeparatedStringConverter}}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Artists}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Duration -->
+                    <DataGridTextColumn MinWidth="75"
+                                        Binding="{Binding Duration.TotalSeconds, Converter={StaticResource DoubleSecondsToTimerStringConverter}}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Duration}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <!-- Album -->
+                    <DataGridTextColumn MinWidth="300"
+                                        Binding="{Binding Album}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource Str_Album}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </templates:PlaylistGrid>
+        </Grid>
+    </Grid>
+</UserControl>

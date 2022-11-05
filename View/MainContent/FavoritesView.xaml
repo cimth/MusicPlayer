@@ -1,0 +1,121 @@
+<UserControl x:Class="View.MainContent.FavoritesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:View"
+             xmlns:converter="clr-namespace:View.Converter"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:templates="clr-namespace:View.Templates"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+             BorderBrush="{StaticResource AppTurquoiseBorderBrush}" BorderThickness="0 1 0 0">
+    <Grid>
+        <!-- Grid layout -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Header -->
+        <Grid Grid.Row="0">
+            <Label FontWeight="Bold" Content="{DynamicResource Str_Favorites}"
+                   Background="{StaticResource AppTurquoiseDarkestBrush}" />
+        </Grid>
+        
+        <!-- Show favorite directories on top and favorite playlists on bottom -->
+        <Grid Grid.Row="1">
+            <!-- Grid layout -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <!-- Header for directories -->
+            <Border Grid.Row="0" 
+                    BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
+                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- Heading -->
+                    <Label Content="{DynamicResource Str_Directories}" />
+                </StackPanel>
+            </Border>
+            
+            <!-- Directories -->
+            <!-- The Directories are <root directory, sub path> pairs which get grouped by the root directories
+                 inside the grid. The selected value is a pair which then needs to be combined to a full path.
+                 See: https://www.wpftutorial.net/datagrid.html#grouping -->
+            <templates:PlaylistGrid Grid.Row="1"
+                                    ItemsSource="{Binding GroupedDirectoryPairs}"
+                                    SelectedValue="{Binding SelectedDirectoryPair}"
+                                    HeadersVisibility="None">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the elements XML properties, only Code-Behind methods can be called.
+                -->
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding OpenDirectoryCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+                
+                <!-- KeyBindings -->
+                <templates:PlaylistGrid.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding OpenDirectoryCommand}" />
+                </templates:PlaylistGrid.InputBindings>
+                
+                <!-- Header of the group, which here is path of the root directory -->
+                <templates:PlaylistGrid.GroupStyle>
+                    <GroupStyle ContainerStyle="{StaticResource DirectoryGroupStyle}" />
+                </templates:PlaylistGrid.GroupStyle>
+                
+                <!-- Show data as columns -->
+                <DataGrid.Columns>
+                    <!-- The Value contains the sub path for the directory -->
+                    <DataGridTextColumn Width="*" Binding="{Binding Value}" />
+                </DataGrid.Columns>
+            </templates:PlaylistGrid>
+            
+            <!-- Header for playlists -->
+            <Border Grid.Row="2" 
+                    BorderBrush="{DynamicResource AppTurquoiseBorderBrush}" BorderThickness="0 1">
+                <StackPanel Style="{DynamicResource HeaderToolbarStyle}">
+                    <!-- Heading -->
+                    <Label Content="{DynamicResource Str_Playlists}" />
+                </StackPanel>
+            </Border>
+            
+            <templates:PlaylistGrid Grid.Row="3" 
+                                ItemsSource="{Binding GroupedPlaylistPairs}"
+                                SelectedItem="{Binding  SelectedPlaylistPair}"
+                                HeadersVisibility="None">
+                <!-- 
+                    Use Interaction.Triggers to bind the mouse events to commands.
+                    With the elements XML properties, only Code-Behind methods can be called.
+                -->
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseDoubleClick">
+                        <b:InvokeCommandAction Command="{Binding OpenPlaylistCommand}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+                
+                <!-- KeyBindings -->
+                <templates:PlaylistGrid.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding OpenPlaylistCommand}" />
+                </templates:PlaylistGrid.InputBindings>
+                
+                <!-- Header of the group, which here is path of the root directory -->
+                <templates:PlaylistGrid.GroupStyle>
+                    <GroupStyle ContainerStyle="{StaticResource DirectoryGroupStyle}" />
+                </templates:PlaylistGrid.GroupStyle>
+                
+                <!-- Show data as columns -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding Value}" />
+                </DataGrid.Columns>
+            </templates:PlaylistGrid>
+        </Grid>
+    </Grid>
+</UserControl>

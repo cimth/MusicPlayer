@@ -1,0 +1,131 @@
+<UserControl x:Class="View.CurrentSongView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:View"
+             xmlns:converter="clr-namespace:View.Converter"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d"
+             d:DesignHeight="150" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converter:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
+        <converter:DoubleSecondsToTimerStringConverter x:Key="DoubleSecondsToTimerStringConverter" />
+        <converter:InvertNullToBooleanConverter x:Key="InvertNullToBooleanConverter" />
+        <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <converter:InvertNullToVisibilityConverter x:Key="InvertNullToVisibilityConverter" />
+    </UserControl.Resources>
+    
+    <DockPanel Margin="10">
+        <!-- Song information -->
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,10"
+                    HorizontalAlignment="Stretch">
+            <!-- Song title -->
+            <Label Content="{Binding SongPlayer.CurrentSong.Title}" HorizontalAlignment="Center"
+                   Visibility="{Binding SongPlayer.CurrentSong, Converter={StaticResource NullToVisibilityConverter}}"/>
+            
+            <!-- No song loaded -->
+            <Label Content="{DynamicResource Str_NoSongLoaded}" HorizontalAlignment="Center"
+                   Visibility="{Binding SongPlayer.CurrentSong, Converter={StaticResource InvertNullToVisibilityConverter}}"/>
+            
+            <Grid Background="Transparent">
+                <!-- Grid layout -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+            
+                <!-- Current time -->
+                <Label Grid.Column="0"
+                       Content="{Binding SongPlayer.TimerCurrent, Converter={StaticResource DoubleSecondsToTimerStringConverter}, FallbackValue=0:00}"/>
+            
+                <!-- Song progress -->
+                <!-- 
+                    Notes:
+                     * Set IsMoveToPointEnabled to True to click anywhere in the slider to jump to this point 
+                     * Only enable the slider if the current song is not null
+                -->
+                <Slider Grid.Column="1" VerticalAlignment="Center"
+                        Minimum="0" Maximum="{Binding SongPlayer.TimerMax}" 
+                        Value="{Binding SongPlayer.TimerCurrent}"
+                        IsMoveToPointEnabled="true"
+                        IsEnabled="{Binding SongPlayer.CurrentSong, Converter={StaticResource InvertNullToBooleanConverter}}">
+                    <!-- Use Interaction.Triggers to bind the mouse events to commands.
+                         With the Slider settings, only Code-Behind methods can be called.
+                         Only Preview<MouseEvent> can be used instead of <MouseEvent> because the Slider consumes
+                         the normal mouse events. -->
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                            <b:InvokeCommandAction Command="{Binding SongProgressDragStartedCommand}" />
+                        </b:EventTrigger>
+                        <b:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                            <b:InvokeCommandAction Command="{Binding SongProgressDragCompletedCommand}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Slider>
+            
+                <!-- Song length -->
+                <Label Grid.Column="2" 
+                       Content="{Binding SongPlayer.TimerMax, Converter={StaticResource DoubleSecondsToTimerStringConverter}}" />
+            </Grid>
+        </StackPanel>
+            
+        <!-- Main controls -->
+        <UniformGrid Rows="1" HorizontalAlignment="Center">
+            <!-- Set margin on button sides -->
+            <UniformGrid.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Margin" Value="3,0" />
+                </Style>
+            </UniformGrid.Resources>
+            
+            <!-- Previous button -->
+            <Button Padding="15" 
+                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
+                    Command="{Binding PlayPreviousCommand}">
+                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/play-skip-back.svg}" />
+            </Button>
+            
+            <!-- Stop button -->
+            <Button Padding="15" 
+                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
+                    Command="{Binding StopCommand}">
+                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/stop.svg}" />
+            </Button>
+            
+            <!-- Play button -->
+            <Button Padding="15" 
+                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
+                    Visibility="{Binding SongPlayer.IsPlaying, Converter={StaticResource InvertBooleanToVisibilityConverter}}"
+                    Command="{Binding ResumeCommand}">
+                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/play.svg}" />
+            </Button>
+            
+            <!-- Pause button -->
+            <Button Padding="15" 
+                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
+                    Visibility="{Binding SongPlayer.IsPlaying, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding PauseCommand}">
+                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/pause.svg}"/>
+            </Button>
+            
+            <!-- Next button -->
+            <Button Padding="15" 
+                    Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
+                    Command="{Binding PlayNextCommand}">
+                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/play-skip-forward.svg}" />
+            </Button>
+            
+            <!-- Repeat button -->
+            <ToggleButton Padding="15" 
+                          IsChecked="{Binding SongPlayer.RepeatPlaylist}"
+                          Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}">
+                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/repeat.svg}" />
+            </ToggleButton>
+            
+        </UniformGrid>
+    </DockPanel>
+</UserControl>

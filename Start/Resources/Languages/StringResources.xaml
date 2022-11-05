@@ -1,0 +1,66 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Net.Primitives">
+    <system:String x:Key="Str_WindowTitle">MusicPlayer</system:String>
+    <system:String x:Key="Str_InputDialog">Input Dialog</system:String>
+    <system:String x:Key="Str_ConfirmDialog">Confirm</system:String>
+    
+    <system:String x:Key="Str_Error">Error!</system:String>
+    <system:String x:Key="Str_Success">Success!</system:String>
+    <system:String x:Key="Str_TargetDirectoryIsNotEmpty">The target directory has to be empty.</system:String>
+    <system:String x:Key="Str_PlaylistAlreadyExists">There already exists a playlist with this name in the current directory.</system:String>
+    <system:String x:Key="Str_DirectoryAlreadyExists">There already exists a sub directory with this name in the current directory.</system:String>
+    <system:String x:Key="Str_PlaylistSuccessfullyExported">The playlist was successfully exported.</system:String>
+    
+    <system:String x:Key="Str_Alphabetical">Alphabetical</system:String>
+    <system:String x:Key="Str_Individual">Individual</system:String>
+    <system:String x:Key="Str_TitleNumber">Title number</system:String>
+    
+    <system:String x:Key="Str_CurrentPlaylist">Current Playlist</system:String>
+    <system:String x:Key="Str_Queue">Queue</system:String>
+    <system:String x:Key="Str_Favorites">Favorites</system:String>
+    <system:String x:Key="Str_Directories">Directories</system:String>
+    <system:String x:Key="Str_Playlists">Playlists</system:String>
+    
+    <system:String x:Key="Str_Ok">OK</system:String>
+    <system:String x:Key="Str_Cancel">Cancel</system:String>
+    <system:String x:Key="Str_Yes">Yes</system:String>
+    <system:String x:Key="Str_No">No</system:String>
+    <system:String x:Key="Str_Add">Add</system:String>
+    <system:String x:Key="Str_Remove">Remove</system:String>
+    <system:String x:Key="Str_NoDuplicates">No duplicates</system:String>
+    <system:String x:Key="Str_Duplicate">Duplicate</system:String>
+    <system:String x:Key="Str_Back">Back</system:String>
+    <system:String x:Key="Str_SortPlaylist">Sort playlist:</system:String>
+    <system:String x:Key="Str_PleaseSelect">Please select ...</system:String>
+    <system:String x:Key="Str_AddToFavorites">Add to Favorites</system:String>
+    <system:String x:Key="Str_RemoveFromFavorites">Remove from Favorites</system:String>
+    <system:String x:Key="Str_Export">Export</system:String>
+    <system:String x:Key="Str_AddToQueue">Add to Queue</system:String>
+    <system:String x:Key="Str_Rename">Rename</system:String>
+    
+    <system:String x:Key="Str_Songs">Songs</system:String>
+    <system:String x:Key="Str_RootMusicDirectories">Root music directories</system:String>
+    <system:String x:Key="Str_SubDirectories">Sub directories</system:String>
+    <system:String x:Key="Str_MusicFiles">Music files</system:String>
+    <system:String x:Key="Str_Content">Content</system:String>
+    <system:String x:Key="Str_FavoritesHeaderForPlaylistRootDirectory"># Root directory for playlist #</system:String>
+    
+    <system:String x:Key="Str_Title">Title</system:String>
+    <system:String x:Key="Str_Artists">Artists</system:String>
+    <system:String x:Key="Str_Duration">Duration</system:String>
+    <system:String x:Key="Str_DurationWithColon">Duration:</system:String>
+    <system:String x:Key="Str_Album">Album</system:String>
+    <system:String x:Key="Str_Name">Name</system:String>
+    
+    <system:String x:Key="Str_NoDirectorySelected">No directory selected</system:String>
+    <system:String x:Key="Str_NoDirectoryOrPlaylistSelected">No playlist directory and playlist selected</system:String>
+    <system:String x:Key="Str_NoPlaylistLoaded">No playlist loaded</system:String>
+    <system:String x:Key="Str_NoSongLoaded">No song loaded</system:String>
+    
+    <system:String x:Key="Str_WhichNameForDirectory">Which name should the directory have?</system:String>
+    <system:String x:Key="Str_WhichNameForPlaylist">Which name should the playlist have?</system:String>
+    
+    <system:String x:Key="Str_ConfirmRemoveDirectory">Do you really want to remove the directory?</system:String>
+    <system:String x:Key="Str_ConfirmRemovePlaylist">Do you really want to remove the playlist?</system:String>
+</ResourceDictionary>

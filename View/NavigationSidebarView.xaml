@@ -1,0 +1,52 @@
+<UserControl x:Class="View.NavigationSidebar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:View"
+             mc:Ignorable="d"
+             d:DesignHeight="400" d:DesignWidth="750">
+    <StackPanel Orientation="Vertical">
+        <Grid>
+            <!-- Set Button style -->
+            <Grid.Resources>
+                <Style TargetType="{x:Type RadioButton}"
+                       BasedOn="{StaticResource NavigationButtonStyle}" />
+            </Grid.Resources>
+            
+            <!-- Grid layout -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <!-- Current playlist -->
+            <RadioButton Content="{DynamicResource Str_CurrentPlaylist}" Grid.Row="0"
+                         IsChecked="{Binding MainWindowViewModel.IsCurrentPlaylistViewShown, Mode=OneWay}"
+                         Command="{Binding ShowCurrentPlaylistCommand}" />
+            
+            <!-- Queue -->
+            <RadioButton Content="{DynamicResource Str_Queue}" Grid.Row="1"
+                         IsChecked="{Binding MainWindowViewModel.IsQueueViewShown, Mode=OneWay}"
+                         Command="{Binding ShowQueueCommand}" />
+
+            <!-- Favorites -->
+            <RadioButton Content="{DynamicResource Str_Favorites}" Grid.Row="2"
+                         IsChecked="{Binding MainWindowViewModel.IsFavoritesViewShown, Mode=OneWay}"
+                         Command="{Binding ShowFavoritesCommand}" />
+            
+            <!-- Directories -->
+            <RadioButton Content="{DynamicResource Str_Directories}" Grid.Row="3" 
+                         IsChecked="{Binding MainWindowViewModel.IsDirectoriesViewShown, Mode=OneWay}"
+                         Command="{Binding ShowDirectoriesCommand}" />
+            
+            <!-- Playlists -->
+            <RadioButton Content="{DynamicResource Str_Playlists}" Grid.Row="4"
+                         IsChecked="{Binding MainWindowViewModel.IsPlaylistsViewShown, Mode=OneWay}"
+                         Command="{Binding ShowPlaylistsCommand}" />
+        </Grid>
+    </StackPanel>
+</UserControl>
