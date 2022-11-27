@@ -75,6 +75,10 @@
       <Resource Include="Resources\Icons\pencil.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+      <None Remove="Resources\Icons\document-text-outline.svg" />
+      <Resource Include="Resources\Icons\document-text-outline.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
     <ItemGroup>

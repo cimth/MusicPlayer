@@ -176,7 +176,7 @@ public class PlaylistManager : NotifyPropertyChangedImpl
     // EXPORT
     // ==============
 
-    public void Export(string targetDirectoryPath, Playlist selectedPlaylist)
+    public void ExportIntoDirectory(string targetDirectoryPath, Playlist selectedPlaylist)
     {
         Debug.Assert(Directory.Exists(targetDirectoryPath));
 
@@ -222,6 +222,36 @@ public class PlaylistManager : NotifyPropertyChangedImpl
         }
     }
     
+    public void ExportAsM3U(string targetFilePath, Playlist selectedPlaylist)
+    {
+        // Get all song paths of the playlist.
+        List<string> songPathsAbsolute = new List<string>();
+        foreach (var song in selectedPlaylist.Songs)
+        {
+            songPathsAbsolute.Add(song.FilePath);
+        }
+        
+        // Compute the relative paths from the target file directory.
+        string? targetDirectoryPath = Path.GetDirectoryName(targetFilePath);
+        List<string> songPathsRelative = new List<string>();
+        
+        if (targetDirectoryPath != null)
+        {
+            
+            foreach (var songPath in songPathsAbsolute)
+            {
+                songPathsRelative.Add(Path.GetRelativePath(targetDirectoryPath, songPath));
+            }
+        }
+        
+        // Just write the paths into the target file.
+        // A M3U file only contains those paths.
+        // For more information, see: https://en.wikipedia.org/wiki/M3U
+        //
+        // Use the encoding 'Unicode' to handle special characters correctly.
+        File.WriteAllLines(targetFilePath, songPathsRelative, Encoding.Unicode);
+    }
+    
     // ==============
     // HELPING METHODS 
     // ==============
@@ -237,7 +267,7 @@ public class PlaylistManager : NotifyPropertyChangedImpl
         // Return '<playlists root directory>/<file or directory name>' if no parent directory is given
         return Path.Combine(AppConfig.PlaylistsRootPath, fileOrDirectoryName);
     }
-    
+
     public string GetFullPath(string relativePath)
     {
         return Path.Combine(AppConfig.PlaylistsRootPath, relativePath);

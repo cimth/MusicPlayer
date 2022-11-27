@@ -8,6 +8,7 @@ using Model.DataType;
 using Model.Service;
 using ViewModel.Command;
 using ViewModel.Dialog;
+using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace ViewModel.MainContent;
 
@@ -187,7 +188,9 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
     
     public ICommand RenamePlaylistCommand { get; }
     
-    public ICommand ExportPlaylistCommand { get; }
+    public ICommand ExportPlaylistIntoDirectoryCommand { get; }
+    
+    public ICommand ExportPlaylistIntoFileCommand { get; }
     
     public ICommand AddToQueueCommand { get; }
     
@@ -236,7 +239,8 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         this.RemovePlaylistCommand = new DelegateCommand(this.RemovePlaylist);
         this.DuplicatePlaylistCommand = new DelegateCommand(this.DuplicatePlaylist);
         this.RenamePlaylistCommand = new DelegateCommand(this.RenamePlaylist);
-        this.ExportPlaylistCommand = new DelegateCommand(this.ExportPlaylist);
+        this.ExportPlaylistIntoDirectoryCommand = new DelegateCommand(this.ExportPlaylistIntoDirectory);
+        this.ExportPlaylistIntoFileCommand = new DelegateCommand(this.ExportPlaylistIntoFile);
         this.AddToQueueCommand = new DelegateCommand(this.AddToQueue);
         this.AddSongToPlaylistCommand = new DelegateCommand(this.AddSongToPlaylist);
         this.RemoveSongFromPlaylistCommand = new DelegateCommand(this.RemoveSongFromPlaylist);
@@ -606,7 +610,7 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
         }
     }
 
-    private void ExportPlaylist()
+    private void ExportPlaylistIntoDirectory()
     {
         // Stop if no playlist is selected
         if (this.SelectedPlaylist == null)
@@ -629,7 +633,34 @@ public class PlaylistsViewModel : NotifyPropertyChangedImpl
             }
             
             // Copy the playlist's songs to the target directory.
-            this._playlistManager.Export(dialog.SelectedPath, this.SelectedPlaylist);
+            this._playlistManager.ExportIntoDirectory(dialog.SelectedPath, this.SelectedPlaylist);
+            
+            // Show success dialog
+            MessageDialogViewModel successDialogViewModel = new MessageDialogViewModel("Str_Success", "Str_PlaylistSuccessfullyExported");
+            this._dialogService.ShowMessageDialog(successDialogViewModel);
+        }
+    }
+    
+    private void ExportPlaylistIntoFile()
+    {
+        // Stop if no playlist is selected
+        if (this.SelectedPlaylist == null)
+        {
+            return;
+        }
+        
+        // Open dialog to select the target directory for the export
+        SaveFileDialog dialog = new SaveFileDialog
+        {
+            Filter = "*.m3u|*.m3u"
+        };
+        
+        bool? shouldSave = dialog.ShowDialog();
+
+        if (shouldSave != null && shouldSave.Value && dialog.FileName.Length > 0)
+        {
+            // Copy the playlist's songs to the target directory.
+            this._playlistManager.ExportAsM3U(dialog.FileName, this.SelectedPlaylist);
             
             // Show success dialog
             MessageDialogViewModel successDialogViewModel = new MessageDialogViewModel("Str_Success", "Str_PlaylistSuccessfullyExported");

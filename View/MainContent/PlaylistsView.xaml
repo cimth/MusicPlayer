@@ -194,9 +194,14 @@
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/pencil.svg}" />
                     </Button>
                     
-                    <!-- Export playlist -->
-                    <Button ToolTip="{DynamicResource Str_Export}" Command="{Binding ExportPlaylistCommand}">
+                    <!-- Export playlist into directory -->
+                    <Button ToolTip="{DynamicResource Str_ExportIntoDirectory}" Command="{Binding ExportPlaylistIntoDirectoryCommand}">
                         <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/share-outline.svg}" />
+                    </Button>
+                    
+                    <!-- Export playlist into file -->
+                    <Button ToolTip="{DynamicResource Str_ExportIntoFile}" Command="{Binding ExportPlaylistIntoFileCommand}">
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/document-text-outline.svg}" />
                     </Button>
                     
                     <!-- Separator -->
@@ -316,9 +321,14 @@
                         <!-- Separator -->
                         <Separator />
                         
-                        <!-- Export playlist -->
-                        <Button ToolTip="{DynamicResource Str_Export}" Command="{Binding ExportPlaylistCommand}">
+                        <!-- Export playlist into directory -->
+                        <Button ToolTip="{DynamicResource Str_ExportIntoDirectory}" Command="{Binding ExportPlaylistIntoDirectoryCommand}">
                             <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/share-outline.svg}" />
+                        </Button>
+                    
+                        <!-- Export playlist into file -->
+                        <Button ToolTip="{DynamicResource Str_ExportIntoFile}" Command="{Binding ExportPlaylistIntoFileCommand}">
+                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/document-text-outline.svg}" />
                         </Button>
                         
                         <!-- Separator -->
