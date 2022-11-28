@@ -196,12 +196,12 @@
                     
                     <!-- Export playlist into directory -->
                     <Button ToolTip="{DynamicResource Str_ExportIntoDirectory}" Command="{Binding ExportPlaylistIntoDirectoryCommand}">
-                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/share-outline.svg}" />
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/export-mp3-outline.svg}" />
                     </Button>
                     
                     <!-- Export playlist into file -->
                     <Button ToolTip="{DynamicResource Str_ExportIntoFile}" Command="{Binding ExportPlaylistIntoFileCommand}">
-                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/document-text-outline.svg}" />
+                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/export-m3u-outline.svg}" />
                     </Button>
                     
                     <!-- Separator -->
@@ -323,12 +323,12 @@
                         
                         <!-- Export playlist into directory -->
                         <Button ToolTip="{DynamicResource Str_ExportIntoDirectory}" Command="{Binding ExportPlaylistIntoDirectoryCommand}">
-                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/share-outline.svg}" />
+                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/export-mp3-outline.svg}" />
                         </Button>
                     
                         <!-- Export playlist into file -->
                         <Button ToolTip="{DynamicResource Str_ExportIntoFile}" Command="{Binding ExportPlaylistIntoFileCommand}">
-                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/document-text-outline.svg}" />
+                            <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/export-m3u-outline.svg}" />
                         </Button>
                         
                         <!-- Separator -->
