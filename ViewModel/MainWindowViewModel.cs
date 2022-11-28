@@ -207,7 +207,7 @@ public class MainWindowViewModel : NotifyPropertyChangedImpl
     private void HandleKeyDown(Key key)
     {
         // Pause / Resume the current song on 'Space' or on 'MediaPlayPause'
-        if (key == Key.Space || key == Key.MediaPlayPause)
+        if (key == Key.Space && !DialogService.IsInputDialogOpen || key == Key.MediaPlayPause)
         {
             if (this._songPlayer.IsPlaying)
             {

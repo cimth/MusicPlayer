@@ -176,7 +176,7 @@ public class PlaylistManager : NotifyPropertyChangedImpl
     // EXPORT
     // ==============
 
-    public void Export(string targetDirectoryPath, Playlist selectedPlaylist)
+    public void ExportIntoDirectory(string targetDirectoryPath, Playlist selectedPlaylist)
     {
         Debug.Assert(Directory.Exists(targetDirectoryPath));
 
@@ -222,6 +222,40 @@ public class PlaylistManager : NotifyPropertyChangedImpl
         }
     }
     
+    public void ExportAsM3U(string targetFilePath, Playlist selectedPlaylist)
+    {
+        // Get all song paths of the playlist.
+        List<string> songPathsAbsolute = new List<string>();
+        foreach (var song in selectedPlaylist.Songs)
+        {
+            songPathsAbsolute.Add(song.FilePath);
+        }
+        
+        // Compute the relative paths from the target file directory.
+        string? targetDirectoryPath = Path.GetDirectoryName(targetFilePath);
+        List<string> songPathsRelative = new List<string>();
+        
+        if (targetDirectoryPath != null)
+        {
+            
+            foreach (var songPath in songPathsAbsolute)
+            {
+                songPathsRelative.Add(Path.GetRelativePath(targetDirectoryPath, songPath));
+            }
+        }
+        
+        // Just write the paths into the target file.
+        // A M3U file only contains those paths.
+        // For more information, see: https://en.wikipedia.org/wiki/M3U
+        //
+        // Note: Do not encode the file.
+        // - If encoding in Unicode, it will work in the 'Groove' app but not in another tested app.
+        // - If encoding in UTF-8, it will work in no tested app.
+        // - If not encoding, it will work in the 'Groove' and 'Samsung Music' app but not in 'Windows Media Player'.
+        //   This seems to be the best way by now.
+        File.WriteAllLines(targetFilePath, songPathsRelative);
+    }
+    
     // ==============
     // HELPING METHODS 
     // ==============
@@ -237,7 +271,7 @@ public class PlaylistManager : NotifyPropertyChangedImpl
         // Return '<playlists root directory>/<file or directory name>' if no parent directory is given
         return Path.Combine(AppConfig.PlaylistsRootPath, fileOrDirectoryName);
     }
-    
+
     public string GetFullPath(string relativePath)
     {
         return Path.Combine(AppConfig.PlaylistsRootPath, relativePath);

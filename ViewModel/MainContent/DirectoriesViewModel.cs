@@ -210,7 +210,9 @@ public class DirectoriesViewModel : NotifyPropertyChangedImpl
         this.HasMusicFiles = mp3Files.Length > 0;
 
         // Create Playlist if songs exist in the new directory, else reset to null
-        this.PlaylistFromDirectory = this.HasMusicFiles ? this._playlistImporter.Import(directoryName, mp3Files.ToList()) : null;
+        string? parentDirectoryPath = Path.GetDirectoryName(directoryPath);
+        string playlistName = parentDirectoryPath != null ? $"{parentDirectoryPath} | {directoryName}" : directoryName;
+        this.PlaylistFromDirectory = this.HasMusicFiles ? this._playlistImporter.Import(playlistName, mp3Files.ToList()) : null;
     }
 
     // ==============

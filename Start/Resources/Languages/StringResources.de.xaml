@@ -35,7 +35,8 @@
     <system:String x:Key="Str_PleaseSelect">Bitte auswählen ...</system:String>
     <system:String x:Key="Str_AddToFavorites">Zu Favoriten hinzufügen</system:String>
     <system:String x:Key="Str_RemoveFromFavorites">Aus Favoriten entfernen</system:String>
-    <system:String x:Key="Str_Export">Exportieren</system:String>
+    <system:String x:Key="Str_ExportIntoDirectory">Exportieren in Ordner (MP3-Dateien)</system:String>
+    <system:String x:Key="Str_ExportIntoFile">Exportieren in Playlist-Datei (.m3u)</system:String>
     <system:String x:Key="Str_AddToQueue">Zur Warteschlange hinzufügen</system:String>
     <system:String x:Key="Str_Rename">Umbenennen</system:String>
     

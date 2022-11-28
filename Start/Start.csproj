@@ -59,10 +59,6 @@
       <Resource Include="Resources\Icons\home-outline.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <None Remove="Resources\Icons\share-outline.svg" />
-      <Resource Include="Resources\Icons\share-outline.svg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
       <None Remove="Resources\Icons\documents-outline.svg" />
       <Resource Include="Resources\Icons\documents-outline.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -73,6 +69,14 @@
       </Resource>
       <None Remove="Resources\Icons\pencil.svg" />
       <Resource Include="Resources\Icons\pencil.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Resources\Icons\export-mp3-outline.svg" />
+      <Resource Include="Resources\Icons\export-mp3-outline.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Resources\Icons\export-m3u-outline.svg" />
+      <Resource Include="Resources\Icons\export-m3u-outline.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
     </ItemGroup>
