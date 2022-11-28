@@ -248,8 +248,12 @@ public class PlaylistManager : NotifyPropertyChangedImpl
         // A M3U file only contains those paths.
         // For more information, see: https://en.wikipedia.org/wiki/M3U
         //
-        // Use the encoding 'Unicode' to handle special characters correctly.
-        File.WriteAllLines(targetFilePath, songPathsRelative, Encoding.Unicode);
+        // Note: Do not encode the file.
+        // - If encoding in Unicode, it will work in the 'Groove' app but not in another tested app.
+        // - If encoding in UTF-8, it will work in no tested app.
+        // - If not encoding, it will work in the 'Groove' and 'Samsung Music' app but not in 'Windows Media Player'.
+        //   This seems to be the best way by now.
+        File.WriteAllLines(targetFilePath, songPathsRelative);
     }
     
     // ==============
