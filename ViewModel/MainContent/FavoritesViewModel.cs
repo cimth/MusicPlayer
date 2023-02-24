@@ -176,9 +176,21 @@ public class FavoritesViewModel : NotifyPropertyChangedImpl
     {
         if (this.SelectedPlaylistPair != null)
         {
-            // Get the relative path from of the playlist from the <playlist directory, playlist name> pair
+            // Get the file name from of the playlist from the <playlist directory, playlist name> pair.
             KeyValuePair<string, string> pair = this.SelectedPlaylistPair.Value;
-            string relativePath = Path.Combine(pair.Key, pair.Value) + ".json";
+            string fileName = pair.Value + ".json";
+
+            // Get the relative path from the playlist from the <playlist directory, playlist name> pair.
+            // Note that the pair's key (i.e. the directory) is NOT added when the playlist is placed inside the
+            // playlist root directory. In this case, the key will not be an actual directory but a placeholder
+            // for the heading in the GUI.
+            string relativePath = fileName;
+            
+            string headerForPlaylistInRootDirectory = LanguageUtil.GiveLocalizedString("Str_FavoritesHeaderForPlaylistRootDirectory");
+            if (!pair.Key.Equals(headerForPlaylistInRootDirectory))
+            {
+                relativePath = Path.Combine(pair.Key, relativePath);
+            }
             
             // Open the playlist
             this._mainWindowViewModel.ChangeMainContent(MainWindowViewModel.MainContent.Playlists, playlistPath: relativePath);

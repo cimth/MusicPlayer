@@ -1,16 +1,11 @@
 name: Create a standalone, single-file win10-x64 EXE 
 
 on:
-  # Run automatically when pushing to 'main'.
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
   # Run when manually triggering in the GitHub GUI.
   workflow_dispatch:
     
 env:
-  DOTNET_VERSION: '6.0.x'
+  DOTNET_VERSION: '7.0.x'
   RETENTION_DAYS: 3
 
 jobs:
