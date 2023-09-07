@@ -38,7 +38,7 @@ Included dependencies
 |------------------------------|---------|-----------------------------------------------------|
 | .NET                         | 7       |                                                     |
 | Microsoft.Xaml.Behaviors.Wpf | 1.1.39  | Used for binding commands to WPF ListView           |
-| SharpVectors                 | 1.8.0   | Used for easy displaying SVG images (for the icons) |
+| SharpVectors                 | 1.8.1   | Used for easy displaying SVG images (for the icons) |
 | TagLibSharp                  | 2.3.0   | Used for accessing the meta data of music files     |
 
 Configuration
