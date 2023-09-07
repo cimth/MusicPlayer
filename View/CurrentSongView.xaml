@@ -86,14 +86,14 @@
             <Button Padding="15" 
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Command="{Binding PlayPreviousCommand}">
-                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/play-skip-back.svg}" />
+                <svgc:SvgBitmap AppName="Start" UriSource="/Resources/Icons/play-skip-back.svg" />
             </Button>
             
             <!-- Stop button -->
             <Button Padding="15" 
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Command="{Binding StopCommand}">
-                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/stop.svg}" />
+                <svgc:SvgBitmap AppName="Start" UriSource="/Resources/Icons/stop.svg" />
             </Button>
             
             <!-- Play button -->
@@ -101,7 +101,7 @@
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Visibility="{Binding SongPlayer.IsPlaying, Converter={StaticResource InvertBooleanToVisibilityConverter}}"
                     Command="{Binding ResumeCommand}">
-                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/play.svg}" />
+                <svgc:SvgBitmap AppName="Start" UriSource="/Resources/Icons/play.svg" />
             </Button>
             
             <!-- Pause button -->
@@ -109,21 +109,21 @@
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Visibility="{Binding SongPlayer.IsPlaying, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding PauseCommand}">
-                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/pause.svg}"/>
+                <svgc:SvgBitmap AppName="Start" UriSource="/Resources/Icons/pause.svg" />
             </Button>
             
             <!-- Next button -->
             <Button Padding="15" 
                     Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}"
                     Command="{Binding PlayNextCommand}">
-                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/play-skip-forward.svg}" />
+                <svgc:SvgBitmap AppName="Start" UriSource="/Resources/Icons/play-skip-forward.svg" />
             </Button>
             
             <!-- Repeat button -->
             <ToggleButton Padding="15" 
                           IsChecked="{Binding SongPlayer.RepeatPlaylist}"
                           Height="50" Width="{Binding Height, RelativeSource={RelativeSource Self}}">
-                <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/repeat.svg}" />
+                <svgc:SvgBitmap AppName="Start" UriSource="/Resources/Icons/repeat.svg" />
             </ToggleButton>
             
         </UniformGrid>

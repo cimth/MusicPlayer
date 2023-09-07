@@ -53,7 +53,7 @@
                     
                     <!-- Remove playlist -->
                     <Button ToolTip="{DynamicResource Str_Remove}" Command="{Binding RemoveFromQueueCommand}">
-                        <Image Source="{svgc:SvgImage /Start;component/Resources/Icons/remove-circle-outline.svg}" />
+                        <svgc:SvgBitmap AppName="Start" UriSource="/Resources/Icons/remove-circle-outline.svg" />
                     </Button>
                 </StackPanel>
             </Border>

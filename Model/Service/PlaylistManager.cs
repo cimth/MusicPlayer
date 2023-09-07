@@ -193,6 +193,9 @@ public class PlaylistManager : NotifyPropertyChangedImpl
                 // Get the file name including the extension according to the sort order of the playlist.
                 // If not considering the sort order, the files in the target directory might be in another order
                 // as in the playlist.
+                // Note that you have to sanitize the song title which is used in the file name for invalid
+                // characters like '?' which are not allowed in file names in Windows.
+                string sanitizedSongTitle = this.GetSanitizedSongTitle(song.Title);
                 string songFileExtension = Path.GetExtension(song.FilePath);
                 
                 string targetSongFile;
@@ -200,13 +203,13 @@ public class PlaylistManager : NotifyPropertyChangedImpl
                 {
                     case PlaylistSortOrder.Alphabetical:
                         // Just use the title because directories are sorted alphabetical by default
-                        targetSongFile = $"{song.Title}{songFileExtension}";
+                        targetSongFile = $"{sanitizedSongTitle}{songFileExtension}";
                         break;
                     case PlaylistSortOrder.Individual:
                     case PlaylistSortOrder.TitleNumber:
                         // Set index as prefix
                         string prefix = songIndexOneBased.ToString(digitFormat);
-                        targetSongFile = $"{prefix} {song.Title}{songFileExtension}";
+                        targetSongFile = $"{prefix} {sanitizedSongTitle}{songFileExtension}";
                         break;
                     default:
                         throw new InvalidEnumArgumentException();
@@ -275,5 +278,16 @@ public class PlaylistManager : NotifyPropertyChangedImpl
     public string GetFullPath(string relativePath)
     {
         return Path.Combine(AppConfig.PlaylistsRootPath, relativePath);
+    }
+
+    private string GetSanitizedSongTitle(string rawSongTitle)
+    {
+        // Replace all invalid file name characters in the song title with '-'.
+        char[] invalidFileChars = Path.GetInvalidFileNameChars();
+        foreach (var invalidFileChar in invalidFileChars)
+        {
+            rawSongTitle = rawSongTitle.Replace(invalidFileChar, '-');
+        }
+        return rawSongTitle;
     }
 }

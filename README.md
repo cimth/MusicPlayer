@@ -26,14 +26,19 @@ __An overview of the application features:__
 * Sort the playlists alphabetically, individually or by title number. This sort order can be applied to each playlist
   separately so that you can e.g. have one playlist sorted individually while the others are sorted alphabetically.
 
+Screenshot
+----------
+
+![Screenshot](Screenshot.png)
+
 Included dependencies
 ---------------------
 
 | Dependency                   | Version | Notes                                               |
 |------------------------------|---------|-----------------------------------------------------|
-| .NET                         | 6       |                                                     |
+| .NET                         | 7       |                                                     |
 | Microsoft.Xaml.Behaviors.Wpf | 1.1.39  | Used for binding commands to WPF ListView           |
-| SharpVectors                 | 1.8.0   | Used for easy displaying SVG images (for the icons) |
+| SharpVectors                 | 1.8.1   | Used for easy displaying SVG images (for the icons) |
 | TagLibSharp                  | 2.3.0   | Used for accessing the meta data of music files     |
 
 Configuration
@@ -118,7 +123,6 @@ dotnet publish Start `
      -c=Release -r=win-x64 `
      -o ./publish `
      --self-contained=true `
-     -p:PublishReadyToRun=true `
      -p:PublishSingleFile=true `
      -p:IncludeNativeLibrariesForSelfExtract=true `
      -p:DebugType=None `
