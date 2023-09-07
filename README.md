@@ -26,6 +26,11 @@ __An overview of the application features:__
 * Sort the playlists alphabetically, individually or by title number. This sort order can be applied to each playlist
   separately so that you can e.g. have one playlist sorted individually while the others are sorted alphabetically.
 
+Screenshot
+----------
+
+![Screenshot](Screenshot.png)
+
 Included dependencies
 ---------------------
 
