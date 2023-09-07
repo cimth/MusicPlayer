@@ -123,7 +123,6 @@ dotnet publish Start `
      -c=Release -r=win-x64 `
      -o ./publish `
      --self-contained=true `
-     -p:PublishReadyToRun=true `
      -p:PublishSingleFile=true `
      -p:IncludeNativeLibrariesForSelfExtract=true `
      -p:DebugType=None `
